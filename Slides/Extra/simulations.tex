@@ -1,0 +1,103 @@
+\bfr{Simulation: normal distribution}
+\bi
+\item Comparison of Two groups (labels A, B) of size 5 
+\item $y_i\sim N(0,1)$
+  \item[] 
+\bi
+\item $H_0:f(y|grp=A)=f(y|grp=B)$
+  \item $H_0:f(y|grp=A)\neq f(y|grp=B)$\\ 
+(i.e. two-sided alternatives)
+\ei
+\item 10000 replications
+\item 1000 random permutations for each test
+\ei
+\end{frame}
+%%%%%%%%%%%%%%%%%
+\bfr{Simulation: $H_0$}
+\begin{center}
+\includegraphics[width=0.55\textwidth]{figures/sim0} 
+\end{center}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+\hline
+Empirical Type I error & $\leq$0.01 & $\leq$0.05 & $\leq$0.1 & $\leq$0.5 & $\leq$0.75 \\ 
+\hline
+Permutation & 0.00 & 0.05 & 0.09 & 0.49 & 0.74 \\ 
+Paramatric t.test & 0.01 & 0.04 & 0.09 & 0.49 & 0.75 \\ 
+\hline
+\end{tabular}
+\end{table}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \bfr{Simulation: $H_1$}
+now $(y|grp=A)\sim N(0,1)$, $(y|grp=B)\sim N(2,1)$
+  \begin{center}
+\includegraphics[width=0.55\textwidth]{figures/sim1} 
+\end{center}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+\hline
+Empirical Power & $\leq$0.01 & $\leq$0.05 & $\leq$0.1 & $\leq$0.5 & $\leq$0.75 \\ 
+\hline
+Permutation       & 0.40 & 0.78 & 0.89 & 0.99 & 1.00 \\ 
+Paramatric t.test & 0.41 & 0.77 & 0.88 & 0.99 & 1.00 \\
+\hline
+\end{tabular}
+\end{table}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bfr{Simulation: Cauchy distribution}
+\bi
+\item Comparison of Two groups (labels A, B) 
+\item $y_i\sim Cauchy$
+  \item[] 
+\bi
+\item $H_0:f(y|grp=A)=f(y|grp=B)$
+  \item $H_0:f(y|grp=A)\neq f(y|grp=B)$\\ (i.e. two-sided alternatives)
+\ei
+\item 10000 replications
+\item 1000 random permutations for each test
+\ei
+\end{frame}
+%%%%%%%%%%%%%%%%%
+\bfr{Simulation: $H_0$}
+\begin{center}
+\includegraphics[width=0.55\textwidth]{figures/sim2} 
+\end{center}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+\hline
+Empirical Type I error & $\leq$0.01 & $\leq$0.05 & $\leq$0.1 & $\leq$0.5 & $\leq$0.75 \\ 
+\hline
+Permutation & 0.00 & 0.04 & 0.09 & 0.49 & 0.74 \\ 
+Paramatric t.test  & 0.00 & 0.01 & 0.04 & 0.62 & 0.84 \\
+\hline
+\end{tabular}
+\end{table}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \bfr{Simulation: $H_1$}
+now $(y|grp=A)\sim Cauchy(0)$, $(y|grp=B)\sim Cauchy(10)$
+  \begin{center}
+\includegraphics[width=0.55\textwidth]{figures/sim3} 
+\end{center}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrr}
+\hline
+Empirical Power & $\leq$0.01 & $\leq$0.05 & $\leq$0.1 & $\leq$0.5 & $\leq$0.75 \\ 
+\hline
+Permutation & 0.66 & 0.78 & 0.81 & 0.89 & 0.92 \\ 
+Paramatric t.test & 0.53 & 0.68 & 0.75 & 0.91 & 0.96 \\ 
+\hline
+\end{tabular}
+\end{table}
+\end{frame}

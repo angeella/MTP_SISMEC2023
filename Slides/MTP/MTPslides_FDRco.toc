@@ -1,0 +1,6 @@
+\babel@toc {english}{}\relax 
+\beamer@sectionintoc {1}{False Discovery Rate (FDR)}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Definition}{4}{0}{1}
+\beamer@subsectionintoc {1}{2}{Methods}{6}{0}{1}
+\beamer@sectionintoc {2}{More about FDR}{18}{0}{2}
+\beamer@sectionintoc {3}{FWER or FDR?}{25}{0}{3}

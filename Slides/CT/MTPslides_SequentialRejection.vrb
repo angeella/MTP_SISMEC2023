@@ -1,0 +1,13 @@
+\frametitle{Software (bioconductor.org)}
+
+\bb{Inheritance procedure}
+R package \emph{globaltest}\\
+Authors: Goeman \& Finos
+\eb
+
+\begin{verbatim}
+> library(globaltest)
+> inheritance()
+
+\end{verbatim}
+
