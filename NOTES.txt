@@ -1,0 +1,37 @@
+9:30-10:45: Introduzione al problema e principali metodi di correzione
+11:00-13:00: Metodi avanzati di correzione 
+13:00-14:00: Light lunch
+14:00-16:00: Sessione pratica: esempi ed esercitazioni con il software R
+
+ISSUE
+
+1. Sul sito c'è scritto 9.30-16.30 mentre a noi avevano detto 9.30-16.
+2. Package R? MultComp, MultXpert (non lo conosco).
+
+DATI di esempio: 
+* PASSI (ci sono var di inquinamento e tabacco con malattie associate sia su salute fisica che psicologica), o BRFSS (equivalente Americano).
+* https://www.kaggle.com/datasets/raddar/smoking-related-lung-cancers 
+* https://www.kaggle.com/datasets/nhs/tobacco-use
+* https://www.kaggle.com/datasets/shashwatwork/clinical-dataset-of-the-cypguides-trial
+
+
+* INTRODUZIONE AI TEST
+* PROBLEMA TEST MULTIPLI 
+* BONFERRONI- HOLM
+* CLOSED TESTING (gatekeeping tutti i modi)
+* ESEMPI SEQUENTIAL GATEKEEPING 
+* DATI E FARE IL METODO DI CORREZIONE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
