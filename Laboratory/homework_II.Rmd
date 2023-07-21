@@ -1,0 +1,78 @@
+---
+title: "Multiple Testing"
+author: "Livio Finos"
+highlighter: highlight.js
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+job: University of Padua
+license: by-nc-sa
+mode: selfcontained
+hitheme: tomorrow
+subtitle: Homework week 19
+framework: io2012
+widgets: []
+---
+
+
+# Exercise One
+
+Let be 
+```{r,echo=FALSE}
+ps=c(.523,.0011,.0246,.0073)
+cat(ps)
+```
+
+the p-values resulting in the comparison of two groups in a clinical trial with four endpoints.  
+Perfom:
+
+- a Bonferroni correction
+- a Holm correction
+- a Closed testing correction using Bonferroni combination for the combined tests 
+- at least for the Bonferroni and Holm, program a function to perform it for a general vector of p-values
+
+
+Compare the results of Closed Testing with the ones of Bonferroni and Holm.
+
+
+# Exercise Two
+
+Consider the `PlantGrowth` in `library(datasets)`:
+
+###Description: 
+Results from an experiment to compare yields (as measured by dried weight of plants) obtained under a control and two different treatment conditions.
+
+```{r}
+data(PlantGrowth)
+?PlantGrowth
+str(PlantGrowth)
+```
+
+We are interested in all possible pair-wise comparisons of the three groups.
+Perform a parametric analysis and correct for post-hoc (i.e. multiple testing) using
+
+- Bonferroni
+- Holm
+- Shaffer
+
+Do this without the help of `library(multcomp)` (or any other specialized libraries/softwares), also showing step-by-step the calculation performed.
+
+Compare your results with the ones of `library(multcomp)` (or any other specialized libraries/softwares).
+
+
+# Exercise Three
+
+Consider the `InsectSprays` in `library(datasets)`:
+
+###Description: 
+The counts of insects in agricultural experimental units treated with different insecticides.
+
+```{r}
+data(InsectSprays)
+?InsectSprays
+str(InsectSprays)
+```
+
+Same task as Exercise Two.

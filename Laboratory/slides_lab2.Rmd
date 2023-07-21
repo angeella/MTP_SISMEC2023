@@ -1,0 +1,361 @@
+---
+title: "Test Multipli"
+author: "Livio Finos"
+highlighter: highlight.js
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+job: Università degli Studi di Padova
+license: by-nc-sa
+mode: selfcontained
+hitheme: tomorrow
+subtitle: Esercitazione
+framework: io2012
+widgets: []
+---
+
+
+Ringrazio i professori Aldo Solari, Jelle Goeman e Florian Klinglmueller per le idee e il materiale condivisi in tutti questi anni. Questo materiale ne è una elaborazione.
+
+---
+
+
+Supponiamo essere questi i p-value ottenuti dal vostro ultimo esperimento:
+```{r}
+set.seed(123)
+m=20
+(p.values=runif(m))
+```
+
+Quanti rifiuti?
+```{r}
+alpha = 0.05
+(p.values < alpha)
+sum(p.values < alpha)
+```
+
+
+## Familywise Error Rate
+
+Nei test delle ipotesi, la probabilità di commettere un errore di I tipo è controllata ad un livello prefissato $\alpha$, convenzionalmente il 5%. Tuttavia sorge un problema quando 
+conduciamo non un solo test, ma più di uno. Poichè per ciascun test abbiamo una probabilità di commettere un errore di I tipo, se conduciamo molti test è verosimile ottenere almeno un errore di I tipo. 
+
+Il problema dei test multipli ha una struttura semplice. Abbiamo un insieme di ipotesi nulle
+$\mathcal{H}=(H_1,\ldots,H_m)$, di cui un numero sconosciuto $m_0$ sono vere, mentre le restanti $m-m_0$ sono false. Indichiamo il sottoinsieme di ipotesi vere con $\mathcal{T}\subseteq \mathcal{H}$, quello di ipotesi false con $\mathcal{F}=\mathcal{H}\setminus \mathcal{T}$ e 
+la proporzione di ipotesi vere con $\pi_0=m_0/m$. 
+
+L'obiettivo delle procedure di verifica multipla è di scegliere un sottoinsieme  $\mathcal{R}\subseteq \mathcal{H}$ di ipotesi da rifiutare. Supponiamo di avere a disposizione i p-values $p_1,\ldots,p_m$ per ciascuna ipotesi $H_1,\ldots,H_m$. Possiamo considerare la seguente procedura:
+\[
+\mathcal{R}=\{H_i: p_i \leq \tilde{\alpha}\}
+\]
+ovvero rifiutare tutte le ipotesi i cui p-value sono inferiori ad una certa soglia $\tilde{\alpha}$. Il problema ora è quello di determinare questa soglia $\tilde{\alpha}$.
+
+
+Idealmente, l'insieme di ipotesi rifiutate $\mathcal{R}$ dovrebbe coincidere il più possibile con l'insieme di ipotesi false $\mathcal{F}$. Si possono commettere due tipi di errori: errori di I tipo $\mathcal{R}\cap \mathcal{T}$, ovvero rifiutare ipotesi vere, ed errori di II tipo $\mathcal{R}\setminus \mathcal{F}$, ovvero non rifiutare ipotesi false. 
+
+Possiamo riassumere il numero di errori commessi nella seguente tabella:
+
+Ipotesi  | Vere          | False         | totale
+------------- | ------------- | ------------- | -------------
+rifiutate     | $V$           | $U$           | $R$ 
+non rifiutate | $m_0 - V$     | $m_1-U$       | $m-R$
+totale        | $m_0$         | $m_1$         | $m$
+
+Conosciamo il numero totale delle ipotesi $m$ e il numero di ipotesi rifiutate $R=\#\mathcal{R}$, ma tutte le altre quantità delle tabella sono incognite. 
+I metodi di *multiple testing* cercano di rifiutare il maggior numero di ipotesi cercando però di controllare il numero $V$ di errori di I tipo. 
+
+
+Il *familywise error rate* è definito come
+\[
+\mathrm{FWER}=\Pr(V > 0)
+\]
+ovvero la probabilità di commettere almeno un errore di I tipo. 
+Utililizzando la procedura
+* Rifiuto $H_i$ se $p_i \leq \tilde{\alpha}$
+
+otteniamo
+\[
+\mathrm{FWER}= \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} \{ P_i \leq \tilde{\alpha}  \} \right)
+\]
+
+
+Il controllo del *familywise error rate* ad un livello $\alpha$ richiede che
+\[
+\mathrm{FWER}\leq \alpha
+\]
+
+
+## La diseguaglianza di Sidak: P-values indipendenti
+
+Nel nostro esempio, siamo nella seguente situazione:
+* le $m=$ `r m` ipotesi sono tutte vere, ovvero $m_0=m$;
+* i `r m` test, e quindi i relativi p-values, sono tra loro indipendenti;
+* senza tener conto della molteplicità dei test, si rifiuta $H_i$ quando $p_i \leq \alpha$
+
+
+Indichiamo con $E_i=I\{P_i \leq \alpha\}$ l'esito del test, ovvero attraverso la funzione indicatrice che vale 1 se rifiutiamo l'ipotesi, 0 altrimenti. Poichè le ipotesi sono tutte vere, i p-value $P_1,\ldots,P_m$ sono i.i.d. $\mathrm{Uniforme}(0,1)$.
+Segue che $E_i \sim \mathrm{Bernoulli}(\alpha)$ e $V = \sum_{i=1}^{m}E_i \sim \mathrm{Binomiale}(n,\alpha)$. Quindi il *familywise error rate* risulta
+\[
+\mathrm{FWER}=\Pr(V > 0) = \Pr(\sum_{i=1}^{m}E_i > 0) = 1 - \Pr(\sum_{i=1}^{m}E_i = 0) = 1 - (1-\alpha)^m
+\]
+o equivalentemente
+\[
+\mathrm{FWER}= \Pr\left(\bigcup_{i=1}^{m} \{ P_i \leq \alpha  \} \right) =  1- \Pr\left(\bigcap_{i=1}^{m} \{ P_i > \alpha  \} \right) = 1- \prod_{i=1}^{m} \Pr\left( P_i >  \alpha   \right) =1 - (1-\alpha)^m
+\]
+
+
+ovvero per $m=$ `r m`
+```{r}  
+1 - (1-alpha)^(m) 
+```
+
+Proviamo a rappresentare il *familywise error rate* come funzione del numero del numero di ipotesi $m$ (sempre ipotizzando $m_0=m$)
+```{r}  
+# m = 100
+FWER<- 1-(1-alpha)^(1:100)
+plot(1:100,FWER,xlab="numero di ipotesi", ylab="FWER")
+```
+
+Per controllare il FWER ad un livello $\alpha$, dobbiamo modificare la nostra regola di rifiuto:
+
+* si rifiuta $H_i$ quando $p_i \leq \tilde{\alpha}$
+
+Risolvendo $\mathrm{FWER}= 1 - (1-\tilde{\alpha})^m = \alpha$ otteniamo 
+\[
+\tilde{\alpha} = 1-(1-\alpha)^{(1/m)}
+\]
+ovvero 
+```{r}  
+alpha.adj<-1 - (1-alpha)^(1/m) 
+alpha.adj
+(p.values < alpha.adj)
+sum(p.values < alpha)
+```
+
+In modo equivalente, possiamo considerare la regola di rifiuto:
+
+* si rifiuta l'ipotesi $H_i$ quando $\tilde{p}_{i} \leq \alpha$
+
+dove
+\[
+\tilde{p}_i = 1- (1- p_i)^{m}
+\]
+ovvero 
+```{r} 
+p.values.adj<-1- (1- p.values)^m
+p.values.adj
+```
+
+Più in generale, se vale la diseguaglianza di Sidak:
+\[
+\Pr\left(\bigcap_{i:H_i \in \mathcal{T}} \{ P_i > u \} \right) \geq \prod_{i: H_i \in \mathcal{T}} \Pr\left( P_i > u   \right)
+\]
+per ogni $u\in[0,1]$ e ogni $\mathcal{T}\subseteq \mathcal{H}$, possiamo utilizzare $\tilde{\alpha} = 1-(1-\alpha)^{(1/m)}$ ed ottenere
+\[
+\Pr\left(\bigcap_{i: H_i \in \mathcal{T}} \{ P_i >  1-(1-\alpha)^{(1/m)}  \} \right) \geq \prod_{i: H_i\in \mathcal{T}} \Pr\left( P_i > 1-(1-\alpha)^{(1/m)}   \right) = [(1-\alpha)^{(1/m)}]^{m_0} = (1-\alpha)^{\pi_0} \geq 1-\alpha
+\]
+e quindi controllare il FWER ad $\alpha$:
+\[
+\mathrm{FWER} = \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} \{ P_i <  1-(1-\alpha)^{(1/m)}  \} \right) = 1- \Pr\left(\bigcap_{i: H_i \in \mathcal{T}} \{ P_i >  1-(1-\alpha)^{(1/m)}  \} \right) \leq \alpha
+\]
+
+
+Il caso di 2 test indipendenti.
+Distribuzione empirica delle coppie di p-value per 1000 ipotetici esperimenti  
+```{r}
+p.values.manyExp=cbind(runif(5000),runif(5000))
+plot(p.values.manyExp,pch=20,col="grey",asp=1)
+abline(v=.05,col="red")
+abline(h=.05,col="red")
+```
+
+Proviamo a svolgere una simulazione per verificare che il FWER sia davvero controllato ad $\alpha$
+```{r} 
+B<-5000
+V<-vector("numeric", length=B)
+for (i in 1:B){
+U<-runif(m)
+V[i]<-sum(U <= alpha.adj)
+}
+mean(V>0)
+```
+
+---
+
+La diseguaglianza di Bonferroni
+=========================
+
+--- 
+
+## Dipendenza tra test
+Le variabili di un esperimento sono spesso correlate tra loro.
+Nell'esempio del farmaco che dovrebbe 
+
+```{r}
+effetto.individuo=rnorm(6,mean = 0,sd = sqrt(70))
+pressione.min=rnorm(6,mean = 82,sd = sqrt(30))+effetto.individuo
+pressione.max=rnorm(6,mean = 105,sd = sqrt(30))+effetto.individuo
+
+plot(pressione.min,pressione.max,col=c("black","black","black","red","red","red"),pch=20)
+cor(pressione.min,pressione.max)
+
+dati=data.frame(farmaco=c("standard","standard","standard",
+                        "new","new","new"),
+                pressione.min=pressione.min,
+                pressione.max=pressione.max, pch=20)
+dati
+
+B=5000
+res=replicate(B,{
+  effetto.individuo=rnorm(6,mean = 0,sd = sqrt(70))
+  pressione.min=rnorm(6,mean = 82,sd = sqrt(30))+effetto.individuo
+  pressione.max=rnorm(6,mean = 105,sd = sqrt(30))+effetto.individuo
+  c(press.min=t.test(pressione.min[1:3],pressione.min[4:6],var.equal = FALSE)$p.value,
+    press.max=t.test(pressione.max[1:3],pressione.max[4:6],var.equal = FALSE)$p.value)
+})
+res=t(res)
+plot(res,pch=20,col="grey",asp=1)
+abline(v=.05,col="red")
+abline(h=.05,col="red")
+
+#con che probabilità entrambi i p-value<.05? (area in basso a sx)
+sum((res[,1]<.05)&(res[,2]<.05))/B
+
+# quanto è atteso in caso di indipendenza dei test?
+.05*.05
+```
+
+
+## Carlo Emilio Bonferroni
+Carlo Emilio Bonferroni è stato un matematico italiano, noto soprattutto per la disuguaglianza che portano il suo nome.
+
+![Carlo Emilio Bonferroni (28 January 1892 – 18 August 1960)](http://upload.wikimedia.org/wikipedia/commons/d/de/Carlo_Emilio_Bonferroni.jpg)
+
+La disuguaglianza di Bonferroni, nota anche come diseguaglianza di Boole, afferma che per ogni collezione finita o numerabile di eventi, la probabilità che accada almeno uno degli eventi è minore o uguale alla somma delle probabilità dei singoli eventi, ovvero
+
+\[
+\Pr\left(\bigcup_{i: H_i \in \mathcal{T}} E_i \right) \leq  \sum_{i: H_i \in \mathcal{T}} \Pr\left( E_i  \right) 
+\]
+
+quindi considerando $E_i = \{P_i \leq \frac{\alpha}{m} \}$ otteniamo
+
+\[
+\mathrm{FWER} = \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} \{ P_i \leq \frac{ \alpha}{m}  \} \right) \leq  \sum_{i: H_i \in \mathcal{T}}  \Pr\left( P_i \leq \frac{ \alpha}{m}  \right) \leq m_0 \frac{\alpha}{m} = \pi_0\alpha  \leq \alpha
+\]
+
+ovvero il metodo di Bonferroni controlla il FWER ad $\alpha$. 
+
+La procedura di Bonferroni è la seguente:
+
+* Si rifiuta $H_i$ se $p_i \leq \tilde{\alpha} = \frac{\alpha}{m}$
+
+o, in maniera equivalente
+
+* Si rifiuta $H_i$ se $\tilde{p}_i = \min(mp_i,1) \leq \alpha$
+
+### Dataset mtept
+
+Consideriamo ora il dataset `mtept`:
+
+```{r message=F}  
+require("multcomp")
+data(mtept)
+gruppo<-mtept[,"treatment"]
+risposte<-mtept[,-1]
+boxplot(risposte[gruppo=="Placebo",], at=c(1,3,5,7), xlim=c(1,8))
+boxplot(risposte[gruppo=="Drug",], at=c(2,4,6,8), col="red", add=T)
+```
+
+Conduciamo 4 test di Wilcoxon, uno per ciascun endpoint:
+```{r message=F}  
+require("multcomp")
+m<-4
+p.values<-vector("numeric", length=m)
+names(p.values)<-names(risposte)
+for (i in 1:m){
+p.values[i]<-wilcox.test(risposte[gruppo=="Placebo",i], risposte[gruppo=="Drug",i])$p.value
+}
+p.values
+```
+Aggiustiamo ora il vettore di p-values con il metodo di Bonferroni:
+```{r}  
+p.values.adj<-pmin(p.values*m,1)
+p.values.adj
+p.adjust(p.values,method="bonferroni")
+alpha = 0.1
+names(p.values.adj)[p.values.adj<=alpha] # nomi degli endpoint significativi ad alpha=10%
+```
+quindi il confronto tra i gruppi Placebo e Drug è significativo al livello $\alpha=10\%$ per l'endpoint E1.
+
+# Procedura di Holm
+Porta agli stessi rifiuti di Bonferroni, a volte qualcuno in più (uniformemente più potente).
+
+E' iterativa:
+
+1. Correggi i p-value con Bonferroni,
+2. Rifiuta tutti le ipotesi con p-value significativo
+3. Reitera 1. e 2. fino a quando non ci sono più rifiuti
+
+```{r}
+p.values
+p.adjust(p.values,method = "bonferroni")
+
+p.adjust(p.values,method = "holm")
+```
+
+Vedi slides
+
+# Post Hoc
+
+Un test per ogni confronto a coppie
+
+```{r}
+library(multcomp)
+data(litter)
+head(litter)
+?litter
+#Dose response of litter weights in rats.
+# Details
+# Pregnant mice were divided into four groups and the compound in four different doses was administered during pregnancy. Their litters were evaluated for birth weights.
+# dose: dosages at four levels: 0, 5, 50, 500.
+# weight: response variable: average post-birth weights in the entire litter.
+
+boxplot(weight~dose,data=litter,col="red")
+```
+ 
+Il disegno richiede di tenere in considerazione anche l'effetto di `gesttime + number`:  
+```{r}
+amod <- lm(weight ~ dose + gesttime + number, data = litter)
+summary(amod)
+```
+
+Visualizzazione 
+```{r}
+
+# # Una idea per visualizzare le differenze dei gruppi 'al netto' delle covariate gesttime e number  
+# weight.resid=residuals(lm(weight ~ gesttime + number, data = litter))
+# boxplot(weight.resid~dose,data=litter,col="red")
+
+# un modo più veloce:
+library(effects)
+plot(allEffects(amod))
+```
+
+Controllo della molteplicità:
+ 
+```{r}
+### define matrix of linear hypotheses for 'dose'
+doselev <- as.integer(levels(litter$dose))
+K <- contrMat(table(litter$dose), "Tukey")
+
+### set up multiple comparison object
+Kht <- glht(amod, linfct = mcp(dose = K), alternative = "less")
+
+### cf. Westfall (1997, Table 2)
+summary(Kht, test = univariate())
+summary(Kht, test = adjusted("bonferroni"))
+summary(Kht, test = adjusted("holm"))
+summary(Kht, test = adjusted("Shaffer"))
+```

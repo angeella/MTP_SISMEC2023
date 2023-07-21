@@ -1,0 +1,840 @@
+\section{Some Multiple Testing Procedures}
+\subsection{}
+\begin{frame}
+\frametitle{Familywise Error Rate}
+
+$\mathcal{T}\subseteq\mathcal{H}$: set of true null hypotheses 
+
+\bigskip
+
+\textcolor{cambridgedarkorange}{\textbf{Strong control of the familywise error rate}}
+\begin{eqnarray*}
+\mathrm{FWE} = \Pr(\mathrm{at\,\,least\,\,one\,\,type\,\,I\,\,error})  \leq \alpha \quad \forall\,\, \mathcal{T}\subseteq \mathcal{H}
+\end{eqnarray*}
+
+\bigskip
+
+\textcolor{cambridgedarkorange}{\textbf{Multiple testing procedures}}
+
+\begin{itemize}
+\item Bonferroni and Holm 
+\item Closed testing
+\item Gatekeeping
+\item Stepdown $S_{\max}$
+\item ...
+\end{itemize}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}
+\frametitle{Bonferroni and Holm}
+
+\textcolor{cambridgedarkorange}{\textbf{Bonferroni Inequality}}
+\begin{eqnarray*}
+\mathrm{FWE}=\Pr\left(\bigcup_{H\in \mathcal{T}} \left\{p_H \leq \textcolor{cambridgedarkorange}{\frac{\alpha}{|\mathcal{H}|}} \right\} \right) \leq
+\sum_{H\in \mathcal{H}}\Pr\left( p_H \leq \frac{\alpha}{|\mathcal{H}|} \right)\leq 
+ \alpha
+\end{eqnarray*}
+
+\begin{columns}[t]
+
+\column{0.5\textwidth}
+
+\textcolor{cambridgedarkorange}{$\quad$\textbf{Holm's sequential procedure}}
+
+
+\begin{enumerate}
+\item Start testing at $\alpha/|\mathcal{H}|$
+\item After $|\mathcal{R}|$ hypotheses have been rejected, test at $\alpha / |\mathcal{H}\setminus \mathcal{R} |$
+\item Stop at the first failure to reject a hypothesis
+\end{enumerate}
+
+\column{0.55\textwidth}
+
+
+
+\only<1>{\textcolor{cambridgedarkblue}{Start at $\alpha/5$}}
+\only<2>{\textcolor{cambridgedarkblue}{Suppose $p_A$ and $p_C$ significant}}
+\only<3>{\textcolor{cambridgedarkblue}{Go on at $\alpha/3$}}
+\only<4>{\textcolor{cambridgedarkblue}{Suppose $p_D$ significant}}
+\only<5>{\textcolor{cambridgedarkblue}{Go on at $\alpha/2$}}
+\only<6>{\textcolor{cambridgedarkblue}{No more rejections. Stop}}
+
+\bigskip
+
+\begin{tikzpicture}
+%\draw[color=white] (-1,-1) rectangle (5.5,3);
+\node at (-.4,1) {$\mathcal{H}\setminus \mathcal{R}:$};
+\node at (0,0) {$\mathcal{R}:$};
+\only<1>{
+\node at (1,2) {$\frac{\alpha}{5}$};
+\node at (2,2) {$\frac{\alpha}{5}$};
+\node at (3,2) {$\frac{\alpha}{5}$};
+\node at (4,2) {$\frac{\alpha}{5}$};
+\node at (5,2) {$\frac{\alpha}{5}$};
+\draw[] 
+(1,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {A}
+(2,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {B}
+(3,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {C}
+(4,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {D}
+(5,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {E};}
+\only<2>{
+\node at (1,2) {$\frac{\alpha}{5}$};
+\node at (2,2) {$\frac{\alpha}{5}$};
+\node at (3,2) {$\frac{\alpha}{5}$};
+\node at (4,2) {$\frac{\alpha}{5}$};
+\node at (5,2) {$\frac{\alpha}{5}$};
+\draw[] 
+(1,1) node[draw, line width=1pt,fill=cambridgedarkorange!50] {A}
+(2,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {B}
+(3,1) node[draw, line width=1pt,fill=cambridgedarkorange!50] {C}
+(4,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {D}
+(5,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {E};}
+\only<3>{
+\node at (1,2) {-};
+\node at (2,2) {$\frac{\alpha}{3}$};
+\node at (3,2) {-};
+\node at (4,2) {$\frac{\alpha}{3}$};
+\node at (5,2) {$\frac{\alpha}{3}$};
+\draw[] 
+(1,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {A}
+(2,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {B}
+(3,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {C}
+(4,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {D}
+(5,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {E};}
+\only<4>{
+\node at (1,2) {-};
+\node at (2,2) {$\frac{\alpha}{3}$};
+\node at (3,2) {-};
+\node at (4,2) {$\frac{\alpha}{3}$};
+\node at (5,2) {$\frac{\alpha}{3}$};
+\draw[] 
+(1,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {A}
+(2,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {B}
+(3,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {C}
+(4,1) node[draw, line width=1pt,fill=cambridgedarkorange!50] {D}
+(5,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {E};}
+\only<5-6>{
+\node at (1,2) {-};
+\node at (2,2) {$\frac{\alpha}{2}$};
+\node at (3,2) {-};
+\node at (4,2) {-};
+\node at (5,2) {$\frac{\alpha}{2}$};
+\draw[] 
+(1,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {A}
+(2,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {B}
+(3,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {C}
+(4,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {D}
+(5,1) node[draw, line width=1pt,fill=cambridgedarkblue!50] {E};}
+\end{tikzpicture}
+\end{columns}
+
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}
+\frametitle{Closed Testing}
+
+Make use of the dependence structure of test statistics
+
+\bigskip
+
+
+\begin{columns}[t]
+
+\column{0.55\textwidth}
+
+\textcolor{cambridgedarkorange}{\textbf{Closed Testing}}
+
+
+\begin{enumerate}
+\item Make $\mathcal{H}$ closed, i.e. $A,B\in \mathcal{H}\Rightarrow AB\equiv A\cap B \in \mathcal{H}$
+\item Start testing the top node
+\item At each step, test all child nodes of which all ancestors are significant at $\alpha$
+\end{enumerate}
+
+
+\column{0.55\textwidth}
+
+\only<1>{\textcolor{cambridgedarkblue}{Starting hypotheses}}
+\only<2>{\textcolor{cambridgedarkblue}{Make $\mathcal{H}$ closed w.r. to intersection}}
+\only<3>{\textcolor{cambridgedarkblue}{Start testing the top node at $\alpha$}}
+\only<4>{\textcolor{cambridgedarkblue}{Suppose the top node is significant}}
+\only<5>{\textcolor{cambridgedarkblue}{Go down}}
+\only<6>{\textcolor{cambridgedarkblue}{Find those are significant}}
+\only<7>{\textcolor{cambridgedarkblue}{Go down}}
+\only<8>{\textcolor{cambridgedarkblue}{Find those are significant}}
+
+
+\bigskip
+
+\begin{tikzpicture}
+\only<1>{
+\draw[] 
+(0,4) node[draw, color=white] {A}
+(-2,0) node[draw, line width=1pt] {A}
+(0,0) node[draw, line width=1pt] {B}
+(2,0) node[draw, line width=1pt] {C};
+}
+\only<2>{
+\draw[] 
+(0,4) node[draw, line width=1pt] {ABC}
+(-1.5,2) node[draw, line width=1pt] {AB}
+(0,2) node[draw, line width=1pt] {AC}
+(1.5,2) node[draw, line width=1pt] {BC}
+(-2,0) node[draw, line width=1pt] {A}
+(0,0) node[draw, line width=1pt] {B}
+(2,0) node[draw, line width=1pt] {C};
+}
+\only<3>{
+\draw[] 
+(.8,4) node {$\alpha$}
+(0,4) node[draw, line width=1pt,fill=cambridgedarkblue!50] {ABC}
+(-1.5,2) node[draw, line width=1pt] {AB}
+(0,2) node[draw, line width=1pt] {AC}
+(1.5,2) node[draw, line width=1pt] {BC}
+(-2,0) node[draw, line width=1pt] {A}
+(0,0) node[draw, line width=1pt] {B}
+(2,0) node[draw, line width=1pt] {C};
+}
+\only<4>{
+\draw[] 
+(.8,4) node {-}
+(0,4) node[draw, line width=1pt,fill=cambridgedarkorange!50] {ABC}
+(-1.5,2) node[draw, line width=1pt] {AB}
+(0,2) node[draw, line width=1pt] {AC}
+(1.5,2) node[draw, line width=1pt] {BC}
+(-2,0) node[draw, line width=1pt] {A}
+(0,0) node[draw, line width=1pt] {B}
+(2,0) node[draw, line width=1pt] {C};
+}
+\only<5>{
+\draw[] 
+(.8,4) node {-}
+(2.1,2) node {$\alpha$}
+(-.9,2) node {$\alpha$}
+(.6,2) node {$\alpha$}
+(0,4) node[draw, line width=1pt,fill=cambridgedarkorange!50] {ABC}
+(-1.5,2) node[draw, line width=1pt,fill=cambridgedarkblue!50] {AB}
+(0,2) node[draw, line width=1pt,fill=cambridgedarkblue!50] {AC}
+(1.5,2) node[draw, line width=1pt,fill=cambridgedarkblue!50] {BC}
+(-2,0) node[draw, line width=1pt] {A}
+(0,0) node[draw, line width=1pt] {B}
+(2,0) node[draw, line width=1pt] {C};
+\draw[->, line width=1pt] (0,3.7) -- (-1.5,2.3);
+\draw[->, line width=1pt] (0,3.7) -- (0,2.3);
+\draw[->, line width=1pt] (0,3.7) -- (1.5,2.3);
+}
+\only<6>{
+\draw[] 
+(.8,4) node {-}
+(2.1,2) node {$\alpha$}
+(-.9,2) node {-}
+(.6,2) node {-}
+(0,4) node[draw, line width=1pt,fill=cambridgedarkorange!50] {ABC}
+(-1.5,2) node[draw, line width=1pt,fill=cambridgedarkorange!50] {AB}
+(0,2) node[draw, line width=1pt,fill=cambridgedarkorange!50] {AC}
+(1.5,2) node[draw, line width=1pt,fill=cambridgedarkblue!50] {BC}
+(-2,0) node[draw, line width=1pt] {A}
+(0,0) node[draw, line width=1pt] {B}
+(2,0) node[draw, line width=1pt] {C};
+\draw[->, line width=1pt] (0,3.7) -- (-1.5,2.3);
+\draw[->, line width=1pt] (0,3.7) -- (0,2.3);
+\draw[->, line width=1pt] (0,3.7) -- (1.5,2.3);
+}
+\only<7>{
+\draw[] 
+(.8,4) node {-}
+(2.1,2) node {$\alpha$}
+(-.9,2) node {-}
+(.6,2) node {-}
+(-1.5,0) node {$\alpha$}
+(0,4) node[draw, line width=1pt,fill=cambridgedarkorange!50] {ABC}
+(-1.5,2) node[draw, line width=1pt,fill=cambridgedarkorange!50] {AB}
+(0,2) node[draw, line width=1pt,fill=cambridgedarkorange!50] {AC}
+(1.5,2) node[draw, line width=1pt,fill=cambridgedarkblue!50] {BC}
+(-2,0) node[draw, line width=1pt,fill=cambridgedarkblue!50] {A}
+(0,0) node[draw, line width=1pt] {B}
+(2,0) node[draw, line width=1pt] {C};
+\draw[->, line width=1pt] (0,3.7) -- (-1.5,2.3);
+\draw[->, line width=1pt] (0,3.7) -- (0,2.3);
+\draw[->, line width=1pt] (0,3.7) -- (1.5,2.3);
+\draw[->, line width=1pt] (-1.5,1.7) -- (-2,0.3);
+\draw[->, line width=1pt] (0,1.7) -- (-1.7,0.3);
+}
+\only<8>{
+\draw[] 
+(.8,4) node {-}
+(2.1,2) node {$\alpha$}
+(-.9,2) node {-}
+(.6,2) node {-}
+(-1.5,0) node {-}
+(0,4) node[draw, line width=1pt,fill=cambridgedarkorange!50] {ABC}
+(-1.5,2) node[draw, line width=1pt,fill=cambridgedarkorange!50] {AB}
+(0,2) node[draw, line width=1pt,fill=cambridgedarkorange!50] {AC}
+(1.5,2) node[draw, line width=1pt,fill=cambridgedarkblue!50] {BC}
+(-2,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {A}
+(0,0) node[draw, line width=1pt] {B}
+(2,0) node[draw, line width=1pt] {C};
+\draw[->, line width=1pt] (0,3.7) -- (-1.5,2.3);
+\draw[->, line width=1pt] (0,3.7) -- (0,2.3);
+\draw[->, line width=1pt] (0,3.7) -- (1.5,2.3);
+\draw[->, line width=1pt] (-1.5,1.7) -- (-2,0.3);
+\draw[->, line width=1pt] (0,1.7) -- (-1.7,0.3);
+}
+\end{tikzpicture}
+\end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}
+\frametitle{Gatekeeping Procedures}
+
+
+\centering
+
+\textcolor{cambridgedarkorange}{\textbf{Ordered Testing}}\\
+\textcolor{cambridgedarkorange}{(three ordered endpoints)}
+
+\bigskip
+\only<1>{\textcolor{cambridgedarkblue}{$\,$}}
+\only<2>{\textcolor{cambridgedarkblue}{Start test A at $\alpha$}}
+\only<3>{\textcolor{cambridgedarkblue}{Suppose $p_A<\alpha$}}
+\only<4>{\textcolor{cambridgedarkblue}{Go on to test B at $\alpha$}}
+\only<5>{\textcolor{cambridgedarkblue}{Suppose $p_B>\alpha$. Stop}}
+\bigskip
+
+\begin{tikzpicture}
+% \draw[->, line width=1pt] (0,1.3) -- (0,0.7);
+% \draw[->, line width=1pt] (0,3.3) -- (0,2.7);
+\draw[] 
+(1.3,4) node[color=white] {$\frac{\alpha}{2}$}
+(-1.3,4) node[color=white] {$\frac{\alpha}{2}$};
+\only<1>{
+\draw[] 
+(0,4) node[draw, line width=1pt, text width=1.7cm, text centered] {A\\ \small{primary endpoint}}
+(0,2) node[draw, line width=1pt, text width=1.7cm, text centered] {B\\ \small{secondary endpoint}}
+(0,0) node[draw, line width=1pt, text width=1.7cm, text centered] {C\\ \small{tertiary endpoint}};}
+\only<2>{
+\draw[] 
+(1.3,4) node {$\alpha$}
+(0,4) node[draw, line width=1pt, text width=1.7cm, text centered, fill=cambridgedarkblue!50] {A\\ \small{primary endpoint}}
+(0,2) node[draw, line width=1pt, text width=1.7cm, text centered] {B\\ \small{secondary endpoint}}
+(0,0) node[draw, line width=1pt, text width=1.7cm, text centered] {C\\ \small{tertiary endpoint}};}
+\only<3>{
+\draw[] 
+(1.3,4) node {-}
+(0,4) node[draw, line width=1pt, text width=1.7cm, text centered, fill=cambridgedarkorange!50]{A\\ \small{primary endpoint}}
+(0,2) node[draw, line width=1pt, text width=1.7cm, text centered]{B\\ \small{secondary endpoint}}
+(0,0) node[draw, line width=1pt, text width=1.7cm, text centered] {C\\ \small{tertiary endpoint}};}
+\only<4>{
+\draw[] 
+(1.3,4) node {-}
+(1.3,2) node {$\alpha$}
+(0,4) node[draw, line width=1pt, text width=1.7cm, text centered, fill=cambridgedarkorange!50] {A\\ \small{primary endpoint}}(0,2) node[draw, line width=1pt, text width=1.7cm, text centered, fill=cambridgedarkblue!50] {B\\ \small{secondary endpoint}}
+(0,0) node[draw, line width=1pt, text width=1.7cm, text centered] {C\\ \small{tertiary endpoint}};}
+\only<5->{
+\draw[] 
+(1.3,4) node {-}
+(1.3,2) node {$\alpha$}
+(0,4) node[draw, line width=1pt, text width=1.7cm, text centered, fill=cambridgedarkorange!50] {A\\ \small{primary endpoint}}
+(0,2) node[draw, line width=1pt, text width=1.7cm, text centered, fill=cambridgedarkblue!50] {B\\ \small{secondary endpoint}}
+(0,0) node[draw, line width=1pt, text width=1.7cm, text centered] {C\\ \small{tertiary endpoint}};}
+\end{tikzpicture}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{}
+\begin{frame}
+\frametitle{Gatekeeping Procedures}
+
+\centering
+
+\textcolor{cambridgedarkorange}{\textbf{Parallel strategy}}\\
+\textcolor{cambridgedarkorange}{(Acute lung injury)}
+
+\bigskip
+% \only<1-5>{\textcolor{cambridgedarkblue}{$\,$ }}
+\only<1>{\textcolor{cambridgedarkblue}{Start test A and B at $\alpha/2$}}
+\only<2>{\textcolor{cambridgedarkblue}{Suppose $p_A< \alpha/2$}}
+\only<3>{\textcolor{cambridgedarkblue}{Test C and D at $\alpha/4$}}
+\only<4>{\textcolor{cambridgedarkblue}{Suppose $p_D< \alpha/4$}}
+\only<5>{\textcolor{cambridgedarkblue}{Test C at $\alpha/2$}}
+\only<6>{\textcolor{cambridgedarkblue}{Suppose $p_C<\alpha/2$}}
+\only<7>{\textcolor{cambridgedarkblue}{Test B at $\alpha$}}
+\bigskip
+
+\begin{tikzpicture}
+
+% \draw[->, line width=1pt] (0,2.3) -- (0,1.7) -- (1.5,1.7) -- (1.5,1.3) -- (0,1.3) -- (0,0.7);
+% \draw[->, line width=1pt] (3,2.3) -- (3,1.7) -- (1.5,1.7) -- (1.5,1.3) -- (3,1.3) -- (3,0.7);
+\draw[] 
+(4.3,2.8) node[color=white] {$\frac{\alpha}{2}$}
+(-1.3,2.8) node[color=white] {$\frac{\alpha}{2}$};
+% \only<1-5>{\draw[] 
+% (0,2.8) node[draw, line width=1pt, text width=1.9cm, text centered] {A1 primary\\ \small{lung function}}
+% (3,2.8) node[draw, line width=1pt, text width=1.9cm, text centered] {A2 primary\\ \small{mortality rate}}
+% (0,0.2) node[draw, line width=1pt, text width=1.9cm, text centered] {B1  secondary\\ \small{quality of life}}
+% (3,0.2) node[draw, line width=1pt, text width=1.9cm, text centered] {B2  secondary\\ \small{ICU-free days}};}
+\only<1>{\draw[] 
+(0,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {A1 primary\\ \small{lung function}}
+(-1.3,2.8) node {$\frac{\alpha}{2}$}
+(3,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {A2 primary\\ \small{mortality rate}}
+(4.3,2.8) node {$\frac{\alpha}{2}$}
+(0,0.2) node[draw, line width=1pt, text width=1.9cm, text centered] {B1 secondary\\ \small{quality of life}}
+(3,0.2) node[draw, line width=1pt, text width=1.9cm, text centered] {B2 secondary\\ \small{ICU-free days}};}
+\only<2>{\draw[] 
+(-1.3,2.8) node {-}
+(4.3,2.8) node {$\frac{\alpha}{2}$}
+(0,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {A1 primary\\ \small{lung function}}
+(3,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {A2 primary\\ \small{mortality rate}}
+(0,0.2) node[draw, line width=1pt, text width=1.9cm, text centered] {B1 secondary\\ \small{quality of life}}
+(3,0.2) node[draw, line width=1pt, text width=1.9cm, text centered] {B2 secondary\\ \small{ICU-free days}};}
+\only<3>{\draw[] 
+(-1.3,2.8) node {-}
+(4.3,2.8) node {$\frac{\alpha}{2}$}
+(4.3,0.2) node {$\frac{\alpha}{4}$}
+(-1.3,0.2) node {$\frac{\alpha}{4}$}
+(0,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {A1 primary\\ \small{lung function}}
+(3,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {A2 primary\\ \small{mortality rate}}
+(0,0.2) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {B1  secondary\\ \small{quality of life}}
+(3,0.2) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {B2  secondary\\ \small{ICU-free days}};}
+\only<4>{\draw[] 
+(-1.3,2.8) node {-}
+(4.3,2.8) node {$\frac{\alpha}{2}$}
+(4.3,0.2) node {-}
+(-1.3,0.2) node {$\frac{\alpha}{4}$}
+(0,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {A1 primary\\ \small{lung function}}
+(3,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {A2 primary\\ \small{mortality rate}}
+(0,0.2) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {B1  secondary\\ \small{quality of life}}
+(3,0.2) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {B2  secondary\\ \small{ICU-free days}};}
+\only<5>{\draw[] 
+(-1.3,2.8) node {-}
+(4.3,2.8) node {$\frac{\alpha}{2}$}
+(4.3,0.2) node {-}
+(-1.3,0.2) node {$\frac{\alpha}{2}$}
+(0,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {A1 primary\\ \small{lung function}}
+(3,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {A2 primary\\ \small{mortality rate}}
+(0,0.2) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {B1  secondary\\ \small{quality of life}}
+(3,0.2) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {B2  secondary\\ \small{ICU-free days}};}
+\only<6>{\draw[] 
+(-1.3,2.8) node {-}
+(4.3,0.2) node {-}
+(-1.3,0.2) node {-}
+(4.3,2.8) node {$\frac{\alpha}{2}$}
+(0,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {A1 primary\\ \small{lung function}}
+(3,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {A2 primary\\ \small{mortality rate}}
+(0,0.2) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {B1  secondary\\ \small{quality of life}}
+(3,0.2) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {B2  secondary\\ \small{ICU-free days}};}
+\only<7>{\draw[] 
+(-1.3,2.8) node {-}
+(4.3,0.2) node {-}
+(-1.3,0.2) node {-}
+(4.3,2.8) node {$\alpha$}
+(0,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {A1 primary\\ \small{lung function}}
+(3,2.8) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] {A2 primary\\ \small{mortality rate}}
+(0,0.2) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {B1  secondary\\ \small{quality of life}}
+(3,0.2) node[draw, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] {B2  secondary\\ \small{ICU-free days}};}
+\end{tikzpicture}
+
+\bigskip
+
+secondary endpoints are tested if at least one
+primary test is significant
+
+
+% \end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bfr{Serial gatekeeping}
+\begin{overprint}
+  \onslide<1>
+    Test all primary endpoints at $\alpha/3$
+  \onslide<2>
+    If we reject a few\ldots
+  \onslide<3>
+    Go on with the other primary endpoints as in Holm's procedure
+  \onslide<4>
+    Suppose we are able to reject all primary endpoints\ldots
+  \onslide<5>
+    Go on testing the secondary endpoints at $\alpha/3$
+  \onslide<6>
+    And if we reject some of those\ldots
+  \onslide<7>
+    Go on doing Holm for the secondary endpoints
+\end{overprint}
+\begin{figure}
+  \begin{tikzpicture}
+  \path (0,0) rectangle (7,6) ;
+  \path<1-3> (1,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (a1) {$A_1$} ;
+  \path<4-> (1,5) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] (a1) {$A_1$} ;
+  \path<1-2> (a1.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+  \path<3> (a1.north east) node[anchor=west, blue] {$\alpha$} ;
+
+  \path<1> (1,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (a2) {$A_2$} ;
+  \path<2-> (1,3) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] (a2) {$A_2$} ;
+  \path<1> (a2.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+
+  \path<1> (1,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (a3) {$A_3$} ;
+  \path<2-> (1,1) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] (a3) {$A_3$} ;
+  \path<1> (a3.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+
+  \path<1-4> (5,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b1) {$B_1$} ;
+  \path<5-> (5,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (b1) {$B_1$} ;
+  \path<1-4> (b1.north east) node[anchor=west, blue] {$0$} ;
+  \path<5-6> (b1.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+  \path<7-> (b1.north east) node[anchor=west, blue] {$\frac12\alpha$} ;
+
+  \path<1-4> (5,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b2) {$B_2$} ;
+  \path<5> (5,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (b2) {$B_2$} ;
+  \path<6-> (5,3) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] (b2) {$B_2$} ;
+  \path<1-4> (b2.north east) node[anchor=west, blue] {$0$} ;
+  \path<5> (b2.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+
+  \path<1-4> (5,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b3) {$B_3$} ;
+  \path<5-> (5,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (b3) {$B_3$} ;
+  \path<1-4> (b3.north east) node[anchor=west, blue] {$0$} ;
+  \path<5-6> (b3.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+  \path<7-> (b3.north east) node[anchor=west, blue] {$\frac12\alpha$} ;
+
+  \path (1,6.1) node {Primary endpoints} ;
+  \path (5,6.1) node {Secondary endpoints} ;
+  \end{tikzpicture}
+\end{figure}
+\end{frame}
+
+
+\bfr{Parallel gatekeeping}
+\begin{overprint}
+  \onslide<1>
+    Test all primary endpoints at $\alpha/3$
+  \onslide<2>
+    If we reject a few\ldots
+  \onslide<3>
+    Go on with the secondary endpoints with the available $\alpha$
+  \onslide<4>
+    Suppose we are able to reject some of the secondary endpoints\ldots
+  \onslide<5>
+    Go on doing Holm for the secondary endpoints
+  \onslide<6>
+    And if we reject all secondary ones\ldots
+  \onslide<7>
+    Go on doing Holm for the primary endpoints
+\end{overprint}
+\begin{figure}
+  \begin{tikzpicture}
+  \path (0,0) rectangle (7,6) ;
+  \path<1> (1,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (a1) {$A_1$} ;
+  \path<2-> (1,5) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] (a1) {$A_1$} ;
+  \path<1> (a1.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+
+  \path (1,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (a2) {$A_2$} ;
+  \path<1-6> (a2.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+  \path<7-> (a2.north east) node[anchor=west, blue] {$\frac12\alpha$} ;
+
+  \path (1,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (a3) {$A_3$} ;
+  \path<1-6> (a3.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+  \path<7-> (a3.north east) node[anchor=west, blue] {$\frac12\alpha$} ;
+
+  \path<1-2> (5,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b1) {$B_1$} ;
+  \path<3-5> (5,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (b1) {$B_1$} ;
+  \path<6-> (5,5) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] (b1) {$B_1$} ;
+  \path<1-2> (b1.north east) node[anchor=west, blue] {$0$} ;
+  \path<3-4> (b1.north east) node[anchor=west, blue] {$\frac19\alpha$} ;
+  \path<5> (b1.north east) node[anchor=west, blue] {$\frac16\alpha$} ;
+
+  \path<1-2> (5,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b2) {$B_2$} ;
+  \path<3-5> (5,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (b2) {$B_2$} ;
+  \path<6-> (5,3) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] (b2) {$B_2$} ;
+  \path<1-2> (b2.north east) node[anchor=west, blue] {$0$} ;
+  \path<3-4> (b2.north east) node[anchor=west, blue] {$\frac19\alpha$} ;
+  \path<5> (b2.north east) node[anchor=west, blue] {$\frac16\alpha$} ;
+
+  \path<1-2> (5,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered ] (b3) {$B_3$} ;
+  \path<3> (5,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkblue!50] (b3) {$B_3$} ;
+  \path<4-> (5,1) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=cambridgedarkorange!50] (b3) {$B_3$} ;
+  \path<1-2> (b3.north east) node[anchor=west, blue] {$0$} ;
+  \path<3> (b3.north east) node[anchor=west, blue] {$\frac19\alpha$} ;
+
+  \path (1,6.1) node {Primary endpoints} ;
+  \path (5,6.1) node {Secondary endpoints} ;
+  \end{tikzpicture}
+\end{figure}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}
+\frametitle{Example: clinical trial in patients with hypertension} 
+
+\textcolor{cambridgedarkorange}{Study design:} two doses versus placebo
+
+\bigskip
+
+$\begin{array}{cl}
+   X_{1},\ldots,X_{m}\stackrel{\mathrm{i.i.d.}}{\sim} N(\psi_x,1) & \mathrm{Placebo} \\ 
+   Y_{1},\ldots,Y_{n}\stackrel{\mathrm{i.i.d.}}{\sim}N(\psi_y,1) &  \mathrm{Low\,\,dose}\\ 
+   Z_{1},\ldots,Z_{n}\stackrel{\mathrm{i.i.d.}}{\sim}N(\psi_z,1) & \mathrm{High\,\,dose} \\
+\end{array}$
+
+
+\bigskip
+
+\textcolor{cambridgedarkorange}{Primary endpoint:} reduction in diastolic blood pressure
+
+\bigskip
+
+$\begin{array}{ccc}
+    A: \psi_x = \psi_y & \mathrm{versus} &  \tilde{A}:  \psi_x>\psi_y \\ 
+    B: \psi_x = \psi_z & \mathrm{versus}   &  \tilde{B}: \psi_x>\psi_z\\ 
+\end{array}$
+
+\bigskip
+
+\textcolor{cambridgedarkorange}{Statistics:} marginal and joint null distributions
+
+
+
+\begin{columns}[t]
+\column{0.45\textwidth}
+
+$\begin{array}{c}
+    S_A=\sqrt{\frac{mn}{m+n}}(\bar{X}-\bar{Y}) \stackrel{A}{\sim} N(0,1)\\ 
+    S_B=\sqrt{\frac{mn}{m+n}}( \bar{X}-\bar{Z}) \stackrel{B}{\sim} N(0,1)\\ 
+\end{array}$
+
+
+\column{0.55\textwidth}
+
+
+$$
+\left(   \begin{array}{c}
+    S_A \\ 
+    S_B \\ 
+\end{array}\right) \stackrel{A,B}{\sim} N_{2}\left(   
+\left[\begin{array}{c}
+    0 \\ 
+    0 \\ 
+\end{array}\right], \left[\begin{array}{cc}
+    1 & \lambda \\ 
+    \lambda & 1\\ 
+\end{array}\right]  \right)$$
+
+$\lambda= \frac{n}{n+m}\,\,$  nuisance parameter
+
+\end{columns}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}
+\frametitle{Bonferroni's bound: positive dependence} 
+
+$\mathrm{FWE}=\Pr\left(\left\{S_A > c \right\} \cup \left\{S_B > c \right\} \right)$ using $c=z_{1-\frac{\alpha}{2}}$ (Bonferroni) is equal
+
+\smallskip
+
+$$\underbrace{\Pr\left(S_A>  z_{1-\frac{\alpha}{2}} \right)}_{\alpha/2}+ \underbrace{\Pr\left(S_B >  z_{1-\frac{\alpha}{2}} \right)}_{\alpha/2}  -\underbrace{ \Pr\left(\left\{S_A >  z_{1-\frac{\alpha}{2}} \right\} \cap \left\{S_B >  z_{1-\frac{\alpha}{2}} \right\} \right)}_{\alpha(\lambda)}$$
+
+\bigskip
+
+\begin{columns}[t]
+
+\column{0.45\textwidth}
+\centering
+\textcolor{cambridgedarkorange}{$n=3m$, $\lambda=3/4$, $\mathrm{FWE}=0.04$}\\
+\includegraphics[scale=.33]{lambda75}
+
+\column{0.45\textwidth}
+\centering
+\textcolor{cambridgedarkorange}{$0<\lambda<1$, $\uparrow$ dose levels}\\
+\includegraphics[scale=.33]{lambdarho}
+\end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}
+\frametitle{Bonferroni's bound: worst dependence case} 
+
+\textcolor{cambridgedarkorange}{Two-sided testing}
+
+\bigskip
+
+$\begin{array}{ccc}
+    A: \psi = 0 & \mathrm{versus} &  \tilde{A}:  \psi>0\\ 
+    B: \psi = 0 & \mathrm{versus}   &  \tilde{B}: \psi<0\\ 
+\end{array}$
+
+\bigskip
+
+\textcolor{cambridgedarkorange}{$S_{B}\equiv -S_A\Rightarrow \lambda = -1$ (disjoint rejection regions)}
+\begin{eqnarray*}
+\mathrm{FWE}=\Pr\left(S_A > z_{1-\frac{\alpha}{2}} \right) + \Pr\left(-S_A > z_{1-\frac{\alpha}{2}} \right) = \alpha
+% &=&\Pr\left(S_A < z_{\frac{\alpha}{2}} \right) + \Pr\left(S_A > z_{1-\frac{\alpha}{2}} \right) =\alpha
+\end{eqnarray*}
+
+\begin{columns}[t]
+
+\column{0.45\textwidth}
+\centering
+\includegraphics[scale=.32]{lambda_1}
+
+\column{0.45\textwidth}
+\centering
+\includegraphics[scale=.32]{lambda_1b}
+\end{columns}
+
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}
+\frametitle{Stepdown $S_{\max}$ (parametric)} 
+
+Make use of the dependence structure of test statistics
+
+\begin{columns}[t]
+
+\column{0.5\textwidth}
+
+\textcolor{cambridgedarkorange}{\textbf{Stepdown procedure}}
+
+
+\begin{enumerate}
+\item Find the null distribution of $S_{\max}=\max_{H\in \mathcal{H}}(S_H)$
+\item Reject $H$ if $S_{H}>c_{1-\alpha}$,\\ the $(1-\alpha)$-quantile of $\mathrm{d}_{S_{\max}}$
+\item Recompute the distribution of $S_{\max}=\max_{H\in \mathcal{H}\setminus \mathcal{R}  }(S_H)$
+\item Repeat
+\end{enumerate}
+
+\column{0.55\textwidth}
+
+\only<1>{\textcolor{cambridgedarkorange}{Find $c_{1-\alpha}$ from $\mathrm{d}_{S_{\max}}=\mathrm{d}_{\max(S_A,S_B)}$ }}
+\only<2>{\textcolor{cambridgedarkorange}{Suppose $S_B > c_{1-\alpha}$}}
+\only<3>{\textcolor{cambridgedarkorange}{Find $z_{1-\alpha}$ from $\mathrm{d}_{S_{\max}}=\mathrm{d}_{S_A}$}}
+\only<4>{\textcolor{cambridgedarkorange}{Suppose $S_{A} > z_{1-\alpha}$}}
+
+\begin{tikzpicture}
+\node at (-.4,.5) {$\mathcal{H}\setminus \mathcal{R}:$};
+\node at (0,0) {$\mathcal{R}:$};
+\only<1>{
+\node at (1,1) {$c_{1-\alpha}$};
+\node at (2,1) {$c_{1-\alpha}$};
+\draw[] 
+(1,.5) node[draw, line width=1pt,fill=cambridgedarkblue!50] {A}
+(2,.5) node[draw, line width=1pt,fill=cambridgedarkblue!50] {B};}
+\only<2>{
+\node at (1,1) {$c_{1-\alpha}$};
+\node at (2,1) {$c_{1-\alpha}$};
+\draw[] 
+(1,.5) node[draw, line width=1pt,fill=cambridgedarkblue!50] {A}
+(2,.5) node[draw, line width=1pt,fill=cambridgedarkorange!50] {B};}
+\only<3>{
+\node at (1,1) {$z_{1-\alpha}$};
+\node at (2,1) {$-$};
+\draw[] 
+(1,.5) node[draw, line width=1pt,fill=cambridgedarkblue!50] {A}
+(2,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {B};}
+\only<4>{
+\node at (1,1) {$-$};
+\node at (2,1) {$-$};
+\draw[] 
+(1,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {A}
+(2,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {B};}
+\end{tikzpicture}
+
+
+
+\only<1-2>{\includegraphics[scale=.33]{step1}}
+\only<3->{\includegraphics[scale=.33]{step2}}
+
+
+\end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}
+\frametitle{Stepdown $S_{\max}$ (resampling based)} 
+
+Make use of the dependence structure of test statistics
+
+\begin{columns}[t]
+
+\column{0.5\textwidth}
+
+\textcolor{cambridgedarkorange}{\textbf{Stepdown procedure}}
+
+
+\begin{enumerate}
+\item Find the null distribution$^{*}$ of $S_{\max}=\max_{H\in \mathcal{H}}(S_H)$
+\item Reject $H$ if $S_{H}>c^{*}_{1-\alpha}$,\\ the $(1-\alpha)$-quantile of $\mathrm{d}^{*}_{S_{\max}}$
+\item Recompute the distribution$^{*}$ of $S_{\max}=\max_{H\in \mathcal{H}\setminus \mathcal{R}  }(S_H)$
+\item Repeat
+\end{enumerate}
+
+$^{*}$ bootstrap (parametric and non-), permutations 
+
+\bigskip
+\textcolor{cambridgedarkorange}{Assumption:} 
+ "subset pivotality", exchangeability
+
+\column{0.55\textwidth}
+
+\only<1>{\textcolor{cambridgedarkorange}{Find $c^{*}_{1-\alpha}$ from $\mathrm{d}^{*}_{S_{\max}}=\mathrm{d}^{*}_{\max(S_A,S_B)}$}}
+\only<2>{\textcolor{cambridgedarkorange}{Suppose $S_B > c^{*}_{1-\alpha}$}}
+\only<3>{\textcolor{cambridgedarkorange}{Find $z^{*}_{1-\alpha}$ from $\mathrm{d}^{*}_{S_{\max}}=\mathrm{d}^{*}_{S_A}$}}
+\only<4>{\textcolor{cambridgedarkorange}{Suppose $S_{A} \leq z^{*}_{1-\alpha}$. Stop}}
+
+\begin{tikzpicture}
+\node at (-.4,.5) {$\mathcal{H}\setminus \mathcal{R}:$};
+\node at (0,0) {$\mathcal{R}:$};
+\only<1>{
+\node at (1,1) {$c^{*}_{1-\alpha}$};
+\node at (2,1) {$c^{*}_{1-\alpha}$};
+\draw[] 
+(1,.5) node[draw, line width=1pt,fill=cambridgedarkblue!50] {A}
+(2,.5) node[draw, line width=1pt,fill=cambridgedarkblue!50] {B};}
+\only<2>{
+\node at (1,1) {$c^{*}_{1-\alpha}$};
+\node at (2,1) {$-$};
+\draw[] 
+(1,.5) node[draw, line width=1pt,fill=cambridgedarkblue!50] {A}
+(2,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {B};}
+\only<3>{
+\node at (1,1) {$z^{*}_{1-\alpha}$};
+\node at (2,1) {$-$};
+\draw[] 
+(1,.5) node[draw, line width=1pt,fill=cambridgedarkblue!50] {A}
+(2,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {B};}
+\only<4>{
+\node at (1,1) {$z^{*}_{1-\alpha}$};
+\node at (2,1) {$-$};
+\draw[] 
+(1,.5) node[draw, line width=1pt,fill=cambridgedarkblue!50] {A}
+(2,0) node[draw, line width=1pt,fill=cambridgedarkorange!50] {B};}
+\end{tikzpicture}
+
+
+
+\only<1-2>{\includegraphics[scale=.33]{step1R}}
+\only<3->{\includegraphics[scale=.33]{step2R}}
+
+
+\end{columns}
+
+\end{frame}
+

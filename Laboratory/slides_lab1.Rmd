@@ -1,0 +1,237 @@
+---
+title: "Test Multipli,"
+author: "Livio Finos"
+highlighter: highlight.js
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+job: Università degli Studi di Padova
+license: by-nc-sa
+mode: selfcontained
+hitheme: tomorrow
+subtitle: Una esercitazione
+framework: io2012
+widgets: []
+---
+
+
+Ringrazio i professori Aldo Solari, Jelle Goeman e Florian Klinglmueller per le idee e il materiale condivisi in tutti questi anni. Questo materiale ne \`e una elaborazione.
+
+---
+
+
+```{r setting,echo=FALSE}
+m=10
+```
+
+# Un solo test per ogni esperimento
+
+## H0 vera
+
+Supponiamo di avere condotto un esperimento in cui un nuovo farmaco per l'abbassamento della pressione (massima) è confrontato con il farmaco standard. La risposta di primario interesse è 
+`Y`: la pressione (massima). Si hanno tre soggetti per ogni campione.
+
+La verifica di ipotesi di interesse è l'uguaglianza delle medie dei due campioni.
+
+**Esercizio**
+Generate un dataset 'verosimile' sotto l'ipotesi che i due farmaci siano equivalenti.
+
+Eseguite ora una verifica di ipotesi (calcolare il p-value associato) a livello $\alpha=.05$
+
+Se l'esempio non vi piace, potete immaginare un esempio completamente diverso. Quello che ci interessa è il p-value (generato sotto l'ipotesi nulla).
+
+**Possibile svolgimento**
+Supponiamo che la pressione media dei nostri pazienti sia $\mu=150$ con dev.std $\sigma=10$
+```{r}
+set.seed(17)
+dati=data.frame(farmaco=c("standard","standard","standard",
+                        "new","new","new"),
+                pressione=rnorm(6,mean = 150,sd = 10))
+dati
+
+t.test(pressione~farmaco,data=dati)
+```
+
+**Esercizio**
+
+* Avete rifiutato o accettato l'ipotesi nulla?
+$H_0: \mu_{standard}=\mu_{new}$
+?
+* Vi ha sorpreso?
+* Supponiamo che 20 centri facciano lo stesso esperimento (con il nuovo farmaco che è sempre uguale a quello standard). Quante volte vi attendete di rifiutare l'ipotesi nulla (Errore di I tipo)?
+* e se i centri fossero 1000?
+* Verificate voi stessi con `R`!
+
+**Possibile svolgimento in R**
+```{r}
+# Uso lo script precedente, ad ogni generazione estraggo il p-value con $p.value e replico B (=20 o =1000) volte
+B=1000
+p.values.many.experiments=replicate(B,{
+  dati=data.frame(farmaco=c("standard","standard","standard",
+                          "new","new","new"),
+                  pressione=rnorm(6,mean = 150,sd = 10))
+  t.test(pressione~farmaco,data=dati)$p.value
+}
+)
+
+#conto quante volte il p-value<.05
+sum(p.values.many.experiments<.05)
+```
+
+*Il p-value sotto $H_0$ è una variabile aleatoria uniforme in 0-1: p~U(0,1)*
+e quindi *la probabilità di rifiutate l'ipotesi nulla erroneamente è pari ad $\alpha$: $P(p\leq\alpha|H_0)=\alpha$*
+
+```{r}
+hist(p.values.many.experiments,col="orange")
+sum(p.values.many.experiments<=.05)/B
+#analogamente per un qualsiasi altro valore di significatività:
+sum(p.values.many.experiments<=.10)/B
+```
+
+
+## H1 vera
+
+Supponiamo ora di avere lo stesso setting precedente, ma in questo caso  il farmaco funziona! 
+
+La risposta di primario interesse è ancora
+`Y`: la pressione (minima). Si hanno tre soggetti per ogni campione.
+
+La verifica di ipotesi di interesse è l'uguaglianza delle medie dei due campioni.
+
+**Esercizio**
+Generate un dataset 'verosimile' sotto l'ipotesi che il farmaco abbassi la pressione.
+
+Eseguite ora una verifica di ipotesi (calcolare il p-value associato) a livello $\alpha=.05$
+
+
+
+**Possibile svolgimento**
+Supponiamo che la pressione minima media dei nostri pazienti sia $\mu=150$ con dev.std $\sigma=10$. Il farmaco riduce la pressione di $30$.
+
+```{r}
+set.seed(17)
+dati=data.frame(farmaco=c("standard","standard","standard",
+                        "new","new","new"),
+                pressione=rnorm(6,mean = c(150,150,150,150-30,150-30,150-30),sd = 10))
+dati
+
+t.test(pressione~farmaco,data=dati)
+```
+
+**Esercizio**
+
+* Avete rifiutato o accettato l'ipotesi nulla?
+$H_0: \mu_{standard}=\mu_{new}$
+?
+* Vi ha sorpreso?
+* Verificate la proporzione di rifiuti tramite simulazione in `R`!
+
+**Possibile svolgimento in R**
+```{r}
+# Uso lo script precedente, ad ogni generazione estraggo il p-value con $p.value e replico B (=20 o =1000) volte
+B=1000
+p.values.many.experiments=replicate(B,{
+  dati=data.frame(farmaco=c("standard","standard","standard",
+                          "new","new","new"),
+                  pressione=rnorm(6,mean =  c(150,150,150,150-30,150-30,150-30),sd = 10))
+  t.test(pressione~farmaco,data=dati)$p.value
+}
+)
+
+#conto quante volte il p-value<.05
+sum(p.values.many.experiments<.05)
+```
+
+*Il p-value sotto $H_1$ è una variabile aleatoria con stocasticamente inferiore ad una U(0,1)*
+e quindi *la probabilità di rifiutate l'ipotesi nulla CORRETTAMENTE è $>\alpha$: $P(p\leq\alpha|H_1)>\alpha$*
+
+```{r}
+hist(p.values.many.experiments,xlim=c(0,1),col="orange")
+sum(p.values.many.experiments<=.05)/B
+#analogamente per un qualsiasi altro valore di significatività:
+sum(p.values.many.experiments<=.10)/B
+```
+
+#Un esperimento, molte domande!
+Supponiamo ora che nello stesso esperimento (più realisticamente) si valutino più endpoint di interesse e non solo la pressione massima.
+Per ogni endpoint valutiamo una ipotesi e otteniamo un p-value.
+
+
+**esercizio**
+
+
+Simulate `r B` un trial clinico con `r m` endpoints (es `replicate()`) valutando la distribuzione empirica del **numero di rifiuti** in ogni trial. 
+
+Valutate anche la frazione di esperimenti in cui si è commesso **almeno un errore**.
+
+Nella soluzione che segue prendiamo in considerazione due diverse soglie:
+
+- `alpha_a=.05`
+- `alpha_b=1-(1-.05)^(1/m)=` `r 1-(1-.05)^(1/m)` (Correzione di Sidak)
+
+```{r}
+m=10
+alpha_a=.05
+alpha_b=1-(1-.05)^(1/m)
+# un singolo esperimento con m endpoints (e altrettante verifiche di ipotesi e p-values)
+ endpoints=matrix(rnorm(6*m),6,m)
+
+p.values.1.experiment=apply(endpoints , 2, function(y) t.test(y[1:3],y[4:6],var.equal = TRUE)$p.value)
+
+ c(n.rifiuti_a=sum(p.values.1.experiment<alpha_a),
+      n.rifiuti_b=sum(p.values.1.experiment<alpha_b)
+   )
+
+# replichiamo B volte
+res=replicate(B,{
+ endpoints=matrix(rnorm(6*m),6,m)
+ p.values.1.experiment=apply(endpoints , 2, 
+                             function(y) t.test(y[1:3],y[4:6],var.equal = TRUE)$p.value)
+ c(n.rifiuti_a=sum(p.values.1.experiment<alpha_a),
+   n.rifiuti_b=sum(p.values.1.experiment<alpha_b)
+   )
+}
+)
+
+#Numero di rifiuti:
+table(res["n.rifiuti_a",])
+# Quante volte abbiamo commesso almeno un errore? (= quante volte almeno un rifiuto?)
+sum(res["n.rifiuti_a",]>0)
+
+table(res["n.rifiuti_b",])
+# quante volte almeno un errore?
+sum(res["n.rifiuti_b",]>0)
+
+```
+
+#Il farmaco ha effetto solo su ALCUNI endpoint
+
+Supponiamo ora che il farmaco abbia effetto sui primi 5 enpoint e non sugli altri
+
+```{r}
+ # genero la risposta di 6 pazienti su m enpoint
+ endpoints=matrix(rnorm(6*m),6,m)
+ # aggiunto un valore di 3 ai valori riferiti 
+ # ai primi 5 endpoint per i tre pazienti con il farmaco new 
+ endpoints[4:6,1:5]= endpoints[4:6,1:5]+3
+ endpoints
+
+ p.values.1.experiment=apply(endpoints , 2, function(y) t.test(y[1:3],y[4:6])$p.value)
+
+ c(n.rifiuti_a=sum(p.values.1.experiment<alpha_a),
+      n.rifiuti_b=sum(p.values.1.experiment<alpha_b),
+   n.rifiuti_a_H0=sum(p.values.1.experiment[-(1:5)]<alpha_a),
+   n.rifiuti_b_H0=sum(p.values.1.experiment[-(1:5)]<alpha_b),
+   n.rifiuti_a_H1=sum(p.values.1.experiment[1:5]<alpha_a),
+   n.rifiuti_b_H1=sum(p.values.1.experiment[1:5]<alpha_b)
+   )
+   
+
+ p.values.1.experiment
+```
+I primi 5 p-value hanno valori tendenzialmente più bassi degli altri (rifiuto più volte quelle ipotesi).
+
+
+Nella applicazioni a dati reali ovviamente NON conosciamo quali siano le ipotesi sotto $H_0$ (i due farmaci sono uguali) e quali siano sotto $H_1$ (il farmaco new è migliore).

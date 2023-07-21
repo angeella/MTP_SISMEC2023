@@ -1,0 +1,96 @@
+\section{The sequential rejection principle}
+\subsection{}
+\begin{frame}
+\frametitle{All similar methods}
+
+
+\begin{enumerate}
+\item Start testing hypotheses at some significance criterion
+\item If any hypotheses rejected, set new significance criterion for unrejected hypotheses
+\item Possibly new rejections
+\item Stop if no new rejections occur
+\end{enumerate}
+
+\bigskip
+\textcolor{cambridgedarkorange}{Are these all examples of the same procedure?}
+\bigskip
+
+
+\textcolor{cambridgedarkorange}{\textbf{The general procedure}}
+
+\bigskip
+
+
+$\mathcal{R}_{i}\subseteq \mathcal{H}$: the rejected hypotheses after step $i$
+
+\begin{eqnarray*}
+\mathcal{R}_{0} &=& \emptyset\\
+\mathcal{R}_{i+1} &=& \mathcal{R}_{i} \cup \{H \in \mathcal{H}: S_{H} > c_H(\mathcal{R}_{i})\} 
+\end{eqnarray*}
+
+After every step the procedure adjusts the critical values on the basis of the new rejected set
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{}
+\begin{frame}
+\frametitle{The Sequential Rejection Principle}
+
+
+
+\textcolor{cambridgedarkorange}{\textbf{Theorem}\footnote{J.J. Goeman and A. Solari (2008) The sequential rejection principle of familywise error control. \emph{Submitted}}}
+
+\bigskip
+If a general sequentially rejective procedure fulfills two conditions
+\begin{enumerate}
+\item Monotonicity
+\item Single step control
+\end{enumerate}
+Then it controls the FWE
+
+\bigskip
+
+\only<1>{
+\textcolor{cambridgedarkorange}{Monotonicity condition:}
+for every $\mathcal{S}\subseteq \mathcal{R}\subset\mathcal{H}$ and every $H\in \mathcal{H}\setminus\mathcal{R}$,
+
+$$c_{H}(\mathcal{S})\geq c_{H}(\mathcal{R})$$
+
+\textcolor{cambridgedarkorange}{In words:}
+critical values of unrejected null hypotheses never increase with
+more rejections
+
+\textcolor{cambridgedarkorange}{Note:} monotonicity implies $c_{H}(\mathcal{R}_{i})\geq c_{H}(\mathcal{R}_{i+1})$, but this is too weak to guarantee FWE control
+}
+\only<2>{
+\textcolor{cambridgedarkorange}{Single step condition:}
+for every $\mathcal{R}\subset\mathcal{H}$ and $\mathcal{T}=\mathcal{H}\setminus \mathcal{R}$,
+
+$$\Pr\left(\bigcup_{H\in \mathcal{T}} \left\{S_H > c_H(\mathcal{R})\right\}\right)\leq \alpha$$
+
+\textcolor{cambridgedarkorange}{In words:}
+FWE weak control is guaranteed at each single step.\\
+It may be assumed that all previous rejections were correct
+rejections
+}
+
+
+% \only<3>{
+% \textcolor{cambridgedarkorange}{Proof:}
+% \begin{itemize}
+% \item `Worst case': all false null hypotheses have been rejected
+% \item Single step condition guarantees FWE control in the worst case
+% \item Monotonicity guarantees: no false rejections in the worst case implies no false rejections `on the way' to the worst case 
+% \end{itemize}
+% }
+
+\only<4>{
+\textcolor{cambridgedarkorange}{A unifying approach:}
+\begin{itemize}
+\item Facilitates formulation of FWE controlling procedures
+\item Facilitates proof of FWE control
+\item Makes connections between methods more obvious 
+\end{itemize}
+}
+
+\end{frame}
