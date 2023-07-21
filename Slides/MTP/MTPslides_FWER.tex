@@ -57,9 +57,9 @@
 }
 
 
-\title[]{Controllo della Molteplicit\`a nei trial clinici}
+\title[]{Control of Multiplicity in Clinical Trials}
 \subtitle{FamilyWise Error Rate}
-\author[\hspace{5cm}]{Livio Finos}
+\author[\hspace{5cm}]{Livio Finos and Angela Andreella}
 \date{}
 % \date{A.A. 2015/2016 }
 %\logo{\includegraphics[scale=.05]{figures/logoUnipd.jpg}}
@@ -71,35 +71,36 @@
 \end{frame}
 
 \begin{frame}
-Ringrazio i professori Aldo Solari, Jelle Goeman e Florian Klinglmueller per le idee e il materiale condivisi in tutti questi anni. Questo materiale ne \`e una elaborazione.
+I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and the materials we shared during these years. The material is the result of all this reasoning together.
 \end{frame}
 
 % \section{FamilyWise Error Rate (FWER)}
-\section{Definizione}
+\section{Defintion}
 
 \bfr{FamilyWise Error Rate (FWER)}
-\bb{Probabilit\`a di fare ALMENO un falso rifiuto}
+\bb{Probability of doing AT LEAST one false rejection}
   \eb
 
 \begin{eqnarray*}
-    \mathrm{FWER} &=& P \big(p_i \leq \widetilde{\alpha}\ per\ almeno\ una\ ipotesi\ i\ nulla\ vera \big) \\
-    &=& \mathrm{P} \Big( \bigcup_{i\in \{ipotesi\ nulle\ vere\}} \{p_i \leq \widetilde{\alpha}\} \Big) \\
+    \mathrm{FWER} &=& P \big(p_i \leq \widetilde{\alpha}\ for\ at\ least\ one\ i\ true\ null\ hypothesis \big) \\
+    &=& \mathrm{P} \Big( \bigcup_{i\in \{true\ null\ hypotheses\}} \{p_i \leq \widetilde{\alpha}\} \Big) \\
     \end{eqnarray*}
 
 \end{frame}
 
 
 
-\bfr{Correzione di \v{S}id\`ak }
-Se voglio controllare il $FWER$ a livello $\alpha$, a quale livello individuale $\widetilde{\alpha}$ devo rifiutare i singoli test?
+\bfr{\v{S}id\`ak correction}
+
+If I want to check the $FWER$ at the $\alpha$ level, at which individual $\widetilde{\alpha}$ level should I reject the individual tests?
 
 \begin{eqnarray*}
-    \mathrm{FWER}= \alpha &=& P \big(p_i \leq \widetilde{\alpha}\ per\ almeno\ una\ ipotesi\ nulla\ vera \big) = \\
-    &=& \mathrm{P} \Big( \bigcup_{i\in \{ipotesi\ nulle\ vere\}} \{p_i \leq \widetilde{\alpha}\} \Big) =\\
-    &=& 1 - \mathrm{P} \Big( \bigcap_{i\in \{ipotesi\ nulle\ vere\}} \{p_i > \widetilde{\alpha}\} \Big) = \\
+   \mathrm{FWER} &=& P \big(p_i \leq \widetilde{\alpha}\ for\ at\ least\ one\ i\ true\ null\ hypothesis \big) \\
+    &=& \mathrm{P} \Big( \bigcup_{i\in \{true\ null\ hypotheses\}} \{p_i \leq \widetilde{\alpha}\} \Big) =\\
+    &=& 1 - \mathrm{P} \Big( \bigcap_{i\in \{true\ null\ hypotheses\}} \{p_i > \widetilde{\alpha}\} \Big) = \\
     &&(de Morgan)\\
-    &=& 1 - (1- \widetilde{\alpha})^{m_0}= (m_0: \textrm{\#\{ipotesi nulle vere\}}) \\
-    && (\textrm{non conosciamo $m_0$, sappiamo che per\`o $m_0\leq m$})\\
+    &=& 1 - (1- \widetilde{\alpha})^{m_0}= (m_0: \textrm{\#\{true null hypothesis\}}) \\
+    && (\textrm{we don't know $m_0$, we know that though $m_0\leq m$})\\
     &\leq& 1 - (1- \widetilde{\alpha})^{m} 
     \end{eqnarray*}
 
@@ -107,7 +108,7 @@ Se voglio controllare il $FWER$ a livello $\alpha$, a quale livello individuale 
 \end{frame}
 
 \bfr{Correzione di \v{S}id\`ak }
-Da cui ricaviamo:
+From which we get:
 
 \begin{eqnarray*}
     1- \alpha &=& (1- \widetilde{\alpha})^{m} \\
@@ -115,11 +116,11 @@ Da cui ricaviamo:
   \widetilde{\alpha} &=& 1- (1- \alpha)^{1/m} 
     \end{eqnarray*}
 
-Quindi basta rifiutare ogni singola ipotesi a livello $\widetilde{\alpha} = 1- (1- \alpha)^{1/m}$ (cio\`e rifiuto i p-value per i quali $p \leq \widetilde{\alpha}$)\\
+Then it is enough to reject every single hypothesis at the level $\widetilde{\alpha} = 1- (1- \alpha)^{1/m}$ (i.e., I reject the p-values for which $p \leq \widetilde{\alpha}$)\
 \bigskip
 \pause
-Purtroppo questa soluzione \`e valida solo quando i p-value sono INDIPENDENTI.
-Nella maggior parte dei casi i test hanno una dipendenzza indotta dalla dipendenza tra le variabili originali.
+Unfortunately, this solution is valid only when the p-values are INDEPENDENT.
+In most cases, the tests have dependence-induced dependence between the original variables.
 
 \end{frame}
 
@@ -137,13 +138,13 @@ Nella maggior parte dei casi i test hanno una dipendenzza indotta dalla dipenden
 %\end{frame}
 
 
-\bfr{P-values Dipendenti}
-Pu\`o capitare che $P(\textrm{Almeno\ un\ Falso\ Rifiuto di } H_0) > (!) 1- (1-\alpha)^2$
+\bfr{Dependent P-values}
+It may happen that $P(\textrm{Almeno\ a\ False\ Rejection of } H_0) > (!) 1- (1-\alpha)^2$
 \begin{center}
 \includegraphics[width=0.5\textwidth]{plaatjes/bivaH0dep}
 \end{center}
 
-Remark: ricordate per\`o che le distribuzioni marginali sono uniformi perch\`e i due test sono sotto $H_0$.
+Remark: remember, however, that the marginal distributions are uniform because the two tests are under $H_0$.
 
 
 
@@ -157,16 +158,16 @@ Remark: ricordate per\`o che le distribuzioni marginali sono uniformi perch\`e i
 
 
 \bfr{Boole}
-  \bb{Diseguagliansa di Boole}
-    Dai due  eventi $A$ e $B$:
+  \bb{Boolean inequality}
+    Let two events $A$ e $B$:
     \[ \mathrm{P}(A \cup B) = \mathrm{P}(A) + \mathrm{P}(B) - \mathrm{P}(A \cap B) \]
-    e quindi
+    so
     \[ \mathrm{P}(A \cup B) \leq \mathrm{P}(A) + \mathrm{P}(B) \]
-    Generalizzando al pi\`u eventi $A_1, \ldots, A_m$:
+    Generalizing $A_1, \ldots, A_m$:
     \[ \mathrm{P}(\bigcup_{i=1}^m A_i) \leq \sum_{i=1}^m \mathrm{P}(A_i) \]
   \eb
   \bb{Equality}
-    L'uguaglianza si verifica quando gli eventi sono disgiunti
+    Equality occurs when events are disjointed
   \eb
   % \bb{Nessuna assumptione}
   %   Sempre valida
@@ -175,19 +176,19 @@ Remark: ricordate per\`o che le distribuzioni marginali sono uniformi perch\`e i
 
 
 \bfr{FamilyWise Error Rate (FWER)}
-\bb{Probabilit\`a di fare ALMENO un falso rifiuto}
+\bb{Probability of doing AT LEAST one false rejection}
   \eb
 
 
-\bb{Diseguaglianza di Bonferroni}
-     {Riduce $\alpha$} \\
-    Rifiuta $H_i$ se $p_i \leq \widetilde{\alpha} =\alpha/m$ ($m=$ numero di ipotesi)
+\bb{Bonferroni inequality}
+     {Reduce $\alpha$} \\
+    Reject $H_i$ if $p_i \leq \widetilde{\alpha} =\alpha/m$ ($m=$ number of hypotheses)
 \eb
-  \bb{Controllo del FWER}
+  \bb{FWER control}
     \begin{eqnarray*}
-    \mathrm{FWER} &=& P \big(p_i \leq \alpha/m\ per\ almeno\ una\ ipotesi\ i\ nulla\ vera \big) \\
-    &=& \mathrm{P} \Big( \bigcup_{i\in \{ipotesi\ nulle\ vere\}} \{p_i \leq \alpha/m\} \Big) \\
-    &\leq& \sum_{i \in \{ipotesi\ nulle\ vere\}} \mathrm{P} (p_i \leq \alpha/m) \\
+    \mathrm{FWER} &=& P \big(p_i \leq \alpha/m\ for\ at\ least\ one\ i\ null\ true\ hypothesis \big) \\
+    &=& \mathrm{P} \Big( \bigcup_{i\in \{true\ null\ hypothesis\}} \{p_i \leq \alpha/m\} \Big) \\
+    &\leq& \sum_{i \in \{true\ null\ hypothesis\}} \mathrm{P} (p_i \leq \alpha/m) \\
     &\leq& m_0\frac{\alpha}{m} \leq \alpha
     \end{eqnarray*}
   \eb
@@ -240,42 +241,46 @@ Remark: ricordate per\`o che le distribuzioni marginali sono uniformi perch\`e i
 
 
 
-\bfr{Procedura di Bonferroni}
- \bb{Multiplicity adjusted p-value}
-    $\tilde p_i = mp_i$ $i=1,\ldots,m$ e rifiuta se  $\leq \alpha$
-  \eb
-  \bb{Vantaggi}
-    \bi
-      \item Molto facile
-      \item Controlla il FWER sotto ogni dipendenza
-    \ei
-  \eb
-  \bb{Svantaggi}
-    Conservativo (Adj. p-value molto alti, pochi rifiuti)
-  \eb
+\bfr{Bonferroni Procedure}
+
+\bb{Multiplicity adjusted p-value}
+$\tilde p_i = mp_i$ for $i=1,\ldots,m$ and reject if $\tilde p_i \leq \alpha$
+\eb
+
+\bb{Advantages}
+\bi
+\item Very simple
+\item Controls the Family-Wise Error Rate (FWER) under any dependency
+\ei
+\eb
+
+\bb{Disadvantages}
+\bi
+\item Conservative (Adjusted p-values are often high, leading to few rejections)
+\ei
+\eb
 \end{frame}
 
 
 \section{Holm (step-wise)}
 
-\bfr{Holm's procedure\footnote{Holm S. (1979) A simple sequentially rejective multiple test procedure. {\it Scandinavian Journal of Statistics}; 6(2):65--70.}}
+\bfr{Holm's Procedure\footnote{Holm S. (1979) A simple sequentially rejective multiple test procedure. {\it Scandinavian Journal of Statistics}; 6(2):65--70.}}
 %\textcolor{redUnipd}{$\quad$\textbf{Holm's sequential procedure}}
 
-
 \begin{enumerate}
-\item Primo passo: adjusted p-value: $p\cdot m$; rifiuta se $\leq \alpha$
-\item Dopo $r$ rifiuti, adjusted p-value: $p\cdot (m-r)$
-\item Stop appena non rifiuti nulla
+\item First step: adjusted p-value: $p\cdot m$; reject if $\leq \alpha$
+\item After $r$ rejections, adjusted p-value: $p\cdot (m-r)$
+\item Stop as soon as nothing is rejected
 \end{enumerate}
 
 \begin{center}
 \begin{overprint}
 \only<1>{\bbf{Bonferroni}}
-\only<2>{\bbf{Supponiamo $p_A$ e $p_C$ significativi}}
+\only<2>{\bbf{Suppose $p_A$ and $p_C$ are significant}}
 \only<3>{\bbf{Adjusted p-value: $p\cdot 3$}}
-\only<4>{\bbf{Supponamo $p_D$ significativo}}
+\only<4>{\bbf{Suppose $p_D$ is significant}}
 \only<5>{\bbf{Adjusted p-value: $p\cdot 2$}}
-\only<6>{\bbf{Nessun rifiuto. Stop}}
+\only<6>{\bbf{No rejections. Stop}}
 \begin{tikzpicture}
 \node at (-.4,1) {$\mathcal{H}\setminus \mathcal{R}:$};
 \node at (0,0) {$\mathcal{R}:$};
@@ -385,19 +390,19 @@ Remark: ricordate per\`o che le distribuzioni marginali sono uniformi perch\`e i
 \begin{frame}
 \frametitle{Closed Testing\footnote{R Marcus, E Peritz, KR Gabriel (1976). On closed testing procedures with special reference to ordered analysis of variance. Biometrika 63: 655-660.}}
 \begin{overprint}
-\only<1>{Insieme Chiusura delle ipotesi (tutte le possibili intersezioni)}
-\only<2>{Test nodo superiore (es MANOVA)}
-\only<9>{\bbf{ Svantaggio: ipotesi testate diventano sono spesso troppe: $=2^{\# ipotesi}-1$}}
+\only<1>{Closed Set of Hypotheses (all possible intersections)}
+\only<2>{Top Node Test (e.g., MANOVA)}
+\only<9>{\bbf{Disadvantage: The tested hypotheses often become too many: $=2^{# \text{hypotheses}}-1$}}
 \end{overprint}
 \begin{center}
-\only<1>{\bbf{Ipotesi iniziali}}
-\only<2>{\bbf{Insieme chiusura}}
-\only<3>{\bbf{Test il nodo principale a livello $\alpha$}}
-\only<4>{\bbf{Supponiamo sia significativo}}
-\only<5>{\bbf{Avanti}}
-\only<6>{\bbf{Verifica i successivi a livello $\alpha$}}
-\only<7>{\bbf{Avanti}}
-\only<8-9>{\bbf{Identifica i significativi}}
+\only<1>{\bbf{Initial Hypotheses}}
+\only<2>{\bbf{Closed Set}}
+\only<3>{\bbf{Test the top node at level $\alpha$}}
+\only<4>{\bbf{Suppose it is significant}}
+\only<5>{\bbf{Move forward}}
+\only<6>{\bbf{Check the next ones at level $\alpha$}}
+\only<7>{\bbf{Move forward}}
+\only<8-9>{\bbf{Identify the significant ones}}
 \medskip
 
 \begin{tikzpicture}
@@ -518,83 +523,56 @@ Remark: ricordate per\`o che le distribuzioni marginali sono uniformi perch\`e i
 \end{center}
 \end{frame}
 
-\section{Combinazioni Ristrette di Ipotesi (Shaffer)}
-\bfr{Ipotesi Logicamente relate}
-{Combinazioni ristrette (Shaffer)}
- \bb{Esempio}
-   Modello Anova. 3 campioni.\\
-   Ipothesi: Confronto a coppie dei tre campioni.
-   \begin{eqnarray*}
-     H_{12}&:& \mu_1=\mu_2\\
-     H_{23}&:& \mu_2=\mu_3\\
-     H_{13}&:& \mu_1=\mu_3
-   \end{eqnarray*}
- \eb
- \bb{Relazioni}
-   Se $H_{12}$ \`e falsa, $H_{23}$ e $H_{13}$ non possono essere entrambe vere.
- \eb
- \bb{Combinazioni ristrette}
-   Non tutte le combinazioni di ipotesi vere/false sono possibili
- \eb
+\section{Gatekeeping strategies}
+
+\begin{frame}
+INTRO GATEKEEPING
 \end{frame}
 
+\begin{frame}
+serial gatekeepers:
+- generale
+- single decision-making branch
+- multiple decision-making branches
 
-\bfr{Procedura di Shaffer}
- \bb{metodo di Holm + combinazioni ristrette}
-   Test iniziale $c = \alpha/m$
-   \\ Ripeti
-   \be
-     \item Rifiuta tutte le ipotesi con p-value $\leq c$
-     \item Ricalcola $c = \alpha/s$ \\ con $s$ il massimo numero di ipotesi che possono essere contemporaneamente vere assumendo che tutti i rifiuti precedenti sono corretti (ipotesi $H_1$ vera)
-   \ee
- \eb
- \bb{Confronto con Holm}
-   Metodo valido sotto le stessse assunzioni di Holm
-   \\ Meno conservativo di Holm in caso combinazioni ristrette
- \eb
+con esempi
 \end{frame}
 
-\bfr{Shaffer: esempio}
- \bb{Ipotesi e p-value ($\alpha=0.05$)}
-   \begin{eqnarray*}
-     H_{12}&:& \mu_1=\mu_2 \qquad p_{12} = 0.01\\
-     H_{23}&:& \mu_2=\mu_3 \qquad p_{23} = 0.04\\
-     H_{13}&:& \mu_1=\mu_3 \qquad p_{13} = 0.53
-   \end{eqnarray*}
- \eb
- \bb{Procedura di Shaffer}
-   \be
-     \item Rifiuta tutte $H$ con  $p\leq \alpha/3=.0167$ $\to$ Rifiuta $H_{12}$
-     \item Se $H_{12}$ \`e falsa, al pi\`u una tra $H_{23}$ e $H_{13}$ pu\`o essere contemporaneamente vera.
-     \item Rifiuta tutte le $H$ con $p\leq \alpha/1$  $\to$ Rifiuta $H_{23}$
-     \item Continua:\ldots Nessuno ulteriore rifiuto \`e  possibile.
-   \ee
- \eb
+\begin{frame}
+parallel gatekeepers:
+- general
+- multistage
+
+con esempi
 \end{frame}
 
+\begin{frame}
+tree-structured gatekeepers
+
+con esempi
+\end{frame}
 
 \section{Summary}
-
 \bfr{Summary}
-  \bb{FamilyWise Error}
-    \bi
-      \item Generalizza gli errori di Tipo I al caso di ipotesi multiple 
+\bb{Family-Wise Error}
+\bi
+\item Generalizes Type I errors to the case of multiple hypotheses
 \pause
-      \item Controlla la probabilit\`a di ALMENO un falso tra tutti i rifiuti
+\item Controls the probability of \textbf{at least one} false rejection among all rejections
 \pause
-      \item corregge i p-value (adjusted p-value sempre uguale o peggiore dei p-value non aggiustati)
-    \ei
-  \eb
+\item Adjusts p-values (adjusted p-values are always equal to or worse than the unadjusted p-values)
+\ei
+\eb
 \pause
-  \bb{Software R}
-    \bi
-      \item Bonferroni e Holm: {\tt library(stats); p.adjust()}
-  \item Closed Testing {\tt library(cherry); closed()}
-    % \item Ipotesi Strutturate {\tt library(globaltest); inheritance()}
-    \item Post-hoc ed altro {\tt library(multcomp); glht()}
-  % \item Permutazioni - Westfall \&\ Young\\ {\tt library(flip); flip.adjust()}
-    \ei
-  \eb
+\bb{R Software}
+\bi
+\item Bonferroni and Holm: {\tt library(stats); p.adjust()}
+\item Closed Testing: {\tt library(cherry); closed()}
+% \item Structured Hypotheses: {\tt library(globaltest); inheritance()}
+\item Post-hoc and more: {\tt library(multcomp); glht()}
+% \item Permutations - Westfall \&\ Young: {\tt library(flip); flip.adjust()}
+\ei
+\eb
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%
 

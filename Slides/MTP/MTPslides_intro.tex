@@ -3,11 +3,8 @@
 
 \definecolor{cambridgedarkblue}{HTML}{000000}
 \definecolor{cambridgedarkorange}{HTML}{9b0014}
-
 \definecolor{cambridgegreen}{RGB}{88,166,24}
 \definecolor{cambridgeorange}{HTML}{9b0014}
-
-
 \definecolor{redUnipd}{HTML}{9b0014}
 \definecolor{grayUnipd}{HTML}{444F51}
 \definecolor{myblue}{HTML}{317a9b}
@@ -53,8 +50,6 @@
 \newcommand{\ee}{\end{enumerate}}
 \linespread{1.05}
 
-\newcommand{\bfr}[1]{\begin{frame} \frametitle{#1}}
-
 \AtBeginSection[] {
   \begin{frame}<beamer>
     \frametitle{Outline}
@@ -72,9 +67,16 @@
 
 \begin{document}
 
+
 \begin{frame}
   \titlepage
 \end{frame}
+
+\begin{frame}
+    INTRO NOI
+\end{frame}
+
+\section{Introduction}
 
 \begin{frame}
 \frametitle{American Statistical Association's\\
@@ -106,7 +108,6 @@ e.g. VaxGen's AIDSVAX trial \ldots
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{}
 \begin{frame}
 \frametitle{VaxGen's AIDSVAX trial?}
 
@@ -151,7 +152,6 @@ but the next day...
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{}
 \begin{frame}
 \frametitle{VaxGen's AIDSVAX trial}
 
@@ -220,7 +220,6 @@ but the next day...
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{}
 \begin{frame}
 \frametitle{Criticisms}
 
@@ -261,7 +260,6 @@ If you torture your data long enough, they will confess you whatever you want to
 
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{}
 \begin{frame}
 \frametitle{Revived interest in multiple testing}
 
@@ -317,82 +315,72 @@ trials (EMEA)
 
 \end{frame}
 
-\subsection{}
-\begin{frame}
-\frametitle{Verifica di Ipotesi, Un solo test}
+\section{Hypothesis testing}
 
-\rbf{Due Ipotesi a confronto}
+\begin{frame}
+\frametitle{Hypothesis Testing, One Single Test}
+
+\rbf{Two Hypotheses under Comparison}
 
 \begin{itemize}
-\item $H_0$: due gruppi sono Uguali, nessuna relazione tra $X$ e $Y$, 
-\item $H_1$: due gruppi sono Diversi, there is relazione tra $X$ e $Y$,
+\item $H_0$: two groups are Equal, no relationship between $X$ and $Y$, 
+\item $H_1$: two groups are Different, there is a relationship between $X$ and $Y$,
 \end{itemize}
-Ogni test produce un p-value $p$, \\  se $p\leq .05$ ($\alpha=.05$) rifiuto $H_0$ (e propendo per $H_1$)
+Each test produces a p-value $p$, \\  if $p\leq .05$ ($\alpha=.05$), we reject $H_0$ (and lean towards $H_1$)
 \end{frame}
 
-\subsection{}
 \begin{frame}
-\frametitle{Errori}
+\frametitle{Errors}
 
 \begin{itemize}
-\item \bbf{Tipo I} (falso positivo): Rifiuto $H_0$ quando \`e Vera \\
-$P(Errore\ Tipo\ I)=P(p\leq .05 | H_0)=.05$
-\item \bbf{Tipo II} (falso negativo): Non Rifiuto $H_0$ quando \`e Falsa \\
-$P(Errore\ Tipo\ II)=P(p> .05 | H_1)$\\
-\bbf{Potenza}: 
-\begin{eqnarray}\nonumber P(p\leq .05 | H_1)&=& 1-P(p>.05 | H_1)\\ \nonumber &=& 1-P(Errore\ tipo\ II) 
+\item \textbf{Type I} (false positive): Reject $H_0$ when it is True \\
+$P(\text{Type I Error})=P(p\leq .05 | H_0)=.05$
+\item \textbf{Type II} (false negative): Fail to reject $H_0$ when it is False \\
+$P(\text{Type II Error})=P(p> .05 | H_1)$\\
+\bbf{Power}: 
+\begin{eqnarray}\nonumber P(p\leq .05 | H_1)&=& 1-P(p>.05 | H_1)\\ \nonumber &=& 1-P(\text{Type II Error}) 
 \end{eqnarray}
 \end{itemize}
 \end{frame}
 
-\subsection{}
 \begin{frame}
-\frametitle{Importanza asimmetrica degli errori}
+\frametitle{Asymmetric Importance of Errors}
 
-Controlliamo la $P(Errore\ tipo\ I)$ (es $\leq .05$)\\
-e cerchiamo il test con massima Potenza (minimo $Errore\ tipo\ II$)
+Control $P(\text{Type I Error})$ (e.g., $\leq 0.05$) \\
+and find the test with the maximum Power (minimum $\text{Type II Error}$)
 \bigskip
 
-\`E importante ricordare che
-\bi
-\item[-] un p-value significativo ($p\leq\alpha$) ci autorizza a pensare che sia vera $H_1$, mentre
-\item[-] un p-value non significativo ($p>\alpha$) NON ci autorizza a pensare che sia vera $H_0$, semplicemente non abbiamo abbastanza evidenza per rifiutarla.
-\ei
+\textit{It's important to remember that:}
+\begin{itemize}
+\item[-] A significant p-value ($p\leq\alpha$) allows us to think that $H_1$ is true, while
+\item[-] A non-significant p-value ($p>\alpha$) does NOT allow us to think that $H_0$ is true; we simply don't have enough evidence to reject it.
+\end{itemize}
 \end{frame}
 
-\subsection{}
 \begin{frame}
-\frametitle{Errori di Tipo I:}
+\frametitle{Type I Errors:}
 
 $P(p\leq .05 | H_0=\textrm{i 2 gruppi sono Uguali})=?$\\
-Supponiamo $H_0: \mu_1-\mu_2=0$ e $H_1: \mu_1-\mu_2<0$\\
-statistica test $T=\frac{\bar{x}_1-\bar{x}_2}{\hat{\sigma}}$ ( $\hat{\sigma}$ stima della dev std di $\bar{x}_1-\bar{x}_2$)\\
-sotto $H_0$: $T\sim t_{n_1+n_2-2}$, allora\\
-% \begin{columns}[t,onlytextwidth]
-% \begin{column}{width=0.6\textwidth}
+Suppose $H_0: \mu_1-\mu_2=0$ and $H_1: \mu_1-\mu_2<0$\\
+test statistic $T=\frac{\bar{x}_1-\bar{x}_2}{\hat{\sigma}}$ ( $\hat{\sigma}$ estimate of the std dev of $\bar{x}_1-\bar{x}_2$)\\
+under $H_0$: $T\sim t_{n_1+n_2-2}$, then\\
 \begin{eqnarray*}
 P(T\leq t_\alpha | H_0) =\alpha \ \forall \alpha\\
 P(F(T)\leq F(t_\alpha) | H_0) =\alpha \ \forall \alpha\\
 P(P \leq \alpha | H_0) =\alpha \ \forall \alpha
 \end{eqnarray*}
-ne consegue che $P\sim U(0,1)$
-% \end{column}
-% \begin{column}{width=0.4\textwidth}
+consequently, $P\sim U(0,1)$
 \begin{center}
 \includegraphics[width=0.3\textwidth]{plaatjes/cdf_uniform}      
 \end{center}
-% \end{column}
-% \end{columns}
-
 \end{frame}
 
-\subsection{}
 \begin{frame}
-\frametitle{Errori di Tipo I:}
+\frametitle{Type I Errors:}
 
 \begin{overprint}
-\only<1> {Sotto $H_0$ il p-value \`e una variabile aleatoria uniforme $U(0,1)$}
-\only<2> {Errore di I tipo: $P(p\leq .05 |H_0)=.05$} % (o almeno $\leq .05$)}
+\only<1> {Under $H_0$, the p-value is a uniform random variable $U(0,1)$}
+\only<2> {Type I Error: $P(p\leq .05 |H_0)=.05$} % (or at least $\leq .05$)}
 \end{overprint} 
 \begin{overprint} 
 \onslide<1> \centerline{\includegraphics[width=8cm]{plaatjes/uniform1}}
@@ -400,15 +388,13 @@ ne consegue che $P\sim U(0,1)$
 \end{overprint} 
 \end{frame}
 
-\subsection{}
 \begin{frame}
-\frametitle{Potenza}
+\frametitle{Power}
 
 $P(p\leq .05 | H_1=2\ gruppi\ Diversi)$
 \begin{overprint}
-% \onslide<7> ad es: $Potenza: P(p\leq 0.05 | H_1)=0.74$
-\only<1> {\small Sotto $H_1$ il p-value \`e stocasticamente inferiore ad una variabile aleatoria uniforme $U(0,1)$ (Non distorsione del test)}
-\onslide<2> {Sotto $H_1$ $P(p\leq .05 |H_1)>.05$, nel nostro caso $= .74$\\ }
+\only<1> {Under $H_1$, the p-value is stochastically smaller than a uniform random variable $U(0,1)$ (No test distortion)}
+\only<2> {Under $H_1$: $P(p\leq .05 |H_1)>.05$, in our case $= .74$\\ }
 \end{overprint}
 \begin{overprint} 
 \onslide<1> \centerline{\includegraphics[width=7cm]{plaatjes/beta1}}
@@ -416,47 +402,43 @@ $P(p\leq .05 | H_1=2\ gruppi\ Diversi)$
 \end{overprint} 
 \end{frame}
 
-\subsection{}
 \begin{frame}
-\frametitle{Errori di Tipo I, Due Test (indipendenti)}
+\frametitle{Type I Errors, Two Tests (Independent)}
 
-Propabilit\`a di ALMENO un (falso) rifiuto?\\
+Probability of AT LEAST one (false) rejection?\\
 $P(p_1\leq .05 \cup p_2\leq .05 | H_0)= .05+.05-(.05\cdot .05)=1-(1-.05)^2=.0975=1-(1-\alpha)^2$
 
 \includegraphics[scale=.5]{plaatjes/bivaH0indep}
 \end{frame}
 
-\subsection{}
 \begin{frame}
-\frametitle{Probabilit\`a di falsi rifiuti}
+\frametitle{Probability of False Rejections}
 
-\bb{$m$ p-value indipendenti}
-Se rifiuto l'ipotesi quando $p\leq \alpha$
+\bb{$m$ independent p-values}
+If we reject the hypothesis when $p\leq \alpha$
 \eb
-\bb{Probabilit\`a ALMENO un falso rifiuto}
+\bb{Probability of AT LEAST one false rejection:}
 $P = 1- (1-\alpha)^m$
 \eb
 
 \pause
 \bigskip
-Questo diventa ben presto un problema, se $m$ diventa grande ...
+This quickly becomes a problem if $m$ becomes large ...
 
 \end{frame}
 
-\subsection{}
 \begin{frame}
-\frametitle{Errori di Tipo I in funzione del numero di test ($m$)}
+\frametitle{Type I Errors as a Function of the Number of Tests ($m$)}
 
 \includegraphics[scale=.3]{plaatjes/typeI}
 \end{frame}
 
 
-\subsection{}
 \begin{frame}
 \frametitle{Type I error}
-\bb{Come definire l'errore di tipo I quando ci sono molte ipotesi?}
+\bb{How to define the Type I error when there are many hypotheses?}
 \eb
-\bb{Quali procedure controllano questo errore?}
+\bb{Which procedures control this error?}
 \eb
 \end{frame}
 
