@@ -1,0 +1,7 @@
+\babel@toc {english}{}\relax 
+\beamer@sectionintoc {1}{Definizione}{3}{0}{1}
+\beamer@sectionintoc {2}{Bonferroni (single-step)}{9}{0}{2}
+\beamer@sectionintoc {3}{Holm (step-wise)}{13}{0}{3}
+\beamer@sectionintoc {4}{Closed Testing}{20}{0}{4}
+\beamer@sectionintoc {5}{Combinazioni Ristrette di Ipotesi (Shaffer)}{30}{0}{5}
+\beamer@sectionintoc {6}{Summary}{34}{0}{6}
