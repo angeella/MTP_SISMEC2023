@@ -23,7 +23,7 @@
 
 
 \usepackage[T1]{fontenc}
-%
+\usepackage{multirow}
 \usepackage[english]{babel}
 \usepackage{graphicx}
 \usepackage{booktabs}
@@ -57,8 +57,8 @@
 }
 
 
-\title[]{Control of Multiplicity in Clinical Trials}
-\subtitle{FamilyWise Error Rate}
+\title[]{The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives}
+\subtitle{12th SISMEC National Congress 2023}
 \author[\hspace{5cm}]{Livio Finos and Angela Andreella}
 \date{}
 % \date{A.A. 2015/2016 }
@@ -74,17 +74,43 @@
 I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and the materials we shared during these years. The material is the result of all this reasoning together.
 \end{frame}
 
-% \section{FamilyWise Error Rate (FWER)}
-\section{Defintion}
+\section{FamilyWise Error Rate (FWER)}
+%\section{Defintion}
 
-\bfr{FamilyWise Error Rate (FWER)}
-\bb{Probability of doing AT LEAST one false rejection}
-  \eb
+\begin{frame}
+\frametitle{FamilyWise Error Rate (FWER)}
+\begin{table}[]
+\centering
+\begin{tabular}{@{}ll|ll@{}|l}
+&              & \multicolumn{2}{c|}{\textbf{Null hypothesis}}  &   \\ 
+& \textbf{}    & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}False\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}True\end{tabular}} &  \multicolumn{1}{|l}{Tot}\\ 
+\midrule
+\multicolumn{1}{c}{}                       & Rejected     & \multicolumn{1}{l}{{\color[HTML]{3166FF} $S$}}                                     & {\color[HTML]{9A0000} $V$}  &  $R$ \\
+\multicolumn{1}{c}{\multirow{-2}{*}{Test}} & Not rejected & \multicolumn{1}{l}{{\color[HTML]{9A0000} $T$}}                                      & {\color[HTML]{3531FF} $U$}     &   $m - R$  \\    \midrule
+\multicolumn{1}{c}{}                       & Tot     & \multicolumn{1}{l}{$m_1$}                                     & $m_0$  &  $m$ \\
+\end{tabular}
+\end{table}
 
-\begin{eqnarray*}
-    \mathrm{FWER} &=& P \big(p_i \leq \widetilde{\alpha}\ for\ at\ least\ one\ i\ true\ null\ hypothesis \big) \\
-    &=& \mathrm{P} \Big( \bigcup_{i\in \{true\ null\ hypotheses\}} \{p_i \leq \widetilde{\alpha}\} \Big) \\
-    \end{eqnarray*}
+\vspace{.5cm}
+
+\begin{equation*}
+    \text{FWER} = \mathbb{P}(\text{at least one type I error}) = \mathbb{P}(\textcolor{redUnipd}{V} > 0)
+\end{equation*}
+
+\vspace{.5cm}
+
+A procedure \textbf{controls} it if $\text{FWER} \le \alpha$.
+
+\end{frame}
+
+%\bfr{FamilyWise Error Rate (FWER)}
+%\bb{Probability of doing AT LEAST one false rejection}
+%  \eb
+
+%\begin{eqnarray*}
+%    \mathrm{FWER} &=& \mathbb{P} \big(p_i \leq \widetilde{\alpha} \text{ for at least one $i$ true null hypothesis} \big) \\
+%    &=& \mathrm{P} \Big( \bigcup_{i\in \{ \text{true null hypotheses}\}} \{p_i \leq \widetilde{\alpha}\} \Big) \\
+%    \end{eqnarray*}
 
 \end{frame}
 
@@ -92,12 +118,12 @@ I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and t
 
 \bfr{\v{S}id\`ak correction}
 
-If I want to check the $FWER$ at the $\alpha$ level, at which individual $\widetilde{\alpha}$ level should I reject the individual tests?
+If I want to check the \rbf{\textbf{FWER}} at the $\alpha$ level, at which individual $\widetilde{\alpha}$ level should I reject the individual tests?
 
 \begin{eqnarray*}
-   \mathrm{FWER} &=& P \big(p_i \leq \widetilde{\alpha}\ for\ at\ least\ one\ i\ true\ null\ hypothesis \big) \\
-    &=& \mathrm{P} \Big( \bigcup_{i\in \{true\ null\ hypotheses\}} \{p_i \leq \widetilde{\alpha}\} \Big) =\\
-    &=& 1 - \mathrm{P} \Big( \bigcap_{i\in \{true\ null\ hypotheses\}} \{p_i > \widetilde{\alpha}\} \Big) = \\
+    \mathrm{FWER} &=& \mathbb{P} \big(p_i \leq \widetilde{\alpha} \text{ for at least one $i$ true null hypothesis} \big) \\
+    &=& \mathbb{P} \Big( \bigcup_{i\in \{ \text{true null hypotheses}\}} \{p_i \leq \widetilde{\alpha}\} \Big) \\
+    &=& 1 - \mathbb{P} \Big( \bigcap_{i\in \{ \text{true null hypotheses}\}} \{p_i > \widetilde{\alpha}\} \Big) = \\
     &&(de Morgan)\\
     &=& 1 - (1- \widetilde{\alpha})^{m_0}= (m_0: \textrm{\#\{true null hypothesis\}}) \\
     && (\textrm{we don't know $m_0$, we know that though $m_0\leq m$})\\
@@ -107,19 +133,21 @@ If I want to check the $FWER$ at the $\alpha$ level, at which individual $\widet
 
 \end{frame}
 
-\bfr{Correzione di \v{S}id\`ak }
+\bfr{\v{S}id\`ak correction}
 From which we get:
 
 \begin{eqnarray*}
     1- \alpha &=& (1- \widetilde{\alpha})^{m} \\
     (1- \alpha)^{1/m} &=& (1- \widetilde{\alpha}) \\
   \widetilde{\alpha} &=& 1- (1- \alpha)^{1/m} 
-    \end{eqnarray*}
+\end{eqnarray*}
 
 Then it is enough to reject every single hypothesis at the level $\widetilde{\alpha} = 1- (1- \alpha)^{1/m}$ (i.e., I reject the p-values for which $p \leq \widetilde{\alpha}$)\
 \bigskip
+
 \pause
-Unfortunately, this solution is valid only when the p-values are INDEPENDENT.
+\rbf{\textbf{Problem}}: this solution is valid only when the p-values are \textbf{INDEPENDENT}.
+
 In most cases, the tests have dependence-induced dependence between the original variables.
 
 \end{frame}
@@ -139,14 +167,12 @@ In most cases, the tests have dependence-induced dependence between the original
 
 
 \bfr{Dependent P-values}
-It may happen that $P(\textrm{Almeno\ a\ False\ Rejection of } H_0) > (!) 1- (1-\alpha)^2$
+It may happen that $\mathbb{P}(\text{at least one false rejection of } H_0) > (!) 1- (1-\alpha)^2$
 \begin{center}
 \includegraphics[width=0.5\textwidth]{plaatjes/bivaH0dep}
 \end{center}
 
 Remark: remember, however, that the marginal distributions are uniform because the two tests are under $H_0$.
-
-
 
 \end{frame}
 
@@ -160,11 +186,11 @@ Remark: remember, however, that the marginal distributions are uniform because t
 \bfr{Boole}
   \bb{Boolean inequality}
     Let two events $A$ e $B$:
-    \[ \mathrm{P}(A \cup B) = \mathrm{P}(A) + \mathrm{P}(B) - \mathrm{P}(A \cap B) \]
+    \[ \mathbb{P}(A \cup B) = \mathbb{P}(A) + \mathbb{P}(B) - \mathbb{P}(A \cap B) \]
     so
-    \[ \mathrm{P}(A \cup B) \leq \mathrm{P}(A) + \mathrm{P}(B) \]
+    \[ \mathbb{P}(A \cup B) \leq \mathbb{P}(A) + \mathbb{P}(B) \]
     Generalizing $A_1, \ldots, A_m$:
-    \[ \mathrm{P}(\bigcup_{i=1}^m A_i) \leq \sum_{i=1}^m \mathrm{P}(A_i) \]
+    \[ \mathbb{P}(\bigcup_{i=1}^m A_i) \leq \sum_{i=1}^m \mathbb{P}(A_i) \]
   \eb
   \bb{Equality}
     Equality occurs when events are disjointed
@@ -176,8 +202,8 @@ Remark: remember, however, that the marginal distributions are uniform because t
 
 
 \bfr{FamilyWise Error Rate (FWER)}
-\bb{Probability of doing AT LEAST one false rejection}
-  \eb
+%\bb{Probability of doing AT LEAST one false rejection}
+%  \eb
 
 
 \bb{Bonferroni inequality}
@@ -186,10 +212,10 @@ Remark: remember, however, that the marginal distributions are uniform because t
 \eb
   \bb{FWER control}
     \begin{eqnarray*}
-    \mathrm{FWER} &=& P \big(p_i \leq \alpha/m\ for\ at\ least\ one\ i\ null\ true\ hypothesis \big) \\
-    &=& \mathrm{P} \Big( \bigcup_{i\in \{true\ null\ hypothesis\}} \{p_i \leq \alpha/m\} \Big) \\
-    &\leq& \sum_{i \in \{true\ null\ hypothesis\}} \mathrm{P} (p_i \leq \alpha/m) \\
-    &\leq& m_0\frac{\alpha}{m} \leq \alpha
+    \mathrm{FWER} &=& \mathbb{P} \big(p_i \leq \alpha/m\ \text{ for at least one $i$ true null hypothesis} \big) \\
+    &=& \mathbb{P} \Big( \bigcup_{i\in \{\text{true null hypothesis}\}} \{p_i \leq \alpha/m\} \Big) \\
+    &\leq& \sum_{i \in \{\text{true null hypothesis}\}} \mathbb{P} (p_i \leq \alpha/m) \\
+    &\leq& m_0\frac{\alpha}{m} \leq m \frac{\alpha}{m}  = \alpha
     \end{eqnarray*}
   \eb
 \end{frame}
@@ -526,10 +552,21 @@ $\tilde p_i = mp_i$ for $i=1,\ldots,m$ and reject if $\tilde p_i \leq \alpha$
 \section{Gatekeeping strategies}
 
 \begin{frame}
-INTRO GATEKEEPING
+\frametitle{Gatekeeping}
+Multiple objectives pursued in clinical trials typically exhibit a hierarchical structure; e.g., they can be divided into primary and secondary objectives.
+
+\bigskip
+
+To construct a gatekeeping procedure, one first needs to define two or
+more families of analyses, for example, a family of primary endpoints and a
+family of secondary endpoints. Each family (except for the last one) serves
+as a gatekeeper in the sense that one must pass it to perform analyses in the
+next family.
+
 \end{frame}
 
 \begin{frame}
+\frametitle{Gatekeeping}
 serial gatekeepers:
 - generale
 - single decision-making branch

@@ -19,7 +19,7 @@
 %\textopenbullet
 %\usepackage{marvosym}
 %\setbeamertemplate{itemize items}{$\Neutral$}
-
+\usepackage{booktabs}
 \usepackage{pgfpages}
 \pgfpagesuselayout{resize to}[a4paper, 
                                 border shrink=1.5cm,
@@ -41,6 +41,7 @@
 \usepackage[english]{babel}
 \usepackage{tikz,comment,amssymb}
 \usetikzlibrary{shapes}
+\usepackage{multirow}
 
 \newcommand{\bb}[1]{\begin{block}{#1}}
 \newcommand{\eb}{\end{block}}
@@ -73,7 +74,22 @@
 \end{frame}
 
 \begin{frame}
-    INTRO NOI
+    \begin{minipage}[t]{0.45\textwidth}
+\includegraphics[width= \textwidth]{Slides/MTP/plaatjes/Finos.jpg}
+
+BLA BLA BLA
+\end{minipage}\hfill
+\begin{minipage}[t]{0.45\textwidth}
+  \includegraphics[width= .95\textwidth]{Slides/MTP/plaatjes/Andreella.jpg}
+
+  BLA BLA BLA
+
+\end{minipage}
+\end{frame}
+
+\begin{frame}
+    TODO:
+    Altri esempi?
 \end{frame}
 
 \section{Introduction}
@@ -109,7 +125,7 @@ e.g. VaxGen's AIDSVAX trial \ldots
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-\frametitle{VaxGen's AIDSVAX trial?}
+\frametitle{VaxGen's AIDSVAX trial}
 
 
 VaxGen announced the results of the first-ever efficacy trial of an AIDS vaccine on 24 February 2003:
@@ -118,7 +134,9 @@ VaxGen announced the results of the first-ever efficacy trial of an AIDS vaccine
 
 %the vaccine failed to prevent HIV infection (primary endpoint):
 
-the vaccine prevent HIV infection?
+\begin{center}
+\textbf{The vaccine prevent HIV infection?}
+\end{center}
 
 \bigskip
 
@@ -224,7 +242,7 @@ but the next day...
 \frametitle{Criticisms}
 
 \begin{enumerate}
-\item \textcolor{cambridgedarkorange}{\textbf{failure to account for multiplicity}}
+\item \textcolor{cambridgedarkorange}{\textbf{Failure to account for multiplicity}}
 
 \bigskip 
 
@@ -247,7 +265,7 @@ but the next day...
 
 \bigskip 
 
-\item \textcolor{cambridgedarkorange}{\textbf{selective reporting (data snooping)}}
+\item \textcolor{cambridgedarkorange}{\textbf{Selective reporting (data snooping)}}
 
 \bigskip 
 
@@ -317,120 +335,220 @@ trials (EMEA)
 
 \section{Hypothesis testing}
 
+\subsection{Individual hypothesis testing}
 \begin{frame}
-\frametitle{Hypothesis Testing, One Single Test}
+\frametitle{Hypothesis Testing: One Single Test}
 
 \rbf{Two Hypotheses under Comparison}
 
 \begin{itemize}
-\item $H_0$: two groups are Equal, no relationship between $X$ and $Y$, 
-\item $H_1$: two groups are Different, there is a relationship between $X$ and $Y$,
+\item $H_0$: two groups are \textbf{Equal}, no relationship between $X$ and $Y$, 
+\item $H_1$: two groups are \textbf{Different}, there is a relationship between $X$ and $Y$,
 \end{itemize}
+
+\bigskip
+
 Each test produces a p-value $p$, \\  if $p\leq .05$ ($\alpha=.05$), we reject $H_0$ (and lean towards $H_1$)
 \end{frame}
 
 \begin{frame}
 \frametitle{Errors}
 
+\begin{table}[]
+\centering
+\begin{tabular}{@{}ll|ll@{}}
+&              & \multicolumn{2}{c}{\textbf{Null hypothesis}}     \\ & \textbf{}    & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}False\\ (two groups are different)\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}True\\ (two group are equal)\end{tabular}} \\ \midrule
+\multicolumn{1}{c}{}                       & Rejected     & \multicolumn{1}{l|}{{\color[HTML]{3166FF} True discovery}}                                     & {\color[HTML]{9A0000} Type I error}                                                      \\
+\multicolumn{1}{c}{\multirow{-2}{*}{Test}} & Not rejected & \multicolumn{1}{l|}{{\color[HTML]{9A0000} Type II error}}                                      & {\color[HTML]{3531FF} True negative}                                                    
+\end{tabular}
+\end{table}
+
+\bigskip
+
 \begin{itemize}
 \item \textbf{Type I} (false positive): Reject $H_0$ when it is True \\
-$P(\text{Type I Error})=P(p\leq .05 | H_0)=.05$
+$\mathbb{P}(\text{\rbf{Type I Error}})=\mathbb{P}(p\leq .05 | H_0)=.05$
 \item \textbf{Type II} (false negative): Fail to reject $H_0$ when it is False \\
-$P(\text{Type II Error})=P(p> .05 | H_1)$\\
-\bbf{Power}: 
-\begin{eqnarray}\nonumber P(p\leq .05 | H_1)&=& 1-P(p>.05 | H_1)\\ \nonumber &=& 1-P(\text{Type II Error}) 
-\end{eqnarray}
+$\mathbb{P}(\text{\rbf{Type II Error}})=\mathbb{P}(p> .05 | H_1)$\\
+\bbf{Power}:  $\mathbb{P}(p\leq .05 | H_1) =  1-\mathbb{P}(p>.05 | H_1) = 1-\mathbb{P}(\text{\rbf{Type II Error}})$
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Asymmetric Importance of Errors}
 
-Control $P(\text{Type I Error})$ (e.g., $\leq 0.05$) \\
-and find the test with the maximum Power (minimum $\text{Type II Error}$)
+\begin{center}
+Control $\mathbb{P}(\text{\rbf{Type I Error}})$ (e.g., $\leq 0.05$) \\
+
+    and \\
+
+find the test with the maximum Power (minimum $\text{\rbf{Type II Error}}$)
+\end{center}
+
 \bigskip
 
 \textit{It's important to remember that:}
 \begin{itemize}
-\item[-] A significant p-value ($p\leq\alpha$) allows us to think that $H_1$ is true, while
-\item[-] A non-significant p-value ($p>\alpha$) does NOT allow us to think that $H_0$ is true; we simply don't have enough evidence to reject it.
+\item[-] \textbf{A significant p-value} ($p\leq\alpha$) allows us to think that $H_1$ is true, while
+\item[-] \textbf{A non-significant p-value} ($p>\alpha$) does NOT allow us to think that $H_0$ is true; we simply don't have enough evidence to reject it.
 \end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Type I Errors:}
+\frametitle{Type I Error}
 
-$P(p\leq .05 | H_0=\textrm{i 2 gruppi sono Uguali})=?$\\
+%$\mathbb{P}(p\leq .05 | H_0:\textrm{two groups are \textbf{Equal}})=?$\\
 Suppose $H_0: \mu_1-\mu_2=0$ and $H_1: \mu_1-\mu_2<0$\\
 test statistic $T=\frac{\bar{x}_1-\bar{x}_2}{\hat{\sigma}}$ ( $\hat{\sigma}$ estimate of the std dev of $\bar{x}_1-\bar{x}_2$)\\
-under $H_0$: $T\sim t_{n_1+n_2-2}$, then\\
+under $H_0$: $T\sim t_{n_1+n_2-2}$, then
 \begin{eqnarray*}
-P(T\leq t_\alpha | H_0) =\alpha \ \forall \alpha\\
-P(F(T)\leq F(t_\alpha) | H_0) =\alpha \ \forall \alpha\\
-P(P \leq \alpha | H_0) =\alpha \ \forall \alpha
+\mathbb{P}(T\leq t_\alpha | H_0) =\alpha \ \forall \alpha\\
+\mathbb{P}(F(T)\leq F(t_\alpha) | H_0) =\alpha \ \forall \alpha\\
+\mathbb{P}(P \leq \alpha | H_0) =\alpha \ \forall \alpha
 \end{eqnarray*}
+\vspace{-1.2cm}
+
+\begin{minipage}{0.45\textwidth}
+\centering
 consequently, $P\sim U(0,1)$
-\begin{center}
-\includegraphics[width=0.3\textwidth]{plaatjes/cdf_uniform}      
-\end{center}
+\end{minipage}\hfill
+\begin{minipage}{0.55\textwidth}
+ \hspace{1cm} \includegraphics[width= \textwidth]{Slides/MTP/plaatjes/cdf_uniform}
+\end{minipage}
+
 \end{frame}
 
 \begin{frame}
-\frametitle{Type I Errors:}
+\frametitle{Type I Error}
 
 \begin{overprint}
 \only<1> {Under $H_0$, the p-value is a uniform random variable $U(0,1)$}
-\only<2> {Type I Error: $P(p\leq .05 |H_0)=.05$} % (or at least $\leq .05$)}
+\only<2> {Type I Error: $\mathbb{P}(p\leq .05 |H_0)=.05$} % (or at least $\leq .05$)}
 \end{overprint} 
 \begin{overprint} 
-\onslide<1> \centerline{\includegraphics[width=8cm]{plaatjes/uniform1}}
-\onslide<2> \centerline{\includegraphics[width=8cm]{plaatjes/uniform2}}
+\onslide<1> \centerline{\includegraphics[width=7.5cm]{plaatjes/uniform1}}
+\onslide<2> \centerline{\includegraphics[width=7.5cm]{plaatjes/uniform2}}
 \end{overprint} 
 \end{frame}
 
 \begin{frame}
 \frametitle{Power}
 
-$P(p\leq .05 | H_1=2\ gruppi\ Diversi)$
+%$\mathbb{P}(p\leq .05 | H_1: \textrm{two groups are \textbf{Different}})$
+
 \begin{overprint}
 \only<1> {Under $H_1$, the p-value is stochastically smaller than a uniform random variable $U(0,1)$ (No test distortion)}
-\only<2> {Under $H_1$: $P(p\leq .05 |H_1)>.05$, in our case $= .74$\\ }
+\only<2> {Under $H_1$: $\mathbb{P}(p\leq .05 |H_1)>.05$, in our case $= .74$\\ }
 \end{overprint}
 \begin{overprint} 
-\onslide<1> \centerline{\includegraphics[width=7cm]{plaatjes/beta1}}
-\onslide<2> \centerline{\includegraphics[width=7cm]{plaatjes/beta2}}
+\onslide<1> \centerline{\includegraphics[width=7.5cm]{plaatjes/beta1}}
+\onslide<2> \centerline{\includegraphics[width=7.5cm]{plaatjes/beta2}}
 \end{overprint} 
 \end{frame}
 
-\begin{frame}
-\frametitle{Type I Errors, Two Tests (Independent)}
-
-Probability of AT LEAST one (false) rejection?\\
-$P(p_1\leq .05 \cup p_2\leq .05 | H_0)= .05+.05-(.05\cdot .05)=1-(1-.05)^2=.0975=1-(1-\alpha)^2$
-
-\includegraphics[scale=.5]{plaatjes/bivaH0indep}
-\end{frame}
+\subsection{Multiple hypothesis testing}
 
 \begin{frame}
-\frametitle{Probability of False Rejections}
+\frametitle{Hypothesis testing: Multiple Tests}
 
-\bb{$m$ independent p-values}
-If we reject the hypothesis when $p\leq \alpha$
-\eb
-\bb{Probability of AT LEAST one false rejection:}
-$P = 1- (1-\alpha)^m$
-\eb
+The goal is to test $m \ge 2$ hypotheses simultaneously from the same data.
 
-\pause
 \bigskip
-This quickly becomes a problem if $m$ becomes large ...
+
+Each test carries the risk of making a \rbf{Type I error} $\rightarrow$ the risk of having \textbf{ AT LEAST one} may become unmanageable.    
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Two Tests (Independent) Case}
+
+ESEMPIO
+
+\bigskip
+
+Probability of \textbf{ AT LEAST one} (false) rejection?\
+\bigskip
+\begin{align*}
+\mathbb{P}(p_1\leq .05 \cup p_2\leq .05 | H_0) &= 
+.05+.05-(.05\cdot .05)=1-(1-.05)^2 \\
+&=.0975=1-(1-\alpha)^2 > \alpha
+\end{align*}
+
+%\includegraphics[scale=.5]{plaatjes/bivaH0indep}
 
 \end{frame}
 
-\begin{frame}
-\frametitle{Type I Errors as a Function of the Number of Tests ($m$)}
+\begin{frame}{Multiple Tests}
+    \begin{figure}
+        \centering
+        \includegraphics[width = 1.1\textwidth]{Slides/MTP/plaatjes/mt1.pdf}
 
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Multiple Tests}
+    \begin{figure}
+        \centering
+        \includegraphics[width = 1.1\textwidth]{Slides/MTP/plaatjes/mt2.pdf}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Multiple Tests}
+    \begin{figure}
+        \centering
+        \includegraphics[width = 1.1\textwidth]{Slides/MTP/plaatjes/mt3.pdf}
+
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Error control}
+
+\begin{table}[]
+\centering
+\begin{tabular}{@{}ll|ll@{}|l}
+&              & \multicolumn{2}{c|}{\textbf{Null hypothesis}}  &   \\ 
+& \textbf{}    & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}False\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}True\end{tabular}} &  \multicolumn{1}{|l}{Tot}\\ 
+\midrule
+\multicolumn{1}{c}{}                       & Rejected     & \multicolumn{1}{l}{{\color[HTML]{3166FF} $S$}}                                     & {\color[HTML]{9A0000} $V$ (false discoveries)}  &  $R$ \\
+\multicolumn{1}{c}{\multirow{-2}{*}{Test}} & Not rejected & \multicolumn{1}{l}{{\color[HTML]{9A0000} $T$}}                                      & {\color[HTML]{3531FF} $U$}     &   $m - R$  \\    \midrule
+\multicolumn{1}{c}{}                       & Tot     & \multicolumn{1}{l}{$m_1$}                                     & $m_0$  &  $m$ \\
+\end{tabular}
+\end{table}
+\bigskip
+
+\rbf{Probability of AT LEAST one false rejection:} \\
+\begin{equation*}
+\mathbb{P}(\textcolor{redUnipd}{V} >0) = 1- (1-\alpha)^m
+\end{equation*}
+
+\bigskip
+
+This quickly becomes a problem if $m$ becomes large ...
+\end{frame}
+
+
+%\begin{frame}
+%\frametitle{Tests on multiple features}
+
+%\bb{$m$ independent p-values}
+%If we reject the hypothesis when $p\leq \alpha$
+%\eb
+%\bb{Probability of AT LEAST one false rejection:}
+%$P = 1- (1-\alpha)^m$
+%\eb
+
+%\pause
+%\bigskip
+%This quickly becomes a problem if $m$ becomes large ...
+
+%\end{frame}
+
+\begin{frame}
+\frametitle{Error control}
+\begin{figure}
+    \centering
 \includegraphics[scale=.3]{plaatjes/typeI}
+\end{figure}
 \end{frame}
 
 
