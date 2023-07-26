@@ -1,402 +1,80 @@
 ---
-title       : Test Multipli,
-subtitle    : Una seconda esercitazione
-author      : Livio Finos
-job         : Università degli Studi di Padova
-framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
-highlighter : highlight.js  # {highlight.js,  prettify, highlight}
-hitheme     : tomorrow      # 
-widgets     : []            # {mathjax, quiz, bootstrap}
-mode        : selfcontained # {standalone, draft}
-license     : by-nc-sa
-output: 
-  html_document: 
-    toc: yes
+title: "The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives"
+subtitle: "FDR control"
+author: "Livio Finos"
+highlighter: highlight.js
+job: Università degli Studi di Padova
+output:
+  prettydoc::html_pretty:
+    theme: leonids 
+    highlight: github
+    df_print: paged
+    toc: true
+    number_sections: true
+fontsize: 11pt
+geometry: margin = 1in
+mode: selfcontained
+hitheme: tomorrow
+framework: io2012
+widgets: []
 ---
 
-
-Ringrazio i professori Aldo Solari, Jelle Goeman e Florian Klinglmueller per le idee e il materiale condivisi in tutti questi anni. Questo materiale ne \`e una elaborazione.
-
----
+# False Discovery Rate
 
 
-Supponiamo essere questi i p-value ottenuti dal vostro ultimo esperimento:
-```{r}
-m=15
-(p.values=runif(m))
-```
+Consider a set of null hypotheses $\mathcal{H}=(H_1,\ldots,H_m)$, of which an unknown number $m_0$ are true, while the remaining $m_1=m-m_0$ are false. We can summarize the number of errors made by a *multiple testing* procedure in the following table:
 
-Quanti rifiuti?
-```{r}
-alpha = 0.05
-(p.values < alpha)
-```
-
-
-## Familywise Error Rate
-
-Nei test delle ipotesi, la probabilità di commettere un errore di I tipo è controllata ad un livello prefissato $\alpha$, convenzionalmente il 5%. Tuttavia sorge un problema quando 
-conduciamo non un solo test, ma più di uno. Poichè per ciascun test abbiamo una probabilità di commettere un errore di I tipo, se conduciamo molti test è verosimile ottenere almeno un errore di I tipo. 
-
-Il problema dei test multipli ha una struttura semplice. Abbiamo un insieme di ipotesi nulle
-$\mathcal{H}=(H_1,\ldots,H_m)$, di cui un numero sconosciuto $m_0$ sono vere, mentre le restanti $m-m_0$ sono false. Indichiamo il sottoinsieme di ipotesi vere con $\mathcal{T}\subseteq \mathcal{H}$, quello di ipotesi false con $\mathcal{F}=\mathcal{H}\setminus \mathcal{T}$ e 
-la proporzione di ipotesi vere con $\pi_0=m_0/m$. 
-
-L'obiettivo delle procedure di verifica multipla è di scegliere un sottoinsieme  $\mathcal{R}\subseteq \mathcal{H}$ di ipotesi da rifiutare. Supponiamo di avere a disposizione i p-values $p_1,\ldots,p_m$ per ciascuna ipotesi $H_1,\ldots,H_m$. Possiamo considerare la seguente procedura:
-\[
-\mathcal{R}=\{H_i: p_i \leq \tilde{\alpha}\}
-\]
-ovvero rifiutare tutte le ipotesi i cui p-value sono inferiori ad una certa soglia $\tilde{\alpha}$. Il problema ora è quello di determinare questa soglia $\tilde{\alpha}$.
-
-
-Idealmente, l'insieme di ipotesi rifiutate $\mathcal{R}$ dovrebbe coincidere il più possibile con l'insieme di ipotesi false $\mathcal{F}$. Si possono commettere due tipi di errori: errori di I tipo $\mathcal{R}\cap \mathcal{T}$, ovvero rifiutare ipotesi vere, ed errori di II tipo $\mathcal{R}\setminus \mathcal{F}$, ovvero non rifiutare ipotesi false. 
-
-Possiamo riassumere il numero di errori commessi nella seguente tabella:
-
-Ipotesi  | Vere          | False         | totale
+Assumptions | True | False | Total
 ------------- | ------------- | ------------- | -------------
-rifiutate     | $V$           | $U$           | $R$ 
-non rifiutate | $m_0 - V$     | $m_1-U$       | $m-R$
-totale        | $m_0$         | $m_1$         | $m$
+rejected | $V$ | $U$ | $R$ 
+not rejected | $m_0 - V$ | $m_1-U$ | $m-R$
+total | $m_0$ | $m_1$ | $m$
 
-Conosciamo il numero totale delle ipotesi $m$ e il numero di ipotesi rifiutate $R=\#\mathcal{R}$, ma tutte le altre quantità delle tabella sono incognite. 
-I metodi di *multiple testing* cercano di rifiutare il maggior numero di ipotesi cercando però di controllare il numero $V$ di errori di I tipo. 
-
-
-Il *familywise error rate* è definito come
+We now define the *false discovery proportion* $Q$ as. 
 \[
-\mathrm{FWER}=\Pr(V > 0)
+Q = \left{\begin{array}{ll} V/R & \mathrm{se,\ } R>0\\ 0 & \mathrm{se,\,} R=0 \end{array}{right.
 \]
-ovvero la probabilità di commettere almeno un errore di I tipo. 
-Utililizzando la procedura
-* Rifiuto $H_i$ se $p_i \leq \tilde{\alpha}$
+which represents the ratio of the number of type I errors to the total number of rejected hypotheses (defined as 0 if no hypotheses are rejected), i.e., the proportion of type I errors.
 
-otteniamo
-\[
-\mathrm{FWER}= \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} \{ P_i \leq \tilde{\alpha}  \} \right)
-\]
-
-
-Il controllo del *familywise error rate* ad un livello $\alpha$ richiede che
-\[
-\mathrm{FWER}\leq \alpha
-\]
-
-
-## La diseguaglianza di Sidak: P-values indipendenti
-
-Nel nostro esempio, siamo nella seguente situazione:
-* le $m=$ `r m` ipotesi sono tutte vere, ovvero $m_0=m$;
-* i `r m` test, e quindi i relativi p-values, sono tra loro indipendenti;
-* senza tener conto della molteplicità dei test, si rifiuta $H_i$ quando $p_i \leq \alpha$
-
-
-Indichiamo con $E_i=I\{P_i \leq \alpha\}$ l'esito del test, ovvero attraverso la funzione indicatrice che vale 1 se rifiutiamo l'ipotesi, 0 altrimenti. Poichè le ipotesi sono tutte vere, i p-value $P_1,\ldots,P_m$ sono i.i.d. $\mathrm{Uniforme}(0,1)$.
-Segue che $E_i \sim \mathrm{Bernoulli}(\alpha)$ e $V = \sum_{i=1}^{m}E_i \sim \mathrm{Binomiale}(n,\alpha)$. Quindi il *familywise error rate* risulta
-\[
-\mathrm{FWER}=\Pr(V > 0) = \Pr(\sum_{i=1}^{m}E_i > 0) = 1 - \Pr(\sum_{i=1}^{m}E_i = 0) = 1 - (1-\alpha)^m
-\]
-o equivalentemente
-\[
-\mathrm{FWER}= \Pr\left(\bigcup_{i=1}^{m} \{ P_i \leq \alpha  \} \right) =  1- \Pr\left(\bigcap_{i=1}^{m} \{ P_i > \alpha  \} \right) = 1- \prod_{i=1}^{m} \Pr\left( P_i >  \alpha   \right) =1 - (1-\alpha)^m
-\]
-
-
-ovvero per $m=$ `r m`
-```{r}  
-1 - (1-alpha)^(m) 
-```
-
-Proviamo a rappresentare il *familywise error rate* come funzione del numero del numero di ipotesi $m$ (sempre ipotizzando $m_0=m$)
-```{r}  
-# m = 100
-FWER<- 1-(1-alpha)^(1:100)
-plot(1:100,FWER,xlab="numero di ipotesi", ylab="FWER")
-```
-
-Per controllare il FWER ad un livello $\alpha$, dobbiamo modificare la nostra regola di rifiuto:
-
-* si rifiuta $H_i$ quando $p_i \leq \tilde{\alpha}$
-
-Risolvendo $\mathrm{FWER}= 1 - (1-\tilde{\alpha})^m = \alpha$ otteniamo 
-\[
-\tilde{\alpha} = 1-(1-\alpha)^{(1/m)}
-\]
-ovvero 
-```{r}  
-alpha.adj<-1 - (1-alpha)^(1/m) 
-alpha.adj
-(p.values < alpha.adj)
-```
-
-In modo equivalente, possiamo considerare la regola di rifiuto:
-* si rifiuta l'ipotesi $H_i$ quando $\tilde{p}_{i} \leq \alpha$
-
-dove
-\[
-\tilde{p}_i = 1- (1- p_i)^{m}
-\]
-ovvero 
-```{r} 
-p.values.adj<-1- (1- p.values)^m
-p.values.adj
-```
-
-Più in generale, se vale la diseguaglianza di Sidak:
-\[
-\Pr\left(\bigcap_{i:H_i \in \mathcal{T}} \{ P_i > u \} \right) \geq \prod_{i: H_i \in \mathcal{T}} \Pr\left( P_i > u   \right)
-\]
-per ogni $u\in[0,1]$ e ogni $\mathcal{T}\subseteq \mathcal{H}$, possiamo utilizzare $\tilde{\alpha} = 1-(1-\alpha)^{(1/m)}$ ed ottenere
-\[
-\Pr\left(\bigcap_{i: H_i \in \mathcal{T}} \{ P_i >  1-(1-\alpha)^{(1/m)}  \} \right) \geq \prod_{i: H_i\in \mathcal{T}} \Pr\left( P_i > 1-(1-\alpha)^{(1/m)}   \right) = [(1-\alpha)^{(1/m)}]^{m_0} = (1-\alpha)^{\pi_0} \geq 1-\alpha
-\]
-e quindi controllare il FWER ad $\alpha$:
-\[
-\mathrm{FWER} = \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} \{ P_i <  1-(1-\alpha)^{(1/m)}  \} \right) = 1- \Pr\left(\bigcap_{i: H_i \in \mathcal{T}} \{ P_i >  1-(1-\alpha)^{(1/m)}  \} \right) \leq \alpha
-\]
-
-
-Il caso di 2 test indipendenti.
-Distribuzione empirica delle coppie di p-value per 1000 ipotetici esperimenti  
-```{r}
-p.values.manyExp=cbind(runif(5000),runif(5000))
-plot(p.values.manyExp,pch=20,col="grey",asp=1)
-abline(v=.05,col="red")
-abline(h=.05,col="red")
-```
-
-Proviamo a svolgere una simulazione per verificare che il FWER è davvero controllato ad $\alpha$
-```{r} 
-B<-5000
-V<-vector("numeric", length=B)
-for (i in 1:B){
-U<-runif(m)
-V[i]<-sum(U <= alpha.adj)
-}
-mean(V>0)
-```
-
----
-
-La diseguaglianza di Bonferroni
-=========================
-
---- 
-
-## Dipendenza tra test
-Le variabili di un esperimento sono spesso correlate tra loro.
-Nell'esempio del farmaco che dovrebbe 
-
-```{r}
-effetto.individuo=rnorm(6,mean = 0,sd = sqrt(70))
-pressione.min=rnorm(6,mean = 82,sd = sqrt(30))+effetto.individuo
-pressione.max=rnorm(6,mean = 105,sd = sqrt(30))+effetto.individuo
-
-plot(pressione.min,pressione.max,col=c("black","black","black","red","red","red"),pch=20)
-cor(pressione.min,pressione.max)
-
-dati=data.frame(farmaco=c("standard","standard","standard",
-                        "new","new","new"),
-                pressione.min=pressione.min,
-                pressione.max=pressione.max)
-dati
-
-B=5000
-res=replicate(B,{
-  effetto.individuo=rnorm(6,mean = 0,sd = sqrt(70))
-  pressione.min=rnorm(6,mean = 82,sd = sqrt(30))+effetto.individuo
-  pressione.max=rnorm(6,mean = 105,sd = sqrt(30))+effetto.individuo
-  c(press.min=t.test(pressione.min[1:3],pressione.min[4:6])$p.value,
-    press.max=t.test(pressione.max[1:3],pressione.max[4:6])$p.value)
-})
-res=t(res)
-plot(res,pch=20,col="grey",asp=1)
-abline(v=.05,col="red")
-abline(h=.05,col="red")
-
-#con che probabilità entrambi i p-value<.05? (area in basso a sx)
-sum((res[,1]<.05)&(res[,2]<.05))/B
-
-# quanto è atteso in caso di indipendenza dei test?
-.05*.05
-```
-
-
-## Carlo Emilio Bonferroni
-Carlo Emilio Bonferroni è stato un matematico italiano, noto soprattutto per la disuguaglianza che portano il suo nome.
-
-![alt text](http://upload.wikimedia.org/wikipedia/commons/d/de/Carlo_Emilio_Bonferroni.jpg)
-
-La disuguaglianza di Bonferroni, nota anche come diseguaglianza di Boole, afferma che per ogni collezione finita o numerabile di eventi, la probabilità che accada almeno uno degli eventi è minore o uguale alla somma delle probabilità dei singoli eventi, ovvero
-
-\[
-\Pr\left(\bigcup_{i: H_i \in \mathcal{T}} E_i \right) \leq  \sum_{i: H_i \in \mathcal{T}} \Pr\left( E_i  \right) 
-\]
-
-quindi considerando $E_i = \{P_i \leq \frac{\alpha}{m} \}$ otteniamo
-
-\[
-\mathrm{FWER} = \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} \{ P_i \leq \frac{ \alpha}{m}  \} \right) \leq  \sum_{i: H_i \in \mathcal{T}}  \Pr\left( P_i \leq \frac{ \alpha}{m}  \right) \leq m_0 \frac{\alpha}{m} = \pi_0\alpha  \leq \alpha
-\]
-
-ovvero il metodo di Bonferroni controlla il FWER ad $\alpha$. 
-
-La procedura di Bonferroni è la seguente:
-
-* Si rifiuta $H_i$ se $p_i \leq \tilde{\alpha} = \frac{\alpha}{m}$
-
-o, in maniera equivalente
-
-* Si rifiuta $H_i$ se $\tilde{p}_i = \min(mp_i,1) \leq \alpha$
-
-### Dataset mtept
-
-Consideriamo ora il dataset `mtept`:
-
-```{r message=F}  
-require("multcomp")
-data(mtept)
-gruppo<-mtept[,"treatment"]
-risposte<-mtept[,-1]
-boxplot(risposte[gruppo=="Placebo",], at=c(1,3,5,7), xlim=c(1,8))
-boxplot(risposte[gruppo=="Drug",], at=c(2,4,6,8), col="red", add=T)
-```
-
-Conduciamo 4 test di Wilcoxon, uno per ciascun endpoint:
-```{r message=F}  
-require("multcomp")
-m<-4
-p.values<-vector("numeric", length=m)
-names(p.values)<-names(risposte)
-for (i in 1:m){
-p.values[i]<-wilcox.test(risposte[gruppo=="Placebo",i], risposte[gruppo=="Drug",i])$p.value
-}
-p.values
-```
-Aggiustiamo ora il vettore di p-values con il metodo di Bonferroni:
-```{r}  
-p.values.adj<-pmin(p.values*m,1)
-p.values.adj
-p.adjust(p.values,method="bonferroni")
-alpha = 0.1
-names(p.values.adj)[p.values.adj<=alpha] # nomi degli endpoint significativi ad alpha=10%
-```
-quindi il confronto tra i gruppi Placebo e Drug è significativo al livello $\alpha=10\%$ per l'endpoint E1.
-
-## Procedura di Holm
-Porta agli stessi rifiuti di Bonferroni, a volte qualcuno in più (uniformemente più potente).
-
-E' iterativa:
-
-1. Correggi i p-value con Bonferroni,
-2. Rifiuta tutti le ipotesi con p-value significativo
-3. Reitera 1. e 2. fino a quando non ci sono più rifiuti
-
-```{r}
-p.values
-p.adjust(p.values,method = "bonferroni")
-
-p.adjust(p.values,method = "holm")
-```
-
-Vedi slides
-
-## Post Hoc
-
-Un test per ogni confronto a coppie
-
-```{r}
-library(multcomp)
-data(litter)
-head(litter)
-?litter
-#Dose response of litter weights in rats.
-# Details
-# Pregnant mice were divided into four groups and the compound in four different doses was administered during pregnancy. Their litters were evaluated for birth weights.
-# dose: dosages at four levels: 0, 5, 50, 500.
-# weight: response variable: average post-birth weights in the entire litter.
-
-boxplot(weight~dose,data=litter,col="red")
-# weight.resid=residuals(lm(weight ~ gesttime + number, data = litter))
-# boxplot(weight.resid~dose,data=litter,col="red")
-
-amod <- aov(weight ~ dose + gesttime + number, data = litter)
-
-### define matrix of linear hypotheses for 'dose'
-doselev <- as.integer(levels(litter$dose))
-K <- contrMat(table(litter$dose), "Tukey")
-
-### set up multiple comparison object
-Kht <- glht(amod, linfct = mcp(dose = K), alternative = "less")
-
-### cf. Westfall (1997, Table 2)
-summary(Kht, test = univariate())
-summary(Kht, test = adjusted("bonferroni"))
-summary(Kht, test = adjusted("holm"))
-summary(Kht, test = adjusted("Shaffer"))
-```
-
-Vedi slides
-
-
-Il False Discovery Rate
-=========================
---- 
-
-
-Si consideri un insieme di ipotesi nulle $\mathcal{H}=(H_1,\ldots,H_m)$, di cui un numero sconosciuto $m_0$ sono vere, mentre le restanti $m_1=m-m_0$ sono false. Possiamo riassumere il numero di errori commessi da una procedura di *multiple testing* nella seguente tabella:
-
-Ipotesi     | Vere          | False         | totale
-------------- | ------------- | ------------- | -------------
-rifiutate     | $V$           | $U$           | $R$ 
-non rifiutate | $m_0 - V$     | $m_1-U$       | $m-R$
-totale        | $m_0$         | $m_1$         | $m$
-
-Definiamo ora il *false discovery proportion* $Q$ come 
-\[
-Q = \left\{\begin{array}{ll} V/R & \mathrm{se\,\,} R>0\\ 0 & \mathrm{se\,\,} R=0 \\  \end{array}\right.
-\]
-che rappresenta il rapporto tra numero di errori di I tipo e il totale delle ipotesi rifiutate (definito pari a 0 se non si rifiuta alcuna ipotesi), ovvero la proporzione di errori di I tipo.
-
-In precedenza, avevamo definito il *familywise error rate* come la probabilità di commettere almeno un errore di primo tipo, ovvero $\Pr(V>0)$. Il controllo del *familywise error rate* ad $\alpha$ richiede
+Previously, we had defined the *familywise error rate* as the probability of committing at least one error of the first kind, i.e. $\Pr(V>0)$. Controlling the *familywise error rate* at $\alpha$ requires.
 \[
 \Pr(V>0) = \Pr(Q>0) \leq \alpha
 \]
-Introduciamo ora un nuovo tasso di errore, il *false discovery rate* (FDR), definito come $E(Q)$.
-Il controllo del *false discovery rate* ad $\alpha$ richiede
+We now introduce a new error rate, the *false discovery rate* (FDR), defined as $E(Q)$.
+Controlling the *false discovery rate* at $\alpha$ requires.
 \[
 E(Q) \leq \alpha.
 \]
 
-Le procedure di controllo del FDR esercitano un controllo meno stringente rispetto alle procedure di controllo del FWER (come la correzione di Bonferroni), che cercano di controllare la probabilità di almeno un errore di I tipo,$\Pr(V>0)$, in contrasto con il controllo del valore atteso della proporzione di errori I tipo $E(Q)$. 
-Infatti, poichè $0\leq Q \leq 1$, abbiamo 
+FDR control procedures exert less stringent control than FWER control procedures (such as Bonferroni correction), which seek to control the probability of at least one I-type error,$\Pr(V>0)$ as opposed to controlling the expected value of the proportion of I-type errors $E(Q)$. 
+In fact, since $0\leq Q \leq 1$, we have. 
 \[
 E(Q)\leq \Pr(Q>0)
 \]
-che implica che il controllo del FWER garantisce anche il controllo del FDR.
-Di conseguenza, ci possiamo aspettare che le procedure per il controllo del FDR risultino più potenti delle procedure per il controllo del FWER, ovvero che rifiutino un maggiore numero di ipotesi. 
+which implies that the control of FWER also guarantees the control of FDR.
+Consequently, we can expect the procedures for checking FDR to be more powerful than the procedures for checking FWER, i.e., to reject more hypotheses. 
 
-In pratica, i metodi per il controllo del FDR sono particolarmente più potenti dei metodi per il controllo del FWER in presenza di molte ipotesi nulle false. Al contrario, se tutte le ipotesi nulle sono vere, FDR e FWER sono identici. Infatti in questo caso abbiamo $R = V$, quindi $Q$ è una
-variabile aleatoria Bernoulli. Segue che
+In practice, methods for checking FDR are particularly more powerful than methods for checking FWER in the presence of many false null hypotheses. In contrast, if all null hypotheses are true, FDR and FWER are identical. In fact, in this case we have $R = V$, so $Q$ is a
+Bernoulli random variable. It follows that
 \[
 E(Q) = P (Q> 0)
 \]
-Sia il FDR che il FWER sono generalizzazioni proprie del concetto di errore di I tipo. Se vi è una sola ipotesi ($m = 1$), i due tassi di errore sono identici, e pari alla probabilità di errore di I tipo.
+Both FDR and FWER are generalizations proper to the concept of error of type I. If there is only one hypothesis ($m = 1$), the two error rates are identical, and equal to the probability of type I error.
 
-## La procedura di Benjamini-Hochberg
+# Benjamini-Hochberg procedure.
 
-Siano $p_{(1)},\ldots,p_{(m)}$ i p-values ordinati in maniera non-decrescente, ovvero $p_{(1)}\leq \ldots \leq p_{(m)}$. Per un dato $\alpha$,la procedura Benjamini-Hochberg per il controllo del FDR funziona come segue:
+Let $p_{(1)},\ldots,p_{(m)}$ be the non-decreasingly ordered p-values, i.e., $p_{(1)}leq \ldots \leq p_{(m)}$. For a given $\alpha$,the Benjamini-Hochberg procedure for checking the FDR works as follows:
 
-* Se $p_{(i)} > \frac {i\alpha}{m}$ per ogni $i=1,\ldots,m$, non si rifiuta alcuna ipotesi.
-* Altrimenti, sia \[
-k = \max\Big\{i: p_{(i)} \leq \frac {i\alpha}{m}\Big\}
+* If $p_{(i)} > \frac {i\alpha}{m}$ for any $i=1,\ldots,m$, no hypothesis is rejected.
+* Otherwise, let \[
+k = \max\Big\{i: p_{(i)} \leq \frac {i\alpha}{m}\Big\i}
 \]
-* si rifiuta $H_i$ quando $p_i \leq \tilde{\alpha}= \Large\frac {k \alpha}{m}$
+* one rejects $H_i$ when $p_i \leq \tilde{\alpha}= \Large\frac {k \alpha}{m}$
 
-Sotto l'assunzione che i p-values sono
-* indipendenti oppure positivamente dipendenti
+Under the assumption that the p-values are either.
+* independent or positively dependent
 
-la procedura di Benjamini-Hochberg controlla il FDR al livello $\pi_0\alpha$:
+the Benjamini-Hochberg procedure checks the FDR at the $\pi_0\alpha$ level:
 \[
 E(Q)\leq \pi_0 \alpha \leq \alpha.
 \]
@@ -407,21 +85,21 @@ pvals <- c(0.03000,0.0002, 0.05912, 0.08226, 0.00388, 0.0184, 0.03490)
 m<-length(pvals)
 names(pvals)<-LETTERS[1:m]
 pvals
-pvals.ord<-sort(pvals) # p-values ordinati
+pvals.ord<-sort(pvals) # p-values sorted
 pvals.ord
-(1:m)[(pvals.ord <= alpha*(1:m)/m)] # indici i
-k<-max( (1:m)*(pvals.ord <= alpha*(1:m)/m) ) # k = max(indici i)
+(1:m)[(pvals.ord <= alpha*(1:m)/m)] # indexes i
+k<-max( (1:m)*(pvals.ord <= alpha*(1:m)/m) ) # k = max(indexes i)
 k
-alpha.adj<-(alpha*(1:m)/m)[k] # livello alpha aggiustato
+alpha.adj<-(alpha*(1:m)/m)[k] # adjusted alpha level
 alpha.adj
-hyps.rifiutate<-names(pvals)[pvals<=alpha.adj] # nomi ipotesi rifiutate
-hyps.rifiutate
+hyps.reject<-names(pvals)[pvals<=alpha.adj] # names hypothesis rejected
+hyps.reject
 ```
 
-In modo equivalente, possiamo considerare la regola di rifiuto:
-* si rifiuta l'ipotesi $H_{(i)}$ quando $\tilde{p}_{(i)} \leq \alpha$
+Equivalently, we can consider the rejection rule:
+* we reject the hypothesis $H_{(i)}$ when $\tilde{p}_{(i)} \leq \alpha$
 
-dove 
+where 
 \[
 \tilde{p}_{(i)} = \min_{j=i,\ldots,m}\Big(p_{(j)}\cdot\frac{m}{j} ,1\Big)
 \]
@@ -431,14 +109,14 @@ pvals.ord.adj<-pvals.ord * m/(1:m)
 for (i in 1:m){
 pvals.ord.adj[i]<-min(pvals.ord.adj[i:m],1)
 }
-pvals.ord.adj # p-values aggiustati
-pvals.ord.adj[names(pvals)] # ordinamento iniziale
+pvals.ord.adj # adjusted p-values
+pvals.ord.adj[names(pvals)] # initial sorting
 pvals.adj<-p.adjust(pvals,method="BH")
 pvals.adj
 ```
 
 
-Graficamente abbiamo
+Graphically we have
 ```{r} 
 i<-(pvals.ord <= alpha*(1:m)/m)
 plot(1:m, pvals.ord, xlab="i", ylab=expression(p[(i)]), col=i+1)
@@ -446,21 +124,19 @@ segments(x0=1,y0=alpha/m, x1=m,y1=alpha)
 abline(h=alpha.adj, lty="dotted")
 ```
 
-Per confronto, se utilizziamo il metodo di Bonferroni rifiutiamo
+For comparison, if we use Bonferroni's method we reject
 ```{r} 
-hyps.rifiutate.Bonf<-names(pvals)[pvals<=alpha/m]
-hyps.rifiutate.Bonf
+hyps.reject.Bonf<-names(pvals)[pvals<=alpha/m]
+hyps.reject.Bonf
 ```
 
 
-**esercizio**
-Utilizzando lo stesso setting (e codice) della simulazione sotto $H_0$ parziale con `r m` endpoint valutare (ultima simulazione parte I)
+# Exercise
 
-* la distribuzione empirica del numero di rifiuti usando la correzione di Bonferroni, Holm e BH
-* la frazione di esperimenti in cui si è commesso almeno un errore
-  
-  
-Supponiamo ora che il farmaco abbia effetto sui primi 5 enpoint e non sugli altri
+Using the same setting (and code) as the simulation under $H_0$ partial with `r m` endpoint (last simulation of the previous laboratory) evaluate:
+
+> The empirical distribution of the number of rejections using the correction of Bonferroni, Holm (as in the previous laboratory) and BJ
+> the fraction of experiments in which at least one error was committed
 
 ```{r}
 m=18
@@ -509,41 +185,5 @@ out
 ```
 
 
-## Golub data
-
-Consideriamo ora dei dati di tipo *microarray* utilizzati nello studio descritto da Golub et al. (1999). In questo studio, per ciascun paziente, è stata misurata l'espressione genica su 3051 geni. I 38 pazienti considerati sono malati di leucemia, e possono essere suddivisi in due gruppi: 27 pazienti con *acute lymphoblastic leukemia* (ALL) e con 11 *acute myeloid leukemia* (AML). L'obiettivo dello studio e' di determinare quali geni sono differenzialmente espressi tra i due gruppi di pazienti.
-
-```{r message=F} 
-source("http://bioconductor.org/biocLite.R")
-biocLite("multtest")
-
-set.seed(123)
-require(multtest)
-data(golub)
-rownames(golub)<-golub.gnames[,3]
-m<-3051
-geni<-1:m # sottoinsieme di geni
-risposte<-golub[geni,]
-gruppo<-golub.cl
-p.values<-vector("numeric", length=m)
-names(p.values)<-rownames(risposte)
-for (i in 1:m){
-p.values[i]<-t.test(risposte[i,gruppo==0], risposte[i,gruppo==1])$p.value
-}
-sum(p.values<=alpha) # numero di rifiuti senza correzione per molteplicità
-sum(p.adjust(p.values,"bonferroni") <=alpha) # numero di rifiuti con Bonferroni
-p.values.adj<-p.adjust(p.values,"BH") 
-sum(p.values.adj<=alpha) # numero di rifiuti con Benjamini-Hochberg
-geni.sig<-names(p.values.adj)[(p.values.adj <=alpha)] # nomi dei geni significativi
-geni.sig
-boxplot(risposte[geni.sig[3],]~gruppo, main=geni.sig[3]) # boxplot del terzo gene significativo
-```
-
-Graficamente abbiamo:
-```{r} 
-i<-(sort(p.values) <= alpha*(1:m)/m)
-plot(1:m, sort(p.values), xlab="i", ylab=expression(p[(i)]), col=i+1, ylim=c(0,.1))
-segments(x0=1,y0=alpha/m, x1=m,y1=alpha)
-```
 
 

@@ -1,38 +1,39 @@
 ---
-title: "Multiple Testing"
+title: "The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives"
+subtitle: "Homework 1: Hypothesis testing"
 author: "Livio Finos"
 highlighter: highlight.js
+job: Università degli Studi di Padova
 output:
-  pdf_document:
-    toc: yes
-  html_document:
-    toc: yes
-job: University of Padua
-license: by-nc-sa
+  prettydoc::html_pretty:
+    theme: leonids 
+    highlight: github
+    df_print: paged
+    toc: true
+    number_sections: true
+fontsize: 11pt
+geometry: margin = 1in
 mode: selfcontained
 hitheme: tomorrow
-subtitle: Homework week 18
 framework: io2012
 widgets: []
 ---
 
 
-# Simulation
-
 Perform a simulation with the following setting:
 
-- n = 8 abservations (two balanced samples)
-- m = 20 endpoints
-- m1=5 of them are different between the two groups (H1 hypotheses).
-- control group is distributed as N(0,1) and drug group is N(0,1) for H0 endpoints, while N(3,1) for H1 ones.
-- all endpoints are tested with a t-test
-- 1000 replications
+- $n = 8$ observations (two balanced samples)
+- $m = 20$ endpoints
+- $m_1=5$ of them are different between the two groups ($H_1$ hypotheses).
+- Control group is distributed as $N(0,1)$ and drug group is $N(0,1)$ for $H_0$ endpoints, while $N(3,1)$ for $H_1$ ones.
+- All endpoints are tested with a t-test
+- $1000$ replications
 
 For each generation of data compute 
 
-- the realized FWER (at least one rejection among the H0s)
-- the power (proportion of rejected H1 hypotheses)
-- testin individual hypotheses at level `alpha_a=.05` and `alpha_b=1-(1-.05)^(1/m)`
+- the realized FWER (at least one rejection among the $H_0$s)
+- the power (proportion of rejected $H_1$ hypotheses)
+- testing individual hypotheses at level `alpha_a=.05` and `alpha_b=1-(1-.05)^(1/m)`
 
 
 After the simulation, answer the following questions:
