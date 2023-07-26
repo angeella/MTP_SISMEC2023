@@ -553,41 +553,188 @@ $\tilde p_i = mp_i$ for $i=1,\ldots,m$ and reject if $\tilde p_i \leq \alpha$
 
 \begin{frame}
 \frametitle{Gatekeeping}
-Multiple objectives pursued in clinical trials typically exhibit a hierarchical structure; e.g., they can be divided into primary and secondary objectives.
+Multiple objectives pursued in clinical trials typically exhibit a hierarchical structure $\rightarrow$ Primary and secondary objectives.
 
 \bigskip
 
 To construct a gatekeeping procedure, one first needs to define two or
-more families of analyses, for example, a family of primary endpoints and a
-family of secondary endpoints. Each family (except for the last one) serves
-as a gatekeeper in the sense that one must pass it to perform analyses in the
-next family.
+more families of analyses, for example:
+\begin{itemize}
+    \item \rbf{Primary and secondary endpoints}: Primary endpoints determine the trial's outcome and key secondary endpoints provide useful supportive information about efficacy and safety
+    \item \rbf{Primary and secondary populations}: General population versus subgroups of patients who are more likely to benefit from treatment
+    \item \rbf{Primary and secondary tests}: Noninferiority assessment as the primary analysis followed by a superiority assessment
+\end{itemize}
+
 
 \end{frame}
 
 \begin{frame}
 \frametitle{Gatekeeping}
-serial gatekeepers:
-- generale
-- single decision-making branch
-- multiple decision-making branches
+\rbf{Family 1}
+$F_1 = \{H_1, \dots, H_k\}$, null hypotheses
 
-con esempi
+\rbf{Family 2}
+$F_2 = \{H_{k+1}, \dots, H_m\}$, null hypotheses
+\bigskip
+
+Each family (except for the last one) serves as a gatekeeper in the sense that one must pass it to perform analyses in the next family $\rightarrow$ increase power by accounting for \rbf{hierarchical} structure of multiple families.
 \end{frame}
 
 \begin{frame}
-parallel gatekeepers:
-- general
-- multistage
+\frametitle{Serial Gatekeeping \footnote{Westfall, P. H., & Krishen, A. (2001). Optimally weighted, fixed sequence and gatekeeper multiple testing procedures. Journal of Statistical Planning and Inference, 99(1), 25-40.}}
 
-con esempi
+Family $1$ is a \rbf{serial gatekeeper} for Family $2$ $\rightarrow$ all hypotheses must be rejected in Family $1$ to proceed to Family $2$.
+
+\bigskip
+\rbf{\textbf{Example}}: Alzheimer's diseases trial
+
+\textbf{Objective}: Evaluate the effects of a treatment on cognition
+and global changes in patients with mild to moderate Alzheimer's disease
+
+\textbf{Design}: Treatment versus placebo
+
+\textbf{Primary endpoints}: Endpoint 1: Cognition endpoint (ADAS-Cog), Endpoint 2: Clinical global scale (CIBIC plus)
+
+Treatment effect on both endpoints must be significant
+
+\textbf{Secondary endpoints}; Endpoint 3: Biochemical marker, Endpoint 4: Imaging marker
 \end{frame}
 
 \begin{frame}
-tree-structured gatekeepers
+\frametitle{Serial Gatekeeping}
+\definecolor{redlight}{RGB}{255, 179, 178}
+\tikzstyle{comp1} = [draw, rectangle, rounded corners, minimum height=1cm, minimum width=4cm, fill=redlight]
+\tikzstyle{comp2} = [draw, rectangle, rounded corners, minimum height=1cm, minimum width=2cm, fill=redlight]
+\tikzstyle{arrow} = [thick,->,>=stealth]
 
-con esempi
+\begin{figure}
+\centering
+
+\begin{tikzpicture}[node distance=2.2cm]
+%%% NODES %%%
+\node (main)     [comp1]                 {$H_1$ and $H_2$};
+\node (text1)        [left of=main]     {\hspace{-5cm} \textbf{Family 1} };
+\coordinate[below of=main] (c);
+\node (s1)         [comp2, left of=c]      {$H_3$};
+\node (s2)        [comp2, right of=c]     {$H_4$};
+
+\node (text2) [below of=text1]     {\hspace{-5cm}\textbf{Family 2}};
+%%% ARROWS %%%
+\draw [arrow] (main) -- (s1);
+\draw [arrow] (main) -- (s2);
+\end{tikzpicture}
+\end{figure}
+
 \end{frame}
+
+\begin{frame}
+
+\begin{table}[]
+\begin{tabular}{l|l|l}
+\textbf{Family} & \textbf{Hypothesis} & \textbf{Raw p-value} \\ \hline
+Family 1 & H1  & 0.0113  \\
+   & H2  & 0.0187  \\
+Family 2  & H3 & 0.0071               \\
+  & H4  & 0.0528              
+\end{tabular}
+\end{table}    
+\end{frame}
+
+\begin{frame}
+\frametitle{Serial Gatekeeping}
+\definecolor{redlight}{RGB}{255, 179, 178}
+\tikzstyle{comp1} = [draw, rectangle, rounded corners, minimum height=1cm, minimum width=4cm, fill=redlight]
+\tikzstyle{comp2} = [draw, rectangle, rounded corners, minimum height=1cm, minimum width=2cm, fill=redlight]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{figure}
+\centering
+
+\begin{tikzpicture}[node distance=2.2cm]
+%%% NODES %%%
+\node (main)     [comp1]                 {$H_1$ and $H_2$};
+\node (text1)        [left of=main]     {\hspace{-5cm} \textbf{Family 1} };
+\coordinate[below of=main] (c);
+\node (s1)         [comp2, left of=c]      {$H_3$};
+\node (s2)        [comp2, right of=c]     {$H_4$};
+
+\node (text2) [below of=text1]     {\hspace{-5cm}\textbf{Family 2}};
+%%% ARROWS %%%
+\draw [arrow] (main) -- (s1);
+\draw [arrow] (main) -- (s2);
+\end{tikzpicture}
+\end{figure}
+
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Parallel Gatekeeping \footnote{Dmitrienko, A., Offen, W. W., and Westfall, P. H. (2003). Gatekeeping strategies for clinical trials that do not require all primary effects to be significant. Statistics in medicine, 22(15), 2387-2400.}}
+
+Family $1$ is a \rbf{parallel gatekeeper} for Family $2$, i.e., at least one hypothesis must be rejected in Family $1$ to proceed to Family $2$.
+
+\bigskip
+
+\rbf{\textbf{Example}}: Schizophrenia trial
+
+\textbf{Objective}: Evaluate the efficacy of a treatment in patients diagnosed with schizophrenia
+
+\textbf{Design}: Two doses of treatment (Doses L and H) versus placebo. Treatment effect on at least one dose must be
+significant.
+
+\textbf{Primary endpoint}: Positive and Negative Symptoms Scale (PANSS) total score
+
+\textbf{Two patient populations}: General population and subpopulation (based on a genotypic classifier)
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Parallel Gatekeeping}
+\definecolor{redlight}{RGB}{255, 179, 178}
+\tikzstyle{comp1} = [draw, rectangle, rounded corners, minimum height=1cm, minimum width=2cm, fill=redlight]
+
+\tikzstyle{arrow} = [thick,->,>=stealth]
+
+\begin{figure}
+\centering
+
+\begin{tikzpicture}[node distance=2.2cm]
+%%% NODES %%%
+\node (main1)     [comp1]                 {$H_1$};
+\node (main2)     [comp1, right of=main1]                 {$H_2$};
+
+\node (text1)        [left of=main]     {\hspace{-5cm} \textbf{Family 1} };
+\node (s1)         [comp1, below of=main1]      {$H_3$};
+\node (s2)        [comp1, below of=main2]     {$H_4$};
+
+\node (text2) [below of=text1]     {\hspace{-5cm}\textbf{Family 2}};
+%%% ARROWS %%%
+\draw [arrow] (main1) -- (s1);
+\draw [arrow] (main1) -- (s2);
+\draw [arrow] (main2) -- (s1);
+\draw [arrow] (main2) -- (s2);
+\end{tikzpicture}
+\end{figure}
+Family 1: Doses L and H versus Placebo in overall
+population
+Family 2: Doses L and H versus Placebo in subpopulation
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Parallel gatekeepers}
+Family 1: Bonferroni procedure
+Reject H1 if $p_1 \le \alpha/2$
+Reject H2 if $p_2 \le \alpha/2$
+Gatekeeper is passed if at least one null
+hypothesis is rejected
+Family 2: Bonferroni procedure
+Reject H3 if $p_3 \le \alpha/2$
+Reject H4 if $p_4 \le \alpha/2$
+
+\end{frame}
+
+
 
 \section{Summary}
 \bfr{Summary}
