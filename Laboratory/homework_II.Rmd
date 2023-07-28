@@ -119,7 +119,7 @@ Define the procedure in such a way that:
 
 Is there any room for a further improvement of the procedure? if yes, make your proposal.
 
-## Define a procedure (three enpoints)
+## Define a procedure (three endpoints)
 
 Define now a procedure that considers also the endpoints: \#EPS/HR and \#EPS > 	5'/12HR (i.e. 3 doses comparisons, 3 endpoints)
 
