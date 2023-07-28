@@ -1,5 +1,6 @@
 %\documentclass[10pt]{beamer}
 \documentclass[xcolor={pdftex,dvipsnames,table}]{beamer}
+\usepackage{multirow}
 
 \definecolor{redUnipd}{HTML}{9b0014}
 \definecolor{grayUnipd}{HTML}{444F51}
@@ -57,9 +58,9 @@
 }
 
 
-\title[]{Multiplicity Control in Clinical Trial}
-\subtitle{False Discovery Rate}
-\author[\hspace{5cm}]{Livio Finos}
+\title[]{The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives}
+\subtitle{12th SISMEC National Congress 2023}
+\author[\hspace{5cm}]{Livio Finos and Angela Andreella}
 \date{}% \date{A.A. 2015/2016 }
 %\logo{\includegraphics[scale=.05]{figures/logoUnipd.jpg}}
 
@@ -98,206 +99,99 @@ I thank Aldo Solari, Jelle Goeman and Florian Klinglmueller for the ideas and th
 % \end{frame}
 
 \bfr{A contingency table}
-\begin{table}[!ht]
-  \bb{Contingency table for multiple hypothesis testing}
-    Rejection versus truth or falsehood of hypotheses
-    \newline\ \\
-    \begin{tabular}{lccc}
-                  & true    & false   & total \\\hline
-    rejected      & $V$     & $U$     & $R$ \\
-    not rejected  & $m_0-V$ & $m_1-U$ & $m-R$ \\\hline
-    total         & $m_0$   & $m_1$   & $m$
-    \end{tabular}
-  \eb
+
+\begin{table}[]
+\centering
+\begin{tabular}{@{}ll|cc@{}|l}
+&              & \multicolumn{2}{c|}{\textbf{Null hypothesis}}  &   \\ 
+& \textbf{}    & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}False\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}True\end{tabular}} &  \multicolumn{1}{|l}{Tot}\\ 
+\midrule
+\multicolumn{1}{c}{}                       & Rejected     & \multicolumn{1}{l}{{\color[HTML]{3166FF} $S$}}                                     & {\color[HTML]{9A0000} $V$}  &  {\color[HTML]{16c155} $R$}\\
+\multicolumn{1}{c}{\multirow{-2}{*}{Test}} & Not rejected & \multicolumn{1}{l}{{\color[HTML]{9A0000} $T$}}                                      & {\color[HTML]{3531FF} $U$}     &   $m -$ {\color[HTML]{16c155} $R$}  \\    \midrule
+\multicolumn{1}{c}{}                       & Tot     & \multicolumn{1}{l}{$m_1$}                                     & $m_0$  &  $m$ \\
+\end{tabular}
 \end{table}
+
+\vspace{1cm}
+
+\rbf{\textbf{False Discovery Proportion}}: \[
+\mathrm{FDP} = \left\{ \begin{array}{ll} {\color[HTML]{9A0000} V} /{\color[HTML]{16c155} R} & \textrm{if ${\color[HTML]{16c155} R} > 0$} \\ 0 & \textrm{otherwise}, \end{array} \right.
+\]
+Defined for every rejected set {\color[HTML]{16c155} $R$}
+
 \end{frame}
 
 
-\bfr{FDP, FWER and FDR}
-  \bb{False Discovery Proportion}
-\[
-\mathrm{FDP} = \left\{ \begin{array}{ll} V/R & \textrm{if $R > 0$} \\ 0 & \textrm{otherwise}, \end{array} \right.
-\]
-    Defined for every rejected set $R$
-  \eb
+\bfr{FWER and FDR}
+
   \bb{Familywise error rate}
-   \[ \mathrm{FWER} = \mathrm{P}(V > 0) \]
+   \[ \mathrm{FWER} = \mathbb{P}({\color[HTML]{9A0000} V} > 0) \]
+   A procedure controls it if $\text{FWER} \le \alpha$.
+   
+   FWER focuses on the probability that the rejected set contains any error.
   \eb
   \bb{False discovery rate}
-    \[ \mathrm{FDR} = \mathrm{E}(\mathrm{FDP}) \]
+    \[ \mathrm{FDR} = \mathbb{E}(\mathrm{FDP}) \]
+    A procedure controls it if $\text{FDR} \le \alpha$
+    
+    FDR looks at the expected proportion of errors among the rejections
   \eb
 \end{frame}
+
+
 
 \subsection{Methods}
 
-\bfr{False Discovery Rate
+\bfr{Benjamini and Hochberg (BH) procedure
 \footnote{Benjamini and Hochberg (1995). Journal of the Royal Statistical Society, Series B (Methodological) 57 (1): 289--300.}}
 
-
-% \section{Basic FDR  methods}
-% \subsection{}
- \bb{BH procedure}
     \be
       \item Sort the $p$-values: $p_{(1)}, \ldots, p_{(m)}$
-      \item Find $j'$, the largest $j$ such that $p_{(j)} \leq j\alpha/m$
+      \item Find $j'$, the largest $j$ such that
+      \begin{equation*}
+          p_{(j)} \leq j\alpha/m = c_j^{BH}
+      \end{equation*}
       \item Reject all hypotheses with $p$-values at most $p_{j'}$
     \ee
-  \eb
-  \bb{Benjamini and Hochberg}
-    This procedure controls FDR under independence
-    \\ Control is at $\pi_0\alpha$ (compare Bonferroni), with $\pi_0=m_0/m$
-  \eb
-  \bb{Later}
-    Conditions relaxed
-  \eb
 \end{frame}
 
-\bfr{Step-down and step-up}
-  \begin{tikzpicture}[scale=.7]
-    \draw[help lines, ->] (0,0)--(10,0);
-    \draw[help lines, ->] (0,0)--(0,8) ;
-    \path(0,8) node[left] {1};
-    \draw[->] (0,0) -- (10,5);
-    \draw[fill] (1,0.2) circle(2pt);
-    \draw[fill] (2,0.8) circle(2pt);
-    \draw[fill] (3,1.8) circle(2pt);
-    \draw[fill] (4,2.1) circle(2pt);
-    \draw[fill] (5,2.3) circle(2pt);
-    \draw[fill] (6,2.6) circle(2pt);
-    \draw[fill] (7,3.8) circle(2pt);
-    \draw[fill] (8,4.9) circle(2pt);
-    \draw[fill] (9,7.8) circle(2pt);
-    \draw[<->, very thick, below right] (.5,6) node{rejected by a step-up method} -- (6.5,6);
-    \draw[<->, very thick, below right] (.5,5) node{rejected by a step-down method} -- (2.5,5);
-    \draw[help lines] (6.5, 2) -- (6.5,6.5);
-    \draw[help lines] (2.5, 0.5) -- (2.5,5.3);
-    \draw[help lines] (.5, 0) -- (0.5,6.5);
-    \foreach \x in {1,2,3,4,5,6,7,8,9}
-      \draw (\x, -1pt) node[below] {\x} -- (\x, 1pt);
-    \draw (0,-1pt) node[left] {0} -- (0,0);
-    \path (5,-1) node{rank of $p$-value};
-    \path (-1,4) node[rotate=90]{$p$-value};
-  \end{tikzpicture}
+\bfr{Benjamini and Hochberg (BH) procedure}
+\begin{figure}
+    \centering
+    \includegraphics[width = .8\textwidth]{Slides/MTP/plaatjes/bh.pdf}
+\end{figure}
 \end{frame}
 
+\begin{frame}
+\frametitle{Benjamini and Hochberg (BH) procedure}
 
-\bfr{Benjamini and Hochberg (BH)}
-\begin{overprint}
-\onslide<1>  $\frac{p_{(10)} \ m}{10}=\frac{0.753 \ 10}{10} =0.753 \bbf{\stackrel{?}{\leq}  q=.10}$ : No
-\onslide<2>  $\frac{p_{(9)} \ m}{9}=\frac{0.731 \ 10}{9} =0.812 \bbf{\stackrel{?}{\leq}  q=.10}$ : No
-\onslide<3>  $\frac{p_{(8)} \ m}{8}=\frac{0.503 \ 10}{8} =0.629 \bbf{\stackrel{?}{\leq}  q=.10}$ : No
-\onslide<4>  $\frac{p_{(7)} \ m}{7}=\frac{0.314 \ 10}{7} =0.449\bbf{\stackrel{?}{\leq}  q=.10}$ : No
-\onslide<5>  $\frac{p_{(6)} \ m}{6}=\frac{0.153 \ 10}{6} =0.255 \bbf{\stackrel{?}{\leq}  q=.10}$ : No
-\onslide<6>   etc. 
-\onslide<7>  $\frac{p_{(2)}\ m}{2}=\frac{0.016 \ 10}{2} =0.080\bbf{\stackrel{?}{\leq}  q=.10}$ : Yes!, \textcolor{redUnipd}{STOP}
-\end{overprint}
+This procedure 
 
-
-\begin{tikzpicture}
-
-\draw<1>[thick] (5.6cm,0pt) -- (5.6cm,5cm);
-\draw<2>[thick] (5.4cm,0pt) -- (5.4cm,5cm);
-\draw<3>[thick] (4.62cm,0pt) -- (4.62cm,5cm);
-\draw<4>[thick] (4.1cm,0pt) -- (4.1cm,5cm);
-\draw<5>[thick] (3.14cm,0pt) -- (3.14cm,5cm);
-\draw<6>[thick] (2.7cm,0pt) -- (2.7cm,5cm);
-\draw<7>[thick] (2.58cm,0pt) -- (2.58cm,5cm);
-
-\draw[very thick] (0cm,-.05cm) -- (9cm,-.05cm);
-
-\fill<1>[redUnipd,xshift=2.5cm]           (0,0) rectangle (3.1cm,.4cm);
-\node at (1.2,.15) {p$_{(10)}$=.753};
-\fill<2->[xshift=2.5cm]           (0,0) rectangle (3.1cm,.4cm);
-\node at (1.2,.15) {p$_{(10)}$=.753};
-     
-\fill<1-2>[redUnipd,yshift=.5cm,xshift=2.5cm] (0,0) rectangle (2.9cm,.4cm);
-\node at (1.2,.65) {p$_{(9)}$ =.731};
-\fill<3->[yshift=.5cm,xshift=2.5cm] (0,0) rectangle (2.9cm,.4cm);
-\node at (1.2,.65) {p$_{(9)}$ =.731};
-
-\fill<1-3>[redUnipd,yshift=1cm,xshift=2.5cm] (0,0) rectangle (2.12cm,.4cm);
-\node at (1.2,1.15) {p$_{(8)}$ =.503};
-\fill<4->[yshift=1cm,xshift=2.5cm] (0,0) rectangle (2.12cm,.4cm);
-\node at (1.2,1.15) {p$_{(8)}$ =.503};
-
-\fill<1-4>[redUnipd,yshift=1.5cm,xshift=2.5cm] (0,0) rectangle (1.6cm,.4cm);
-\node at (1.2,1.65) {p$_{(7)}$ =.314};
-\fill<5->[yshift=1.5cm,xshift=2.5cm] (0,0) rectangle (1.6cm,.4cm);
-\node at (1.2,1.65) {p$_{(7)}$ =.314};
-
-\fill<1-5>[redUnipd,yshift=2cm,xshift=2.5cm] (0,0) rectangle (.64cm,.4cm);
-\node at (1.2,2.15) {p$_{(6)}$ =.153};
-\fill<6->[yshift=2cm,xshift=2.5cm] (0,0) rectangle (.64cm,.4cm);
-\node at (1.2,2.15) {p$_{(6)}$ =.153};
-
-\fill<1-5>[redUnipd,yshift=2.5cm,xshift=2.5cm] (0,0) rectangle (.3,.4);
-\node at (1.2,2.65) {p$_{(5)}$ =.075};
-\fill<6->[yshift=2.5cm,xshift=2.5cm] (0,0) rectangle (.3,.4);
-\node at (1.2,2.65) {p$_{(5)}$ =.075};
-
-\fill<1-6>[redUnipd,yshift=3cm,xshift=2.5cm] (0,0) rectangle (.2,.4);
-\node at (1.2,3.15) {p$_{(4)}$ =.050};
-\fill<7->[yshift=3cm,xshift=2.5cm] (0,0) rectangle (.2,.4);
-\node at (1.2,3.15) {p$_{(4)}$ =.050};
-
-\fill<1-6>[redUnipd,yshift=3.5cm,xshift=2.5cm] (0,0) rectangle (.121cm,.4cm);
-\node at (1.2,3.65) {p$_{(3)}$ =.038};
-\fill<7->[yshift=3.5cm,xshift=2.5cm] (0,0) rectangle (.121cm,.4cm);
-\node at (1.2,3.65) {p$_{(3)}$ =.038};
-
-\fill[redUnipd,yshift=4cm,xshift=2.5cm](0,0) rectangle (.066cm,.4cm);
-\node at (1.2,4.15) {p$_{(2)}$ =.016};
-
-\fill[redUnipd,yshift=4.5cm,xshift=2.5cm] (0,0) rectangle (.02cm,.4cm);
-\node at (1.2,4.65) {p$_{(1)}$ =.005};
-\end{tikzpicture}
+\begin{itemize}
+    \item control is at $\pi_0\alpha$ (compare Bonferroni), with $\pi_0=m_0/m$
+    \item  On average, the $R$ has FDP $\leq\pi_0\alpha$
+    \item controls FDR under \textbf{independence} and \textbf{positive dependence through stochastic ordering} (i.e.,  non-negatively associated $p$-values):
+  \begin{itemize}
+      \item \rbf{One-sided tests}: as long as test statistics not negatively correlated
+      \item \rbf{Two-sided tests}: If test statistics are (asymptotically) normal
+  \end{itemize}
+\end{itemize}
+    
 \end{frame}
-
-
-\bfr{Meaning of FDR control}
-  \bb{FDR control}
-    On average, the $\mathcal{R}$ returned by BH has FDP $\leq\pi_0\alpha$
-  \eb
-  \bb{Variability of FDP}
-    Due to variability of $\mathcal{R}$
-  \eb
-  \bb{Realized FDP}
-    Varies around $\pi_0\alpha$.
-    \\ Variability can be high if $p$-values correlated
-  \eb
-\end{frame}
-
-
 
 
 \bfr{Benjamini \&\ Yekutieli (BY)\footnote{Benjamini Y, Yekutieli D. (2001) The control of the false discovery rate in multiple testing under dependency. {\it Annals of statistics} 29(4):1165--1188}}
-  \bb{Assumptions of Benjamini and Hochberg}
-    Non-negatively associated $p$-values ({\it Positive Dependence through Stochastic ordering})
-  \eb
-  
-  i.e.
-  \bb{One-sided tests}
-  As long as test statistics not negatively correlated
-  \eb
-  \bb{Two-sided tests}
-  If test statistics are (asymptotically) normal
-  \eb
-\end{frame}
-
-
-
-
-\bfr{Benjamini \&\ Yekutieli (BY)\footnote{Benjamini Y, Yekutieli D. (2001) The control of the false discovery rate in multiple testing under dependency. {\it Annals of statistics} 29(4):1165--1188}}
-  \bb{Benjamini and Yekutieli}
-    Variant valid for any distribution of $p$-values
-  \eb
+Variant of BH valid for any distribution of $p$-values
   \bb{How does it work?}
-Same as BH but $\rbf{\frac{p_{(i)} \ m}{i}\ L \stackrel{?}{\leq}  q=.10}$ \\ 
-with $L=\sum_{j=1}^{i} 1/j$  (es $i=3$: $L= 1/1+1/2+1/3$ )
+Same as BH but 
+\begin{equation*}
+    p_{(j)} \le \dfrac{j \alpha}{m L} = c_j^{BY}
+\end{equation*}
+where $L=\sum_{j=1}^{m} 1/j$  (es $m=3$: $L= 1/1+1/2+1/3$ )
   \eb
   \bb{In practice}
     \bi
-      \item Quite conservative, especially if $m_0$ is large
+      \item Quite conservative (especially if $m_0$ is large) $\rightarrow$ $c_j^{BY} < c_j^{BH}$
       \item Not often needed, not often used
     \ei
   \eb
@@ -307,75 +201,51 @@ BH  e BY: {\tt library(stats); p.adjust()}
 
 \end{frame}
 
-
-%\bfr{Risultati (BH \& BY)}
-%\begin{small}
-%\begin{center}
-%\begin{tabular}{ l | c |ll}
-% & p-value & BH & BY\\
-%\hline
-%%ECRR & & &\\
-%ECRR: Ansia&.2165 & .325  &1.000 \\
-%ECRR: Evitamento&.0015 & .009 * & .028 *\\
-%\hline
-%%DAS & & \\
-%DAS: Consenso&.0072& .022 *& .067\\
-%DAS: Soddisfazione&.0001&  .001 * & .004 *\\
-%DAS: Coesione&.0415& .083 & .258 \\
-%DAS: Espr.Affetti&.0025& .010 & .031\\
-%\hline
-%%AAI & & \\
-%AAI: Sicuro & .3545 & .473 & 1.000\\
-%AAI: Distanziante & .0189& .045 * & .141 \\
-%AAI: Preoccupato & .1264 & .217 & .673\\
-%\hline
-%%CRI& & \\
-%CRI: Sicuro & .5856 & .639 & 1.000\\
-%CRI: Distanziante & .5536 & .639 & 1.000 \\
-%CRI: Preoccupato & 1.000 & 1.000 & 1.000 \\
-%%\hline
-%\end{tabular}
-%\end{center}
-%\end{small}
-%\end{frame}
-%%%%%%%%%%%%%%%%%%%%%
-
-\section{More about FDR}
-\bfr{Adaptive FDR control}
-  \bb{BH controls FDR at $\pi_0\alpha$}
-    If $\pi_0$ were known, use $\tilde\alpha = \alpha/\pi_0$ instead
-  \eb
-  \bb{Adaptive FDR control idea}
-    Estimate $\pi_0$ by $\hat\pi_0$ and use $\tilde\alpha = \alpha/\hat\pi_0$
-  \eb
-  \bb{Various methods available}
-    \bi
-      \item Higher power if $\pi_0$ low, lower power if $\pi_0 \approx 1$
-      \item May reject hypotheses with $p$-values $> \alpha$
-      \item FDR control under dependence not guaranteed
-    \ei
-  \eb
+\begin{frame}
+\frametitle{Benjamini \&\ Yekutieli (BY)}
+    \begin{figure}
+    \centering
+    \includegraphics[width = .8\textwidth]{Slides/MTP/plaatjes/BH_BY.pdf}
+\end{figure}
 \end{frame}
 
 
+\section{FDP estimation}
+
+\begin{frame}
+\frametitle{FDP estimation}
+\rbf{Difference between FDR control and FDP estimation}
+\begin{itemize}
+    \item \textbf{FDR control}: starts with the choice of $\alpha$ to be controlled and the procedure finds $R$
+    \item \textbf{FDP estimation}: starts with $R$ (not necessarily the hypotheses with top p-values) and finds an estimate for FDP of that set.  
+\end{itemize}
+
+To formulate the point estimation approach:
+\begin{itemize}
+    \item $V(t) = \# \{ \text{true null } H_i: p_i \le t\}$
+    \item $R(t) = \{H_i: p_i \leq t\}$
+\end{itemize}
+$\rightarrow$ $FDR(t) = \mathbb{E}(V(t) /R(t))$   with $t \in (0, 1]$
+
+\end{frame}
+
 
 \bfr{Storey's FDP estimate}
-  \bb{Rejected set}
-    Suppose we reject hypotheses $\mathcal{R} = \{H_i: p_i \leq t\}$
-  \eb
+
   \bb{Intuition}
-    By uniformity of $p$-values under the null $\mathrm{FDP} \approx m_0t/\#\mathcal{R}$
+    By uniformity of $p$-values under the null $\mathrm{FDP} \approx m_0t/\#R$
   \eb
   \bb{Estimate of $m_0$ (again by uniformity)}
   \[ \hat{m}_0 = \frac{ \#\{p_i > \lambda\}+1}{1-\lambda} \]
+  where $0 < \lambda < 1$ constant (e.g., $\lambda = 1/2$, $\lambda = \alpha$).
   \eb
-  \bb{Resulting estimate of FDP (``$q$-value'')}
+  \bb{Resulting estimate of FDP}
 \[    \hat{\mathrm{FDP}}\ =\ \frac{\hat{m}_0t}{\#\mathcal{R}}\ =\ \frac{t}{1-\lambda}\frac{\#\{p_i > \lambda\}+1}{\#\{p_i \leq t\}} \]
   \eb
 \end{frame}
 
 
-\bfr{Storey's $\pi_0$ estimation}
+\bfr{Storey's FDP estimate}
   \begin{tikzpicture}[scale=.7]
     \draw[help lines, ->] (0,0)--(10,0);
     \draw[help lines, ->] (0,0)--(0,8) ;
@@ -398,8 +268,11 @@ BH  e BY: {\tt library(stats); p.adjust()}
 \end{frame}
 
 
-\bfr{Storey and Benjamini \&\ Hochberg}
-  \bb{Close relationship}
+\bfr{Storey's FDP estimate}
+
+Storey's estimate is sometimes used as a way to control FDR, rather than as a way to estimate FDP: selecting the highest value of $t$ such that the estimate $\hat{\text{FDP}} > \alpha$.
+
+  \bb{Close relationship with BH}
     Alternative way of constructing BH rejected set
     \be
       \item Estimate $\hat m_0 = 1$ instead of Storey's estimate
@@ -415,7 +288,7 @@ BH  e BY: {\tt library(stats); p.adjust()}
 \end{frame}
 
 
-\bfr{Storey and dependence}
+\bfr{Storey's FDP estimate}
   \bb{Method of moments estimate}
     Only dependent on means $\to$ unaffected by correlation structure
   \eb
@@ -461,6 +334,18 @@ BH  e BY: {\tt library(stats); p.adjust()}
   \eb
 \end{frame}
 
+\bfr{Meaning of FDR control}
+  \bb{FDR control}
+    On average, the $\mathcal{R}$ returned by BH has FDP $\leq\pi_0\alpha$
+  \eb
+  \bb{Variability of FDP}
+    Due to variability of $\mathcal{R}$
+  \eb
+  \bb{Realized FDP}
+    Varies around $\pi_0\alpha$.
+    \\ Variability can be high if $p$-values correlated
+  \eb
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{FWER or FDR?}%{Altri Tipi di Errori Multivariati}
