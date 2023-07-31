@@ -1,5 +1,6 @@
-%\documentclass[10pt]{beamer}
-\documentclass[xcolor={pdftex,dvipsnames,table}]{beamer}
+\documentclass[xcolor={dvipsnames}]{beamer}
+
+\usetheme{CambridgeUS}
 
 \definecolor{redUnipd}{HTML}{9b0014}
 \definecolor{grayUnipd}{HTML}{444F51}
@@ -20,11 +21,21 @@
 %\textopenbullet
 %\usepackage{marvosym}
 %\setbeamertemplate{itemize items}{$\Neutral$}
-
+\setbeamercolor*{structure}{bg=white,fg=redUnipd}
+\setbeamercolor{frametitle}{bg=white,fg=redUnipd}
+\setbeamercolor{titlelike}{bg=white,fg=redUnipd}
+\setbeamercolor*{palette primary}{use=structure,fg=redUnipd,bg=white}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
+\setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+\setbeamertemplate{itemize items}[square]
 \usepackage{pgfpages}
-\pgfpagesuselayout{resize to}[a4paper, 
-                                border shrink=1.5cm,
-                                landscape]
+%\pgfpagesuselayout{resize to}[a4paper, 
+%                                border shrink=1.5cm,
+%                                landscape]
+\setbeamertemplate{blocks}[rounded][shadow=false]
 
 
 \usepackage[T1]{fontenc}
@@ -62,10 +73,11 @@
 }
 
 
-\title[]{The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives}
-\subtitle{12th SISMEC National Congress 2023}
-\author[\hspace{5cm}]{Livio Finos and Angela Andreella}
+\title[]{The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives \\
+\vspace*{1cm} \large FWER control}
+\subtitle{\vspace*{2cm} \small 12th SISMEC National Congress 2023}
 \date{}
+\author[\hspace{5cm}]{Livio Finos and Angela Andreella}
 % \date{A.A. 2015/2016 }
 %\logo{\includegraphics[scale=.05]{figures/logoUnipd.jpg}}
 
@@ -95,7 +107,7 @@ I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and t
 \multicolumn{1}{c}{}                       & Tot     & \multicolumn{1}{l}{$m_1$}                                     & $m_0$  &  $m$ \\
 \end{tabular}
 \end{table}
-
+TODO COLOR TABLE IN LINE BETWEEN SLIDES
 \vspace{.5cm}
 
 \begin{equation*}
@@ -399,7 +411,7 @@ One rejects the global hypothesis of no effect if there is evidence of a positiv
 
 Let denote the hypotheses $H_1, \dots, H_m$ corresponding to the multiple objectives. The hypotheses are tested against the alternative hypotheses $K_1, \dots, K_m$:
 \begin{equation*}
-    H_I: \cap_{i = 1}^m H_i \quad \text{versus} H_U: \cup_{i=1}^m K_i
+    H_I: \cap_{i = 1}^m H_i \quad \text{versus} \quad H_U: \cup_{i=1}^m K_i
 \end{equation*}
 
 \bigskip
@@ -572,7 +584,7 @@ $F_1 = \{H_1, \dots, H_{k_1}\}$, null hypotheses
 
 $\dots$
 
-\rbf{Family m}:
+\rbf{Family $m$}:
 $F_m = \{H_{k_{m-1} +1}, \dots, H_{k_m}\}$, null hypotheses
 
 \bigskip
@@ -929,7 +941,7 @@ Intersection-union testing arises naturally in studies when a significant outcom
 
 \begin{itemize}
     \item All analyses must show benefit
-    \item The trial’s outcome is positive if all analyses
+    \item The trial's outcome is positive if all analyses
 produce a significant outcome
 \end{itemize}
 

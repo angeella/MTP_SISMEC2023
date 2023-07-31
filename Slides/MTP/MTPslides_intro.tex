@@ -1,7 +1,8 @@
 %\documentclass[10pt]{beamer}
-\documentclass[xcolor={pdftex,dvipsnames,table}]{beamer}
+\documentclass[xcolor={dvipsnames}]{beamer}
 
-\definecolor{cambridgedarkblue}{HTML}{000000}
+\usetheme{CambridgeUS}
+
 \definecolor{cambridgedarkorange}{HTML}{9b0014}
 \definecolor{cambridgegreen}{RGB}{88,166,24}
 \definecolor{cambridgeorange}{HTML}{9b0014}
@@ -12,27 +13,32 @@
 \newcommand{\bbf}[1]{\textcolor{black}{\bf #1}}
 \newcommand{\rbf}[1]{\textcolor{redUnipd}{ #1}}
 \usefonttheme{structurebold}
-\usecolortheme[named=myblue]{structure}
-\setbeamercolor{structure}{fg=redUnipd}
-\setbeamercolor{normal text}{bg=white,fg=grayUnipd}
-\setbeamertemplate{itemize items}{$\circ$}
+%\usecolortheme[named=myblue]{structure}
+\setbeamercolor*{structure}{bg=white,fg=redUnipd}
+\setbeamercolor{frametitle}{bg=white,fg=redUnipd}
+\setbeamercolor{titlelike}{bg=white,fg=redUnipd}
+\setbeamercolor*{palette primary}{use=structure,fg=redUnipd,bg=white}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
+%\setbeamercolor*{normal text}{bg=white,fg=black}
+%\setbeamertemplate{itemize items}{$\circ$}
 %\textopenbullet
 %\usepackage{marvosym}
 %\setbeamertemplate{itemize items}{$\Neutral$}
 \usepackage{booktabs}
 \usepackage{pgfpages}
-\pgfpagesuselayout{resize to}[a4paper, 
-                                border shrink=1.5cm,
-                                landscape]
+%\pgfpagesuselayout{resize to}[a4paper, 
+%                                border shrink=1.5cm,
+%                                landscape]
+\setbeamertemplate{blocks}[rounded][shadow=false]
 
 \usepackage[T1]{fontenc}
-%
+\usepackage{hyperref}
 \usepackage[english]{babel}
 \usepackage{graphicx}
 \usepackage{booktabs}
 \usepackage{latexsym}
 \usepackage{subfigure}
-\usefonttheme{professionalfonts}
 %\usepackage{enumitem}
 \usepackage{amsmath,amssymb}
 \usepackage[latin1]{inputenc}
@@ -42,7 +48,10 @@
 \usepackage{tikz,comment,amssymb}
 \usetikzlibrary{shapes}
 \usepackage{multirow}
-
+\setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{section in toc}[sections numbered]
+\setbeamertemplate{subsection in toc}[subsections numbered]
+\setbeamertemplate{itemize items}[square]
 \newcommand{\bb}[1]{\begin{block}{#1}}
 \newcommand{\eb}{\end{block}}
 \newcommand{\bi}{\begin {itemize}}
@@ -59,10 +68,11 @@
 }
 
 
-\title[]{The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives}
-\subtitle{12th SISMEC National Congress 2023}
-\author[\hspace{5cm}]{Livio Finos and Angela Andreella}
+\title[]{The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives \\
+\vspace*{1cm} \large Introduction to Hypothesis testing}
+\subtitle{\vspace*{2cm} \small 12th SISMEC National Congress 2023}
 \date{}
+\author[\hspace{5cm}]{Livio Finos and Angela Andreella}
 % \date{A.A. 2015/2016 }
 %\logo{\includegraphics[scale=.05]{figures/logoUnipd.jpg}}
 
@@ -76,12 +86,18 @@
 \begin{frame}
     \begin{minipage}[t]{0.45\textwidth}
 \includegraphics[width= \textwidth]{Slides/MTP/plaatjes/Finos.jpg}
-TODO
+\begin{itemize}
+    \item Full professor in statistics at  University of Padova
+    \item \textbf{E-mail}: \href{mailto:livio.finos@unipd.it}{livio.finos@unipd.it} 
+\end{itemize}
 
 \end{minipage}\hfill
 \begin{minipage}[t]{0.45\textwidth}
   \includegraphics[width= .95\textwidth]{Slides/MTP/plaatjes/Andreella.jpg}
-TODO
+\begin{itemize}
+    \item Researcher in social statistics at  University Ca' Foscari Venezia
+    \item \textbf{E-mail}: \href{mailto:angela.andreella@unive.it}{angela.andreella@unive.it} 
+\end{itemize}
 
 \end{minipage}
 \end{frame}
@@ -225,7 +241,7 @@ but the next day...
 \node[text=cambridgeorange]  at (6.5,-3) {\small{8.5\%}};
 \end{tikzpicture}
 
-\bigskip
+\vspace{.1cm}
 
 \emph{"The numbers were small, which concerned us, but the result was highly statistically significant. They were pretty incredible results."}
 
@@ -275,31 +291,18 @@ If you torture your data long enough, they will confess you whatever you want to
 \begin{frame}
 \frametitle{Revived interest in multiple testing}
 
+\large{``-omics''}   \\
+\scriptsize{e.g., genomics experiments with microarray data: which genes are differentially expressed?}
 
-\textcolor{cambridgedarkblue}{\large{``-omics''}}   \\
-\scriptsize{e.g. genomics experiments with microarray data: which genes are differentially expressed?}
-\smallskip
-\smallskip
+\large{model selection}\\
+\scriptsize{e.g., multiple regression: which coefficients matter?}
 
-\textcolor{cambridgedarkblue}{\large{model selection}}\\
-\scriptsize{e.g. multiple regression: which coefficients matter?}
-\smallskip
-\smallskip
-
-\textcolor{cambridgedarkblue}{\large{econometric}}\\
-\scriptsize{e.g. comparing several strategies with a benchmark: any better? which ones?}
-\smallskip
-\smallskip
-
-\textcolor{cambridgedarkblue}{\large{...}}
-\smallskip
-\smallskip
+\large{...}
 
 
-\begin{block}{\Large \textbf{clinical trials}}
+\textbf{\rbf{Clinical trials}}
 \begin{columns}[t]
 \column{0.45\textwidth}
-\normalsize{
 \textcolor{cambridgedarkorange}{sources of multiplicity}
 \begin{itemize}
 \item multiple endpoints
@@ -308,10 +311,9 @@ If you torture your data long enough, they will confess you whatever you want to
 \item subgroup analysis
 \item interim analysis
 \item $\ldots$
-\end{itemize}}
+\end{itemize}
 
 \column{0.45\textwidth}
-\normalsize{
 \textcolor{cambridgedarkorange}{regulatory guidelines}
 \begin{itemize}
 \item statistical principles for clinical trials (ICH E9)
@@ -319,9 +321,9 @@ If you torture your data long enough, they will confess you whatever you want to
 to consider on multiplicity issues in clinical
 trials (EMEA)
 \item $\ldots$
-\end{itemize}}
+\end{itemize}
 \end{columns}
-\end{block}
+
 
 
 
@@ -407,7 +409,7 @@ under $H_0$: $T\sim t_{n_1+n_2-2}$, then
 consequently, $P\sim U(0,1)$
 \end{minipage}\hfill
 \begin{minipage}{0.55\textwidth}
- \hspace{1cm} \includegraphics[width= \textwidth]{Slides/MTP/plaatjes/cdf_uniform}
+ \hspace{1cm} \includegraphics[width= .85\textwidth]{Slides/MTP/plaatjes/cdf_uniform}
 \end{minipage}
 
 \end{frame}
@@ -475,7 +477,7 @@ Probability of \textbf{ AT LEAST one} (false) rejection?\
 \begin{frame}{Multiple Tests}
     \begin{figure}
         \centering
-        \includegraphics[width = 1.1\textwidth]{Slides/MTP/plaatjes/mt1.pdf}
+        \includegraphics[width = \textwidth]{Slides/MTP/plaatjes/mt1.pdf}
 
     \end{figure}
 \end{frame}
@@ -483,16 +485,17 @@ Probability of \textbf{ AT LEAST one} (false) rejection?\
 \begin{frame}{Multiple Tests}
     \begin{figure}
         \centering
-        \includegraphics[width = 1.1\textwidth]{Slides/MTP/plaatjes/mt2.pdf}
+        \includegraphics[width = \textwidth]{Slides/MTP/plaatjes/mt2.pdf}
     \end{figure}
 \end{frame}
 
 \begin{frame}{Multiple Tests}
     \begin{figure}
         \centering
-        \includegraphics[width = 1.1\textwidth]{Slides/MTP/plaatjes/mt3.pdf}
+        \includegraphics[width = \textwidth]{Slides/MTP/plaatjes/mt3.pdf}
 
     \end{figure}
+    TODO CHANGE COLOR IN LINE WITH BELOW TABLE AND TABLES FROM OTHER SLIDES
 \end{frame}
 
 \begin{frame}{Error control}
@@ -541,17 +544,18 @@ This quickly becomes a problem if $m$ becomes large ...
 \frametitle{Error control}
 \begin{figure}
     \centering
-\includegraphics[scale=.3]{plaatjes/typeI}
+\includegraphics[width = .6\textwidth]{plaatjes/typeI}
 \end{figure}
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Type I error}
-\bb{How to define the Type I error when there are many hypotheses?}
-\eb
-\bb{Which procedures control this error?}
-\eb
+\begin{itemize}
+    \item How to define the Type I error when there are many hypotheses?
+    \bigskip
+    \item Which procedures control this error?
+\end{itemize}
 \end{frame}
 
 \end{document}
