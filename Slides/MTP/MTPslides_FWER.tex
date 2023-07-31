@@ -13,9 +13,9 @@
 \newcommand{\bbf}[1]{\textcolor{black}{\bf #1}}
 \newcommand{\rbf}[1]{\textcolor{redUnipd}{ #1}}
 \usefonttheme{structurebold}
-\usecolortheme[named=myblue]{structure}
+%\usecolortheme[named=myblue]{structure}
 \setbeamercolor{structure}{fg=redUnipd}
-\setbeamercolor{normal text}{bg=white,fg=grayUnipd}
+%setbeamercolor{normal text}{bg=white,fg=grayUnipd}
 \definecolor{cambridgedarkblue}{HTML}{000000}
 \setbeamertemplate{itemize items}{$\circ$}
 %\textopenbullet
@@ -45,7 +45,7 @@
 \usepackage{booktabs}
 \usepackage{latexsym}
 \usepackage{subfigure}
-\usefonttheme{professionalfonts}
+\usefonttheme{structurebold}
 %\usepackage{enumitem}
 \usepackage{amsmath,amssymb}
 \usepackage[latin1]{inputenc}
@@ -98,16 +98,16 @@ I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and t
 \frametitle{FamilyWise Error Rate (FWER)}
 \begin{table}[]
 \centering
-\begin{tabular}{@{}ll|ll@{}|l}
+\begin{tabular}{@{}ll|cc@{}|l}
 &              & \multicolumn{2}{c|}{\textbf{Null hypothesis}}  &   \\ 
 & \textbf{}    & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}False\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}True\end{tabular}} &  \multicolumn{1}{|l}{Tot}\\ 
 \midrule
-\multicolumn{1}{c}{}                       & Rejected     & \multicolumn{1}{l}{{\color[HTML]{3166FF} $S$}}                                     & {\color[HTML]{9A0000} $V$}  &  $R$ \\
-\multicolumn{1}{c}{\multirow{-2}{*}{Test}} & Not rejected & \multicolumn{1}{l}{{\color[HTML]{9A0000} $T$}}                                      & {\color[HTML]{3531FF} $U$}     &   $m - R$  \\    \midrule
+\multicolumn{1}{c}{}                       & Rejected     & \multicolumn{1}{l}{{\color[HTML]{3166FF} $S$}}                                     & {\color[HTML]{9A0000} $V$}  &  {\color[HTML]{16c155} $R$}\\
+\multicolumn{1}{c}{\multirow{-2}{*}{Test}} & Not rejected & \multicolumn{1}{l}{{\color[HTML]{9A0000} $T$}}                                      & {\color[HTML]{3531FF} $U$}     &   $m -$ {\color[HTML]{16c155} $R$}  \\    \midrule
 \multicolumn{1}{c}{}                       & Tot     & \multicolumn{1}{l}{$m_1$}                                     & $m_0$  &  $m$ \\
 \end{tabular}
 \end{table}
-TODO COLOR TABLE IN LINE BETWEEN SLIDES
+
 \vspace{.5cm}
 
 \begin{equation*}
@@ -1081,8 +1081,6 @@ secondary endpoints are tested if all primary tests are significant
 
 \section{Summary}
 \bfr{Summary}
-TODO: sistemare summary
-
 \bb{Family-Wise Error}
 \bi
 \item Generalizes Type I errors to the case of multiple hypotheses
@@ -1090,6 +1088,8 @@ TODO: sistemare summary
 \item Controls the probability of \textbf{at least one} false rejection among all rejections
 \pause
 \item Adjusts p-values (adjusted p-values are always equal to or worse than the unadjusted p-values)
+\pause
+\item Understand the hierarchical/sequential structure of hypotheses testing $\rightarrow$ increase power
 \ei
 \eb
 \pause
