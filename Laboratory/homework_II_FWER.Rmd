@@ -95,14 +95,14 @@ where $p_i$ are the raw p-values.
 - Apply the serial gatekeeping procedure
 - Apply the parallel gatekeeping procedure
 
-# 4. Exercise {-}
+# 5. Exercise {-}
 
 Description:  
 <http://webserv.jcu.edu/math//faculty/TShort/Bradstreet/part1/part1-table3.html>
 
 Twelve Gastroesophageal Reflux Disease (GERD) patients were allocated randomly to one of four treatment sequences of 0 (placebo), 10, 20, and 40 mg a.m. of a drug in a four period crossover design. On the fifth (last) day of each treatment period and the study baseline period, percent reflux time (% RT), the number of reflux episodes per hour (# EPS/HR), and the number of reflux episodes greater than five minutes in a 12 hour period (#EPS > 5'/12 HR) were recorded for each patient using ambulatory 24-hour esophageal pH monitoring. Measurements were taken while the patient was in the upright (U) or supine (S) positions. The time (hours) in the upright and supine positions was recorded. A seven day washout period separated the treatment periods. The data recorded in the upright and supine positions are shown in <http://webserv.jcu.edu/math//faculty/TShort/Bradstreet/part1/Bradp1t3.txt>
 
-## Define a procedure (one enpoint) 
+## 5.1 Define a procedure (one enpoint) {-}
 
 Let consider for the moment, only the % RT endpoint, only upright (U) position and the comparisons:  
 
@@ -119,11 +119,11 @@ Define the procedure in such a way that:
 
 Is there any room for a further improvement of the procedure? if yes, make your proposal.
 
-## Define a procedure (three endpoints)
+## 5.2 Define a procedure (three endpoints) {-}
 
 Define now a procedure that considers also the endpoints: \#EPS/HR and \#EPS > 	5'/12HR (i.e. 3 doses comparisons, 3 endpoints)
 
-## Analyse the data
-Analyses the data using the procedures defined at points 2.1 and 2.2.
+## 5.3 Analyse the data {-}
+Analyses the data using the procedures defined at points 5.1 and 5.2.
 
 

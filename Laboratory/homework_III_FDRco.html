@@ -1301,97 +1301,6 @@ window.onload = function() {
 </script>
 
 
-<style type="text/css">code{white-space: pre;}</style>
-<style type="text/css" data-origin="pandoc">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-{ counter-reset: source-line 0; }
-pre.numberSource code > span
-{ position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-{ content: counter(source-line);
-position: relative; left: -1em; text-align: right; vertical-align: baseline;
-border: none; display: inline-block;
--webkit-touch-callout: none; -webkit-user-select: none;
--khtml-user-select: none; -moz-user-select: none;
--ms-user-select: none; user-select: none;
-padding: 0 4px; width: 4em;
-color: #aaaaaa;
-}
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
-div.sourceCode
-{ }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } 
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
-code span.at { color: #7d9029; } 
-code span.bn { color: #40a070; } 
-code span.bu { color: #008000; } 
-code span.cf { color: #007020; font-weight: bold; } 
-code span.ch { color: #4070a0; } 
-code span.cn { color: #880000; } 
-code span.co { color: #60a0b0; font-style: italic; } 
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
-code span.do { color: #ba2121; font-style: italic; } 
-code span.dt { color: #902000; } 
-code span.dv { color: #40a070; } 
-code span.er { color: #ff0000; font-weight: bold; } 
-code span.ex { } 
-code span.fl { color: #40a070; } 
-code span.fu { color: #06287e; } 
-code span.im { color: #008000; font-weight: bold; } 
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
-code span.kw { color: #007020; font-weight: bold; } 
-code span.op { color: #666666; } 
-code span.ot { color: #007020; } 
-code span.pp { color: #bc7a00; } 
-code span.sc { color: #4070a0; } 
-code span.ss { color: #bb6688; } 
-code span.st { color: #4070a0; } 
-code span.va { color: #19177c; } 
-code span.vs { color: #4070a0; } 
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
-
-a.sourceLine {
-pointer-events: auto;
-}
-</style>
-<script>
-// apply pandoc div.sourceCode style to pre.sourceCode instead
-(function() {
-  var sheets = document.styleSheets;
-  for (var i = 0; i < sheets.length; i++) {
-    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
-    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
-      var rule = rules[j];
-      // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
-      var style = rule.style.cssText;
-      // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
-      // replace div.sourceCode by a pre.sourceCode rule
-      sheets[i].deleteRule(j);
-      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
-    }
-  }
-})();
-</script>
 
 
 
@@ -1424,7 +1333,7 @@ code span.ot { color: #007020; }
 <div class="cover-card table-cell table-middle">
 <span class="author_name">The Labyrinth of Multiple Testing: how to
 avoid the pitfall of false positives</span>
-<span class="author_job">Homework 2: FWER control</span>
+<span class="author_job">Homework 3: FDR control</span>
 <span class="author_bio mbm">Livio Finos</span>
 </div>
 </div>
@@ -1433,147 +1342,17 @@ avoid the pitfall of false positives</span>
 
 <div class="col s12 m9">
 <div class="post-listing">
-<div id="TOC" class="toc">
-<ul>
-<li><a href="#exercise" id="toc-exercise">1. Exercise</a></li>
-<li><a href="#exercise-1" id="toc-exercise-1">2. Exercise</a></li>
-<li><a href="#exercise-2" id="toc-exercise-2">3. Exercise</a></li>
-<li><a href="#exercise-3" id="toc-exercise-3">4. Exercise</a></li>
-<li><a href="#exercise-4" id="toc-exercise-4">4. Exercise</a>
-<ul>
-<li><a href="#define-a-procedure-one-enpoint" id="toc-define-a-procedure-one-enpoint"><span class="toc-section-number">0.1</span> Define a procedure (one
-enpoint)</a></li>
-<li><a href="#define-a-procedure-three-enpoints" id="toc-define-a-procedure-three-enpoints"><span class="toc-section-number">0.2</span> Define a procedure (three
-enpoints)</a></li>
-<li><a href="#analyse-the-data" id="toc-analyse-the-data"><span class="toc-section-number">0.3</span> Analyse the data</a></li>
-</ul></li>
-</ul>
-</div>
 
 <div id="post">
 <article class="post-content">
-<div id="exercise" class="section level1 unnumbered">
-<h1 class="unnumbered">1. Exercise</h1>
-<p>Let be</p>
-<pre><code>## 0.523 0.0011 0.0246 0.0073</code></pre>
-<p>the p-values resulting in the comparison of two groups in a clinical
-trial with four endpoints.</p>
-<p>Perfom:</p>
+<p>Given the following p-values</p>
+<pre><code>## 0.2167, 0.0694, 0.0058, 0.0557, 0.2782, 0.0436, 0.029, 0.1403, 0.0069, 0.0507</code></pre>
 <ul>
-<li>a Bonferroni correction</li>
-<li>a Holm correction</li>
-<li>a Closed testing correction using Bonferroni combination for the
-combined tests</li>
-<li>at least for the Bonferroni and Holm, program a function to perform
-it for a general vector of p-values</li>
+<li>compute the adjusted p-values using Benjamini-Hochberg (FDR
+controlling) procedure and show the steps needed.</li>
+<li>run the analysis using <code>p.adjust</code> and verify that you get
+the same results.</li>
 </ul>
-<p>Compare the results of Closed Testing with the ones of Bonferroni and
-Holm.</p>
-</div>
-<div id="exercise-1" class="section level1 unnumbered">
-<h1 class="unnumbered">2. Exercise</h1>
-<p>Consider the <code>PlantGrowth</code> in
-<code>library(datasets)</code>:</p>
-<p>Results from an experiment to compare yields (as measured by dried
-weight of plants) obtained under a control and two different treatment
-conditions.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(PlantGrowth)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#?PlantGrowth</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(PlantGrowth)</span></code></pre></div>
-<pre><code>## &#39;data.frame&#39;:    30 obs. of  2 variables:
-##  $ weight: num  4.17 5.58 5.18 6.11 4.5 4.61 5.17 4.53 5.33 5.14 ...
-##  $ group : Factor w/ 3 levels &quot;ctrl&quot;,&quot;trt1&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
-<p>We are interested in all possible pair-wise comparisons of the three
-groups. Perform a parametric analysis and correct for post-hoc
-(i.e. multiple testing) using</p>
-<ul>
-<li>Bonferroni</li>
-<li>Holm</li>
-</ul>
-<p>Do this without the help of <code>library(multcomp)</code> (or any
-other specialized libraries/softwares), also showing step-by-step the
-calculation performed.</p>
-<p>Compare your results with the ones of <code>library(multcomp)</code>
-(or any other specialized libraries/softwares).</p>
-</div>
-<div id="exercise-2" class="section level1 unnumbered">
-<h1 class="unnumbered">3. Exercise</h1>
-<p>Consider the <code>InsectSprays</code> in
-<code>library(datasets)</code>:</p>
-<p>The counts of insects in agricultural experimental units treated with
-different insecticides.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(InsectSprays)</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co">#?InsectSprays</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(InsectSprays)</span></code></pre></div>
-<pre><code>## &#39;data.frame&#39;:    72 obs. of  2 variables:
-##  $ count: num  10 7 20 14 14 12 10 23 17 20 ...
-##  $ spray: Factor w/ 6 levels &quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,..: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
-<p>Same task as Exercise Two.</p>
-</div>
-<div id="exercise-3" class="section level1 unnumbered">
-<h1 class="unnumbered">4. Exercise</h1>
-<p>Consider a clinical trial with two families of null hypotheses:</p>
-<p>Family 1: Primary null hypotheses (one-sided p-values) <span class="math inline">\(H_1\)</span> (Endpoint 1), <span class="math inline">\(p_1=0.0082\)</span> <span class="math inline">\(H_2\)</span> (Endpoint 2), <span class="math inline">\(p_2=0.0174\)</span></p>
-<p>Family 2: Secondary null hypotheses (one-sided p-values) <span class="math inline">\(H_3\)</span> (Endpoint 3), <span class="math inline">\(p_3=0.0042\)</span> <span class="math inline">\(H_4\)</span> (Endpoint 4), <span class="math inline">\(p_4=0.0180\)</span></p>
-<p>where <span class="math inline">\(p_i\)</span> are the raw
-p-values.</p>
-<ul>
-<li>Apply the serial gatekeeping procedure</li>
-<li>Apply the parallel gatekeeping procedure</li>
-</ul>
-</div>
-<div id="exercise-4" class="section level1 unnumbered">
-<h1 class="unnumbered">4. Exercise</h1>
-<p>Description:<br />
-<a href="http://webserv.jcu.edu/math//faculty/TShort/Bradstreet/part1/part1-table3.html" class="uri">http://webserv.jcu.edu/math//faculty/TShort/Bradstreet/part1/part1-table3.html</a></p>
-<p>Twelve Gastroesophageal Reflux Disease (GERD) patients were allocated
-randomly to one of four treatment sequences of 0 (placebo), 10, 20, and
-40 mg a.m. of a drug in a four period crossover design. On the fifth
-(last) day of each treatment period and the study baseline period,
-percent reflux time (% RT), the number of reflux episodes per hour (#
-EPS/HR), and the number of reflux episodes greater than five minutes in
-a 12 hour period (#EPS &gt; 5’/12 HR) were recorded for each patient
-using ambulatory 24-hour esophageal pH monitoring. Measurements were
-taken while the patient was in the upright (U) or supine (S) positions.
-The time (hours) in the upright and supine positions was recorded. A
-seven day washout period separated the treatment periods. The data
-recorded in the upright and supine positions are shown in <a href="http://webserv.jcu.edu/math//faculty/TShort/Bradstreet/part1/Bradp1t3.txt" class="uri">http://webserv.jcu.edu/math//faculty/TShort/Bradstreet/part1/Bradp1t3.txt</a></p>
-<div id="define-a-procedure-one-enpoint" class="section level2" number="0.1">
-<h2><span class="header-section-number">0.1</span> Define a procedure
-(one enpoint)</h2>
-<p>Let consider for the moment, only the % RT endpoint, only upright (U)
-position and the comparisons:</p>
-<ul>
-<li><span class="math inline">\(H_{10}: \mu_0 = \mu_{10}\)</span></li>
-<li><span class="math inline">\(H_{20}: \mu_0 = \mu_{20}\)</span></li>
-<li><span class="math inline">\(H_{40}: \mu_0 = \mu_{40}\)</span></li>
-</ul>
-<p>In order to know if there is a dose response and which doses are
-effective, define an appropriate multiple testing procedure. Define the
-procedure in such a way that:</p>
-<ul>
-<li><span class="math inline">\(\alpha/2\)</span> is splitted among the
-three comparisons</li>
-<li>the remaining <span class="math inline">\(\alpha/2\)</span> is
-allocated to the comparison 0 (placebo) vs 40</li>
-<li>when one hypothesis is rejected, its <span class="math inline">\(\alpha\)</span> is inherited in a backward
-fashion: (<span class="math inline">\(H_{40}\)</span> to <span class="math inline">\(H_{20}\)</span> and <span class="math inline">\(H_{20}\)</span> to <span class="math inline">\(H_{10}\)</span>)</li>
-</ul>
-<p>Is there any room for a further improvement of the procedure? if yes,
-make your proposal.</p>
-</div>
-<div id="define-a-procedure-three-enpoints" class="section level2" number="0.2">
-<h2><span class="header-section-number">0.2</span> Define a procedure
-(three enpoints)</h2>
-<p>Define now a procedure that considers also the endpoints: #EPS/HR and
-#EPS &gt; 5’/12HR (i.e. 3 doses comparisons, 3 endpoints)</p>
-</div>
-<div id="analyse-the-data" class="section level2" number="0.3">
-<h2><span class="header-section-number">0.3</span> Analyse the data</h2>
-<p>Analyses the data using the procedures defined at points 2.1 and
-2.2.</p>
-</div>
-</div>
 </article>
 </div>
 </div>

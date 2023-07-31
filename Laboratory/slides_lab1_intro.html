@@ -10,7 +10,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<meta name="author" content="Livio Finos" />
+<meta name="author" content="Livio Finos and Angela Andreella" />
 
 
 <title>The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives</title>
@@ -1301,6 +1301,97 @@ window.onload = function() {
 </script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+
+a.sourceLine {
+pointer-events: auto;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -1333,8 +1424,8 @@ code span.ot { color: #007020; }
 <div class="cover-card table-cell table-middle">
 <span class="author_name">The Labyrinth of Multiple Testing: how to
 avoid the pitfall of false positives</span>
-<span class="author_job">Homework 3: FDR control</span>
-<span class="author_bio mbm">Livio Finos</span>
+<span class="author_job">Introduction to Hypothesis testing</span>
+<span class="author_bio mbm">Livio Finos and Angela Andreella</span>
 </div>
 </div>
 </div>
@@ -1342,17 +1433,320 @@ avoid the pitfall of false positives</span>
 
 <div class="col s12 m9">
 <div class="post-listing">
+<div id="TOC" class="toc">
+<ul>
+<li><a href="#one-single-hypothesis" id="toc-one-single-hypothesis"><span class="toc-section-number">1</span>
+One single hypothesis</a>
+<ul>
+<li><a href="#h_0-true" id="toc-h_0-true"><span class="toc-section-number">1.1</span> <span class="math inline">\(H_0\)</span> true</a></li>
+<li><a href="#h_1-true" id="toc-h_1-true"><span class="toc-section-number">1.2</span> <span class="math inline">\(H_1\)</span> true</a></li>
+</ul></li>
+<li><a href="#multiple-hypotheses" id="toc-multiple-hypotheses"><span class="toc-section-number">2</span> Multiple hypotheses</a></li>
+</ul>
+</div>
 
 <div id="post">
 <article class="post-content">
-<p>Given the following p-values</p>
-<pre><code>## 0.2167, 0.0694, 0.0058, 0.0557, 0.2782, 0.0436, 0.029, 0.1403, 0.0069, 0.0507</code></pre>
+<p>In this laboratory, we will understand the concept of <span class="math inline">\(H_0\)</span>, <span class="math inline">\(H_1\)</span>, <span class="math inline">\(\alpha\)</span>, p-value and FWER using simple
+simulations.</p>
+<div id="one-single-hypothesis" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> One single
+hypothesis</h1>
+<div id="h_0-true" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> <span class="math inline">\(H_0\)</span> true</h2>
+<p>Suppose we conducted an experiment in which a new (maximum) blood
+pressure-lowering drug is compared with the standard drug. The response
+of primary interest is <code>Y</code>: the (maximum) pressure. You have
+three subjects in each sample.</p>
+<p>The hypothesis test of interest is the equality of the means of the
+two samples (new blood pressure-lowering drug vs standard drug).</p>
+<p><strong>Exercise</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Generate a <em>plausible</em> dataset under the assumption that
+the two drugs are equivalent.</p></li>
+<li><p>Now compute a statistical test (and associated p-values) to test
+if the two drugs are equivalent.</p></li>
+<li><p>Did you reject <span class="math inline">\(H_0:
+\mu_{standard}=\mu_{new}\)</span>? Are you surprised?</p></li>
+</ol>
+<p><em>If you do not like the example, you can imagine a completely
+different example. What we are interested in is the p-value generated
+under the null hypothesis <span class="math inline">\(H_0:
+\mu_{standard}=\mu_{new}\)</span>.</em></p>
+<p><strong>Possible solution</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">17</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>datas<span class="ot">=</span><span class="fu">data.frame</span>(<span class="at">drug=</span><span class="fu">c</span>(<span class="st">&quot;standard&quot;</span>,<span class="st">&quot;standard&quot;</span>,<span class="st">&quot;standard&quot;</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;new&quot;</span>,<span class="st">&quot;new&quot;</span>,<span class="st">&quot;new&quot;</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">pressure=</span><span class="fu">rnorm</span>(<span class="dv">6</span>,<span class="at">mean =</span> <span class="dv">150</span>,<span class="at">sd =</span> <span class="dv">10</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>datas</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["drug"],"name":[1],"type":["chr"],"align":["left"]},{"label":["pressure"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"standard","2":"139.8499"},{"1":"standard","2":"149.2036"},{"1":"standard","2":"147.6701"},{"1":"new","2":"141.8273"},{"1":"new","2":"157.7209"},{"1":"new","2":"148.3439"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(pressure<span class="sc">~</span>drug,<span class="at">data=</span>datas)</span></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  pressure by drug
+## t = 0.6835, df = 3.3649, p-value = 0.5384
+## alternative hypothesis: true difference in means between group new and group standard is not equal to 0
+## 95 percent confidence interval:
+##  -12.59476  20.04038
+## sample estimates:
+##      mean in group new mean in group standard 
+##               149.2974               145.5746</code></pre>
+<p>Here, we suppose that the mean pressure of our patients is <span class="math inline">\(\mu=150\)</span> with dev.std <span class="math inline">\(\sigma=10\)</span>.</p>
+<p><strong>Exercise</strong></p>
+<p>Suppose <span class="math inline">\(20\)</span> labs do the same
+experiment (with the new drug that is always the same as the standard
+drug).</p>
+<ol style="list-style-type: decimal">
+<li><p>Generate the dataset</p></li>
+<li><p>How many times do you expect to reject the null hypothesis (Type
+I error)?</p></li>
+<li><p>What if there were <span class="math inline">\(1000\)</span>
+labs?</p></li>
+</ol>
+<p><strong>Possible solution</strong></p>
+<p>We use the previous script, at each generation we extract the p-value
+with <code>$p.value</code> and we replicate it <code>B</code> times with
+<code>B=20</code> or <code>B=1000</code> times</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>B<span class="ot">=</span><span class="dv">1000</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>p.values.many.experiments<span class="ot">=</span><span class="fu">replicate</span>(B,{</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  datas<span class="ot">=</span><span class="fu">data.frame</span>(<span class="at">drug=</span><span class="fu">c</span>(<span class="st">&quot;standard&quot;</span>,<span class="st">&quot;standard&quot;</span>,<span class="st">&quot;standard&quot;</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;new&quot;</span>,<span class="st">&quot;new&quot;</span>,<span class="st">&quot;new&quot;</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">pressure=</span><span class="fu">rnorm</span>(<span class="dv">6</span>,<span class="at">mean =</span> <span class="dv">150</span>,<span class="at">sd =</span> <span class="dv">10</span>))</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(pressure<span class="sc">~</span>drug,<span class="at">data=</span>datas)<span class="sc">$</span>p.value</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>and we count how many times the p-value <span class="math inline">\(&lt;.05\)</span></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p.values.many.experiments<span class="sc">&lt;</span>.<span class="dv">05</span>)</span></code></pre></div>
+<pre><code>## [1] 51</code></pre>
+<blockquote>
+<p>The p-value under <span class="math inline">\(H_0\)</span> is a
+uniform random variable in <span class="math inline">\(0-1: p \sim
+U(0,1)\)</span> and thus the probability of rejecting the null
+hypothesis incorrectly is equal to <span class="math inline">\(\alpha\)</span>: <span class="math inline">\(P(p\leq\alpha|H_0)=\alpha\)</span></p>
+</blockquote>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(p.values.many.experiments,<span class="at">col=</span><span class="st">&quot;orange&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p.values.many.experiments<span class="sc">&lt;=</span>.<span class="dv">05</span>)<span class="sc">/</span>B</span></code></pre></div>
+<pre><code>## [1] 0.051</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#analogously for any other significance value:</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p.values.many.experiments<span class="sc">&lt;=</span>.<span class="dv">10</span>)<span class="sc">/</span>B</span></code></pre></div>
+<pre><code>## [1] 0.095</code></pre>
+</div>
+<div id="h_1-true" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> <span class="math inline">\(H_1\)</span> true</h2>
+<p>Now suppose we have the same previous setting, but in this case the
+drug works!</p>
+<p>The answer of primary interest is still <code>Y</code>: (maximum)
+pressure and we have three subjects in each sample.</p>
+<p>The hypothesis test of interest is the equality of the averages of
+the two samples.</p>
+<p><strong>Exercise</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Generate a <em>plausible</em> dataset under the assumption that
+the two drugs are different.</p></li>
+<li><p>Now compute a statistical test (and associated p-values) to test
+if the two drugs are equivalent.</p></li>
+<li><p>Did you reject <span class="math inline">\(H_0:
+\mu_{standard}=\mu_{new}\)</span>? Are you surprised?</p></li>
+</ol>
+<p><strong>Possible solution</strong></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">17</span>)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>datas<span class="ot">=</span><span class="fu">data.frame</span>(<span class="at">drug=</span><span class="fu">c</span>(<span class="st">&quot;standard&quot;</span>,<span class="st">&quot;standard&quot;</span>,<span class="st">&quot;standard&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot;new&quot;</span>,<span class="st">&quot;new&quot;</span>,<span class="st">&quot;new&quot;</span>),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                <span class="at">pressure=</span><span class="fu">rnorm</span>(<span class="dv">6</span>,<span class="at">mean =</span> <span class="fu">c</span>(<span class="dv">150</span>,<span class="dv">150</span>,<span class="dv">150</span>,<span class="dv">150-30</span>,<span class="dv">150-30</span>,<span class="dv">150-30</span>),<span class="at">sd =</span> <span class="dv">10</span>))</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>datas</span></code></pre></div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["drug"],"name":[1],"type":["chr"],"align":["left"]},{"label":["pressure"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"standard","2":"139.8499"},{"1":"standard","2":"149.2036"},{"1":"standard","2":"147.6701"},{"1":"new","2":"111.8273"},{"1":"new","2":"127.7209"},{"1":"new","2":"118.3439"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(pressure<span class="sc">~</span>drug,<span class="at">data=</span>datas)</span></code></pre></div>
+<pre><code>## 
+##  Welch Two Sample t-test
+## 
+## data:  pressure by drug
+## t = -4.8244, df = 3.3649, p-value = 0.01297
+## alternative hypothesis: true difference in means between group new and group standard is not equal to 0
+## 95 percent confidence interval:
+##  -42.594756  -9.959621
+## sample estimates:
+##      mean in group new mean in group standard 
+##               119.2974               145.5746</code></pre>
+<p>Here, we suppose that the mean pressure of our patients is <span class="math inline">\(\mu=150\)</span> with dev.std <span class="math inline">\(\sigma=10\)</span>. The drug reduces the pressure
+by <span class="math inline">\(30\)</span>.</p>
+<p><strong>Exercise</strong></p>
+<ol style="list-style-type: decimal">
+<li>Check the proportion of rejections by simulation in
+<code>R</code>!</li>
+</ol>
+<p><strong>Possible solution</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>B<span class="ot">=</span><span class="dv">1000</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>p.values.many.experiments<span class="ot">=</span><span class="fu">replicate</span>(B,{</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  dati<span class="ot">=</span><span class="fu">data.frame</span>(<span class="at">farmaco=</span><span class="fu">c</span>(<span class="st">&quot;standard&quot;</span>,<span class="st">&quot;standard&quot;</span>,<span class="st">&quot;standard&quot;</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                          <span class="st">&quot;new&quot;</span>,<span class="st">&quot;new&quot;</span>,<span class="st">&quot;new&quot;</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>                  <span class="at">pressione=</span><span class="fu">rnorm</span>(<span class="dv">6</span>,<span class="at">mean =</span>  <span class="fu">c</span>(<span class="dv">150</span>,<span class="dv">150</span>,<span class="dv">150</span>,<span class="dv">150-30</span>,<span class="dv">150-30</span>,<span class="dv">150-30</span>),<span class="at">sd =</span> <span class="dv">10</span>))</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(pressione<span class="sc">~</span>farmaco,<span class="at">data=</span>dati)<span class="sc">$</span>p.value</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p.values.many.experiments<span class="sc">&lt;</span>.<span class="dv">05</span>)</span></code></pre></div>
+<pre><code>## [1] 684</code></pre>
+<blockquote>
+<p>The p-value under <span class="math inline">\(H_1\)</span> is a
+random variable with stochastically less than a <span class="math inline">\(U(0,1)\)</span> and therefore the probability of
+rejecting the null hypothesis CORRECTLY is <span class="math inline">\(&gt;\alpha\)</span>: <span class="math inline">\(P(p\leq\alpha|H_1)&gt;\alpha\)</span></p>
+</blockquote>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(p.values.many.experiments,<span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="at">col=</span><span class="st">&quot;orange&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p.values.many.experiments<span class="sc">&lt;=</span>.<span class="dv">05</span>)<span class="sc">/</span>B</span></code></pre></div>
+<pre><code>## [1] 0.684</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#analogously for any other significance value:</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(p.values.many.experiments<span class="sc">&lt;=</span>.<span class="dv">10</span>)<span class="sc">/</span>B</span></code></pre></div>
+<pre><code>## [1] 0.876</code></pre>
+</div>
+</div>
+<div id="multiple-hypotheses" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Multiple
+hypotheses</h1>
+<p>Now suppose that in the same experiment (more realistically) we
+evaluate multiple endpoints of interest and not just maximum pressure.
+For each endpoint we evaluate a hypothesis and obtain a p-value.</p>
+<p><strong>Exercise</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Simulate 1000 clinical trials with 18 endpoints under <span class="math inline">\(H_0\)</span>,</p></li>
+<li><p>Evaluate the empirical distribution of the <strong>number of
+rejections</strong> in each trial,</p></li>
+<li><p>Evaluate the fraction of experiments in which <strong>at least
+one error</strong> was made,</p></li>
+</ol>
+<p>considering two different thresholds:</p>
 <ul>
-<li>compute the adjusted p-values using Benjamini-Hochberg (FDR
-controlling) procedure ans show the steps needed.</li>
-<li>run the analysis using <code>p.adjust</code> and verify that you get
-the same results.</li>
+<li><code>alpha_a=.05</code></li>
+<li><code>alpha_b=1-(1-.05)^(1/m)=</code> 0.0028456 (Sidak’s
+correction)</li>
 </ul>
+<p><strong>Possible solution</strong></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>m<span class="ot">=</span><span class="dv">18</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>B <span class="ot">=</span> <span class="dv">1000</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>alpha_a<span class="ot">=</span>.<span class="dv">05</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>alpha_b<span class="ot">=</span><span class="dv">1</span><span class="sc">-</span>(<span class="dv">1</span><span class="fl">-.05</span>)<span class="sc">^</span>(<span class="dv">1</span><span class="sc">/</span>m)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="do">#### A single experiment with m endpoints (and as many hypothesis tests and p-values).</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>endpoints<span class="ot">=</span><span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">6</span><span class="sc">*</span>m),<span class="dv">6</span>,m)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>p.values.<span class="fl">1.</span>experiment<span class="ot">=</span><span class="fu">apply</span>(endpoints , <span class="dv">2</span>, </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>                            <span class="cf">function</span>(y) </span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>                              <span class="fu">t.test</span>(y[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>],y[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>],</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>                                     <span class="at">var.equal =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>p.value)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a> <span class="fu">c</span>(<span class="at">n.rifiuti_a=</span><span class="fu">sum</span>(p.values.<span class="fl">1.</span>experiment<span class="sc">&lt;</span>alpha_a),</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.rifiuti_b=</span><span class="fu">sum</span>(p.values.<span class="fl">1.</span>experiment<span class="sc">&lt;</span>alpha_b))</span></code></pre></div>
+<pre><code>## n.rifiuti_a n.rifiuti_b 
+##           3           0</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># replicate B times</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>res<span class="ot">=</span><span class="fu">replicate</span>(B,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>              {</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a> endpoints<span class="ot">=</span><span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">6</span><span class="sc">*</span>m),<span class="dv">6</span>,m)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a> p.values.<span class="fl">1.</span>experiment<span class="ot">=</span><span class="fu">apply</span>(endpoints , <span class="dv">2</span>, </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                             <span class="cf">function</span>(y) <span class="fu">t.test</span>(y[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>],y[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>],</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">var.equal =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>p.value)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a> <span class="fu">c</span>(<span class="at">n.rifiuti_a=</span><span class="fu">sum</span>(p.values.<span class="fl">1.</span>experiment<span class="sc">&lt;</span>alpha_a),</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.rifiuti_b=</span><span class="fu">sum</span>(p.values.<span class="fl">1.</span>experiment<span class="sc">&lt;</span>alpha_b))</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(res)</span></code></pre></div>
+<pre><code>## [1]    2 1000</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Number of rejections:</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(res[<span class="st">&quot;n.rifiuti_a&quot;</span>,])</span></code></pre></div>
+<pre><code>## 
+##   0   1   2   3   4   5 
+## 380 387 178  47   7   1</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># How many times have we made at least one mistake? (= how many times at least one rejection?)</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(res[<span class="st">&quot;n.rifiuti_a&quot;</span>,]<span class="sc">&gt;</span><span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## [1] 620</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(res[<span class="st">&quot;n.rifiuti_b&quot;</span>,])</span></code></pre></div>
+<pre><code>## 
+##   0   1 
+## 952  48</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(res[<span class="st">&quot;n.rifiuti_b&quot;</span>,]<span class="sc">&gt;</span><span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## [1] 48</code></pre>
+<p>Let us now assume that the drug affects the first 5 endpoints and not
+the others.</p>
+<p><strong>Exercise</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Simulate 1000 clinical trials with 18 endpoints where the drug
+affects the first 5 endpoints.</p></li>
+<li><p>Evaluate the empirical distribution of the <strong>number of
+rejections</strong> in each trial.</p></li>
+<li><p>Evaluate the fraction of experiments in which <strong>at least
+one error</strong> was made.</p></li>
+</ol>
+<p>considering two different thresholds:</p>
+<ul>
+<li><code>alpha_a=.05</code></li>
+<li><code>alpha_b=1-(1-.05)^(1/m)=</code> 0.0028456 (Sidak’s
+correction)</li>
+</ul>
+<p><strong>Possible solution</strong></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate the response of 6 patients on m enpoint.</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>endpoints<span class="ot">=</span><span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">6</span><span class="sc">*</span>m),<span class="dv">6</span>,m)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Added a value of 3 to the values reported </span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co"># to the first 5 endpoints for the three patients with the drug new </span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>endpoints[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]<span class="ot">=</span> endpoints[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]<span class="sc">+</span><span class="dv">3</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>endpoints</span></code></pre></div>
+<pre><code>##            [,1]        [,2]        [,3]        [,4]       [,5]       [,6]
+## [1,] -0.8042365 -0.47723362 -0.09853936  1.90344675 -1.0642840 -0.6428483
+## [2,]  0.3027326  0.02039881  0.59483667  0.08102408 -0.4880139 -1.0932948
+## [3,] -3.3609780 -0.78710828  0.18723548 -1.33842956 -0.1431656 -1.0377388
+## [4,]  3.0804916  3.77286283  3.30777236  2.95434312  3.4418012  0.6660882
+## [5,]  3.6455054  2.74031784  2.85694214  3.36790875  2.3881346  0.1018607
+## [6,]  1.9446001  3.73738139  3.96980253  5.05561871  2.5709344  0.4886592
+##            [,7]        [,8]       [,9]      [,10]      [,11]      [,12]
+## [1,]  1.5942527 -0.34146109  0.7866683 -0.1651197 -0.3100599  0.9801810
+## [2,] -0.3613058  0.97210216  1.7985122 -1.6658747 -0.9713647 -0.5237810
+## [3,] -0.4974855 -0.06256713  0.3515879  0.7164010 -0.2639730 -0.4785343
+## [4,]  0.8146074  0.60813623 -0.8524083  1.6412034  0.2708066 -1.2024163
+## [5,]  0.6375054  1.86849525  1.1812835  0.4591089 -0.1110320 -1.3092998
+## [6,]  0.8966281 -0.34575897  1.1026451 -0.3221929 -0.7889634 -0.5026815
+##            [,13]        [,14]      [,15]       [,16]      [,17]      [,18]
+## [1,] -0.03875883  0.003634702  0.3566331  1.11531840 -2.3310520  0.5502076
+## [2,]  0.32113600 -0.756320542 -0.2785701 -0.44351847  0.7217385  1.9695337
+## [3,]  0.69306802  1.126330789 -0.3485627 -2.26275684  1.5551560 -0.5626118
+## [4,]  0.16502187  0.841082854 -0.8788129 -0.68358299  0.4881190 -1.0912691
+## [5,]  0.50884935  0.660860572 -0.3572377  0.08755564 -2.5196310  0.5242624
+## [6,] -0.46512329  0.159473158  1.5146301  0.17957089  0.8089571 -0.1322751</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>p.values.<span class="fl">1.</span>experiment<span class="ot">=</span><span class="fu">apply</span>(endpoints , <span class="dv">2</span>, </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>                            <span class="cf">function</span>(y) <span class="fu">t.test</span>(y[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>],y[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>])<span class="sc">$</span>p.value)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a> <span class="fu">c</span>(<span class="at">n.rifiuti_a=</span><span class="fu">sum</span>(p.values.<span class="fl">1.</span>experiment<span class="sc">&lt;</span>alpha_a),</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.rifiuti_b=</span><span class="fu">sum</span>(p.values.<span class="fl">1.</span>experiment<span class="sc">&lt;</span>alpha_b),</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.rifiuti_a_H0=</span><span class="fu">sum</span>(p.values.<span class="fl">1.</span>experiment[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)]<span class="sc">&lt;</span>alpha_a),</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.rifiuti_b_H0=</span><span class="fu">sum</span>(p.values.<span class="fl">1.</span>experiment[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)]<span class="sc">&lt;</span>alpha_b),</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.rifiuti_a_H1=</span><span class="fu">sum</span>(p.values.<span class="fl">1.</span>experiment[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]<span class="sc">&lt;</span>alpha_a),</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>   <span class="at">n.rifiuti_b_H1=</span><span class="fu">sum</span>(p.values.<span class="fl">1.</span>experiment[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]<span class="sc">&lt;</span>alpha_b))</span></code></pre></div>
+<pre><code>##    n.rifiuti_a    n.rifiuti_b n.rifiuti_a_H0 n.rifiuti_b_H0 n.rifiuti_a_H1 
+##              6              3              1              0              5 
+## n.rifiuti_b_H1 
+##              3</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>p.values.<span class="fl">1.</span>experiment</span></code></pre></div>
+<pre><code>##  [1] 0.043738527 0.001262447 0.002427531 0.041045566 0.001544470 0.003868907
+##  [7] 0.510136383 0.535270110 0.565967044 0.346279417 0.475664030 0.170708925
+## [13] 0.514467199 0.523873544 0.829012855 0.732050586 0.818371649 0.375600048</code></pre>
+<p>The first 5 p-values tend to have lower values than the others (I
+reject those hypotheses several times).</p>
+<p>In applications to real data we obviously do NOT know which
+hypotheses are under <span class="math inline">\(H_0\)</span> (the two
+drugs are equal) and which are under <span class="math inline">\(H_1\)</span> (the new drug is better).</p>
+</div>
 </article>
 </div>
 </div>

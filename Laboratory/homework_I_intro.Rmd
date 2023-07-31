@@ -1,6 +1,6 @@
 ---
 title: "The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives"
-subtitle: "Homework 1: Hypothesis testing"
+subtitle: "Homework 1: Introduction to Hypothesis testing"
 author: "Livio Finos"
 highlighter: highlight.js
 job: Università degli Studi di Padova

@@ -1,9 +1,8 @@
 ---
 title: "The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives"
-subtitle: "Hypothesis testing"
-author: "Livio Finos"
+subtitle: "Introduction to Hypothesis testing"
+author: "Livio Finos and Angela Andreella"
 highlighter: highlight.js
-job: Università degli Studi di Padova
 output:
   prettydoc::html_pretty:
     theme: leonids 
@@ -21,42 +20,42 @@ widgets: []
 
 
 ```{r setting,echo=FALSE}
-m=10
+m=18
 ```
 
 
-In this laboratory, we will understand the concept of $H_0$, $H_1$, $\alpha$ and p-value using simulations.
+In this laboratory, we will understand the concept of $H_0$, $H_1$, $\alpha$, p-value and FWER using simple simulations.
 
 # One single hypothesis
 
 ## $H_0$ true
 
-Suppose we conducted an experiment in which a new (maximum) blood pressure-lowering drug is compared with the standard drug. The response of primary interest is.  `Y`: the (maximum) pressure. You have three subjects in each sample.
+Suppose we conducted an experiment in which a new (maximum) blood pressure-lowering drug is compared with the standard drug. The response of primary interest is `Y`: the (maximum) pressure. You have three subjects in each sample.
 
-The hypothesis test of interest is the equality of the means of the two samples.
+The hypothesis test of interest is the equality of the means of the two samples (new blood pressure-lowering drug vs standard drug).
 
 
 **Exercise**
 
-> 1. Generate a 'plausible' dataset under the assumption that the two drugs are equivalent.
+1. Generate a *plausible* dataset under the assumption that the two drugs are equivalent.
 
-> 2. Now compute a statistical test (and associate p-values) to test if the two drugs are equivalent.
+2. Now compute a statistical test (and associated p-values) to test if the two drugs are equivalent.
 
-> 3. Did you reject $H_0: \mu_{standard}=\mu_{new}$? Are you surprised?
+3. Did you reject $H_0: \mu_{standard}=\mu_{new}$? Are you surprised?
 
 
-If you do not like the example, you can imagine a completely different example. What we are interested in is the p-value (generated under the null hypothesis).
+*If you do not like the example, you can imagine a completely different example. What we are interested in is the p-value generated under the null hypothesis $H_0: \mu_{standard}=\mu_{new}$.*
 
 **Possible solution**
 
 ```{r}
 set.seed(17)
-dati=data.frame(farmaco=c("standard","standard","standard",
+datas=data.frame(drug=c("standard","standard","standard",
                         "new","new","new"),
-                pressione=rnorm(6,mean = 150,sd = 10))
-dati
+                pressure=rnorm(6,mean = 150,sd = 10))
+datas
 
-t.test(pressione~farmaco,data=dati)
+t.test(pressure~drug,data=datas)
 ```
 
 Here, we suppose that the mean pressure of our patients is $\mu=150$ with dev.std $\sigma=10$.
@@ -64,29 +63,37 @@ Here, we suppose that the mean pressure of our patients is $\mu=150$ with dev.st
 
 **Exercise**
 
-> Suppose 20 labs do the same experiment (with the new drug that is always the same as the standard drug). How many times do you expect to reject the null hypothesis (Type I error)?
-> What if there were 1,000 labs?
-> Check it with `R`!
+Suppose $20$ labs do the same experiment (with the new drug that is always the same as the standard drug). 
+
+1. Generate the dataset
+
+2. How many times do you expect to reject the null hypothesis (Type I error)?
+
+3. What if there were $1000$ labs?
 
 **Possible solution**
 
+We use the previous script, at each generation we extract the p-value with `$p.value` and we replicate it `B` times with `B=20` or `B=1000` times
+
 ```{r}
-# I use the previous script, at each generation I extract the p-value with $p.value and replicate B (=20 or =1000) times
 B=1000
 p.values.many.experiments=replicate(B,{
-  dati=data.frame(farmaco=c("standard","standard","standard",
-                          "new","new","new"),
-                  pressione=rnorm(6,mean = 150,sd = 10))
-  t.test(pressione~farmaco,data=dati)$p.value
+  datas=data.frame(drug=c("standard","standard","standard",
+                        "new","new","new"),
+                pressure=rnorm(6,mean = 150,sd = 10))
+  t.test(pressure~drug,data=datas)$p.value
 }
 )
+```
 
-#count how many times the p-value<.05
+and we count how many times the p-value $<.05$
+
+```{r}
 sum(p.values.many.experiments<.05)
 ```
 
-*The p-value under $H_0$ is a uniform random variable in 0-1: p~U(0,1)*
-and thus *the probability of rejecting the null hypothesis incorrectly is equal to $\alpha$: $P(p\leq\alpha|H_0)=\alpha$*
+
+> The p-value under $H_0$ is a uniform random variable in $0-1: p \sim U(0,1)$ and thus the probability of rejecting the null hypothesis incorrectly is equal to $\alpha$: $P(p\leq\alpha|H_0)=\alpha$
 
 ```{r}
 hist(p.values.many.experiments,col="orange")
@@ -100,17 +107,17 @@ sum(p.values.many.experiments<=.10)/B
 
 Now suppose we have the same previous setting, but in this case the drug works! 
 
-The answer of primary interest is still `Y`: pressure (minimum). One has three subjects in each sample.
+The answer of primary interest is still `Y`: (maximum) pressure and we have three subjects in each sample.
 
 The hypothesis test of interest is the equality of the averages of the two samples.
 
 **Exercise**
 
-> 1. Generate a 'plausible' dataset under the assumption that the two drugs are equivalent.
+1. Generate a *plausible* dataset under the assumption that the two drugs are different.
 
-> 2. Now compute a statistical test (and associate p-values) to test if the two drugs are equivalent.
+2. Now compute a statistical test (and associated p-values) to test if the two drugs are equivalent.
 
-> 3. Did you reject $H_0: \mu_{standard}=\mu_{new}$? Are you surprised?
+3. Did you reject $H_0: \mu_{standard}=\mu_{new}$? Are you surprised?
 
 
 
@@ -120,24 +127,23 @@ The hypothesis test of interest is the equality of the averages of the two sampl
 
 ```{r}
 set.seed(17)
-dati=data.frame(farmaco=c("standard","standard","standard",
+datas=data.frame(drug=c("standard","standard","standard",
                         "new","new","new"),
-                pressione=rnorm(6,mean = c(150,150,150,150-30,150-30,150-30),sd = 10))
-dati
+                pressure=rnorm(6,mean = c(150,150,150,150-30,150-30,150-30),sd = 10))
+datas
 
-t.test(pressione~farmaco,data=dati)
+t.test(pressure~drug,data=datas)
 ```
 
-Here, we suppose that the mean minimum pressure of our patients is $\mu=150$ with dev.std $\sigma=10$. The drug reduces the pressure by $30$.
+Here, we suppose that the mean pressure of our patients is $\mu=150$ with dev.std $\sigma=10$. The drug reduces the pressure by $30$.
 
 **Exercise**
 
-> Check the proportion of rejections by simulation in `R`!
+1. Check the proportion of rejections by simulation in `R`!
 
 **Possible solution**
 
 ```{r}
-# I use the previous script, at each generation I extract the p-value with $p.value and replicate B (=20 or =1000) times
 B=1000
 p.values.many.experiments=replicate(B,{
   dati=data.frame(farmaco=c("standard","standard","standard",
@@ -147,12 +153,10 @@ p.values.many.experiments=replicate(B,{
 }
 )
 
-#count how many times the p-value<.05
 sum(p.values.many.experiments<.05)
 ```
 
-*The p-value under $H_1$ is a random variable with stochastically less than a U(0,1)*
-and therefore *the probability of rejecting the null hypothesis CORRECTLY is $>\alpha$: $P(p\leq\alpha|H_1)>\alpha$*
+> The p-value under $H_1$ is a random variable with stochastically less than a $U(0,1)$ and therefore the probability of rejecting the null hypothesis CORRECTLY is $>\alpha$: $P(p\leq\alpha|H_1)>\alpha$
 
 ```{r}
 hist(p.values.many.experiments,xlim=c(0,1),col="orange")
@@ -166,14 +170,13 @@ sum(p.values.many.experiments<=.10)/B
 Now suppose that in the same experiment (more realistically) we evaluate multiple endpoints of interest and not just maximum pressure.
 For each endpoint we evaluate a hypothesis and obtain a p-value.
 
-
 **Exercise**
 
-> Simulate `r B` a clinical trial with `r m` significant endpoints (e.g. using the function `replicate()`)
+1. Simulate `r B` clinical trials with `r m` endpoints under $H_0$,
 
-> Evaluate the empirical distribution of the **number of rejections** in each trial. 
+2. Evaluate the empirical distribution of the **number of rejections** in each trial, 
 
-> Evaluate the fraction of experiments in which **at least one error** was made.
+3. Evaluate the fraction of experiments in which **at least one error** was made,
 
 considering two different thresholds:
 
@@ -183,16 +186,18 @@ considering two different thresholds:
 **Possible solution**
 
 ```{r}
-m=10
+m=18
+B = 1000
 alpha_a=.05
 alpha_b=1-(1-.05)^(1/m)
-# A single experiment with m endpoints (and as many hypothesis tests and p-values).
+#### A single experiment with m endpoints (and as many hypothesis tests and p-values).
 
 endpoints=matrix(rnorm(6*m),6,m)
 
 p.values.1.experiment=apply(endpoints , 2, 
-                            function(y) t.test(y[1:3],y[4:6],
-                                               var.equal = TRUE)$p.value)
+                            function(y) 
+                              t.test(y[1:3],y[4:6],
+                                     var.equal = TRUE)$p.value)
 
  c(n.rifiuti_a=sum(p.values.1.experiment<alpha_a),
    n.rifiuti_b=sum(p.values.1.experiment<alpha_b))
@@ -209,14 +214,13 @@ res=replicate(B,
    n.rifiuti_b=sum(p.values.1.experiment<alpha_b))
 }
 )
-
+dim(res)
 #Number of rejections:
 table(res["n.rifiuti_a",])
 # How many times have we made at least one mistake? (= how many times at least one rejection?)
 sum(res["n.rifiuti_a",]>0)
 
 table(res["n.rifiuti_b",])
-# How many times at least one error?
 sum(res["n.rifiuti_b",]>0)
 ```
 
@@ -225,11 +229,11 @@ Let us now assume that the drug affects the first 5 endpoints and not the others
 
 **Exercise**
 
-> Simulate `r B` a clinical trial with `r m` significant endpoints (e.g. using the function `replicate()`)
+1. Simulate `r B` clinical trials with `r m` endpoints where the drug affects the first 5 endpoints. 
 
-> Evaluate the empirical distribution of the **number of rejections** in each trial. 
+2. Evaluate the empirical distribution of the **number of rejections** in each trial. 
 
-> Evaluate the fraction of experiments in which **at least one error** was made.
+3. Evaluate the fraction of experiments in which **at least one error** was made.
 
 considering two different thresholds:
 

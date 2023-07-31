@@ -1,9 +1,8 @@
 ---
 title: "The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives"
 subtitle: "FWER control"
-author: "Livio Finos"
+author: "Livio Finos and Angela Andreella"
 highlighter: highlight.js
-job: Università degli Studi di Padova
 output:
   prettydoc::html_pretty:
     theme: leonids 
@@ -33,36 +32,44 @@ How many rejections?
 ```{r}
 alpha = 0.05
 (p.values < alpha)
+sum(p.values < alpha)
 ```
 
 
 # Familywise Error Rate
 
-In hypothesis testing, the probability of committing a Type I error is controlled at a set level $\alpha$, conventionally 5%. However, a problem arises when 
-we conduct not just one test, but more than one. Since for each test we have a probability of committing a type I error, if we conduct many tests it is likely to get at least one type I error. 
+In hypothesis testing, the probability of committing a Type I error is controlled at a set level $\alpha$, conventionally $5\%$. However, a problem arises when we conduct not just one test, but more than one. Since for each test we have a probability of committing a type I error, if we conduct many tests it is likely to get at least one type I error. 
 
-The multiple testing problem has a simple structure. We have a set of null hypotheses
-$\mathcal{H}=(H_1,\ldots,H_m)$, of which an unknown number $m_0$ are true, while the remaining $m-m_0$ are false. We denote the subset of true hypotheses by $\mathcal{T}\subseteq \mathcal{H}$, the subset of false hypotheses by $\mathcal{F}=\mathcal{H}\setminus \mathcal{T}$ and 
+The multiple testing problem has a simple structure. 
+
+We have a set of null hypotheses $\mathcal{H}=(H_1,\ldots,H_m)$, of which an unknown number $m_0$ are true, while the remaining $m-m_0$ are false. 
+
+We denote the subset of true hypotheses by $\mathcal{T}\subseteq \mathcal{H}$, the subset of false hypotheses by $\mathcal{F}=\mathcal{H}\setminus \mathcal{T}$ and 
 the proportion of true hypotheses with $\pi_0=m_0/m$. 
 
-The goal of multiple verification procedures is to choose a subset $\mathcal{R}\subseteq \mathcal{H}$ of hypotheses to reject. Suppose we have available the p-values $p_1,\ldots,p_m$ for each hypothesis $H_1,\ldots,H_m$. We can consider the following procedure:
-\[
-\mathcal{R}={H_i: p_i \leq \tilde{\alpha}
-\]
-that is, reject all hypotheses whose p-values are less than some threshold $\tilde{\alpha}$. The problem now is to determine this threshold $\tilde{alpha}$.
+The goal of multiple testing procedures is to choose a subset $\mathcal{R}\subseteq \mathcal{H}$ of hypotheses to reject. Suppose we have available the p-values $p_1,\ldots,p_m$ for each hypothesis $H_1,\ldots,H_m$. We can consider the following procedure:
+
+$$\mathcal{R}=\{H_i: p_i \leq \tilde{\alpha}\}$$
+
+that is, reject all hypotheses whose p-values are less than some threshold $\tilde{\alpha}$. The problem now is to determine this threshold $\tilde{\alpha}$.
 
 
-Ideally, the set of rejected hypotheses $\mathcal{R}$ should coincide as closely as possible with the set of false hypotheses $\mathcal{F}$. Two types of errors can be made: type I errors $\mathcal{R}\cap \mathcal{T}$, that is, rejecting true hypotheses, and type II errors $\mathcal{R}\setminus \mathcal{F}$, that is, not rejecting false hypotheses. 
+Ideally, the set of rejected hypotheses $\mathcal{R}$ should coincide as closely as possible with the set of false hypotheses $\mathcal{F}$. Two types of errors can be made: 
+
+* type I errors $\mathcal{R}\cap \mathcal{T}$, that is, rejecting true hypotheses,  
+
+* type II errors $\mathcal{R}\setminus \mathcal{F}$, that is, not rejecting false hypotheses. 
 
 We can summarize the number of errors made in the following table:
 
 Assumptions | True | False | Total
 ------------- | ------------- | ------------- | -------------
-rejected | $V$ | $U$ | $R$ 
-not rejected | $m_0 - V$ | $m_1-U$ | $m-R$
+rejected | $V$ | $S$ | $R$ 
+not rejected | $m_0 - V$ | $m_1-S$ | $m-R$
 total | $m_0$ | $m_1$ | $m$
 
 We know the total number of hypotheses $m$ and the number of rejected hypotheses $R=\#\mathcal{R}$, but all other table quantities are unknown. 
+
 Methods of *multiple testing* try to reject as many hypotheses as possible while trying to control the number $V$ of type I errors. 
 
 
@@ -71,18 +78,17 @@ The *familywise error rate* is defined as.
 \mathrm{FWER}=\Pr(V > 0)
 \]
 that is, the probability of committing at least one type I error. 
-Using the procedure.
-* Rejection $H_i$ if $p_i \leq \tilde{\alpha}$
+Using the procedure reject $H_i$ if $p_i \leq \tilde{\alpha}$
 
 we get
 \[
-\mathrm{FWER}= \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} \{ P_i \leq \tilde{\alpha} \right)
+\mathrm{FWER}= \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} \{ P_i \leq \tilde{\alpha} \}\right)
 \]
 
 
 Controlling the *familywise error rate* at a $\alpha$ level requires that
 \[
-\mathrm{FWER}\leq \alpha}
+\mathrm{FWER}\leq \alpha.
 \]
 
 
@@ -90,13 +96,18 @@ Controlling the *familywise error rate* at a $\alpha$ level requires that
 ## Sidak's inequality: independent P-values.
 
 In our example, we are in the following situation:
+
 * the $m=$ `r m` hypotheses are all true, i.e. $m_0=m$;
+
 * the `r m` tests, and thus the related p-values, are independent of each other;
-* without regard to the multiplicity of the tests, we reject $H_i$ when $p_i \leq \alpha$
+
+* without regard to the multiplicity of the tests, we reject $H_i$ when $p_i \leq \alpha$.
 
 
-We denote by $E_i=I\{P_i \leq \alpha}$ the outcome of the test, i.e., through the indicator function which is worth 1 if we reject the hypothesis, 0 otherwise. Since the hypotheses are all true, the p-values $P_1,\ldots,P_m$ are i.i.d. $\mathrm{Uniform}(0,1)$.
-It follows that $E_i \sim \mathrm{Bernoulli}(\alpha)$ and $V = \sum_{i=1}^{m}E_i \sim \mathrm{Binomial}(n,\alpha)$. Then the *familywise error rate* results in.
+We denote by $E_i=I\{P_i \leq \alpha\}$ the outcome of the test, i.e., through the indicator function which is 1 if we reject the hypothesis, 0 otherwise. 
+
+Since the hypotheses are all true, the p-values $P_1,\ldots,P_m$ are i.i.d. $\mathrm{Uniform}(0,1)$.
+It follows that $E_i \sim \mathrm{Bernoulli}(\alpha)$ and $V = \sum_{i=1}^{m}E_i \sim \mathrm{Binomial}(n,\alpha)$. Then the familywise error rate results in.
 \[
 \mathrm{FWER}= \Pr(V > 0) = \Pr(\sum_{i=1}^{m}E_i > 0) = 1 - \Pr(\sum_{i=1}^{m}E_i = 0) = 1 - (1-\alpha)^m
 \]
@@ -115,12 +126,12 @@ Let us try to represent the *familywise error rate* as a function of the number 
 ```{r}  
 # m = 100
 FWER<- 1-(1-alpha)^(1:100)
-plot(1:100,FWER,xlab="numero di ipotesi", ylab="FWER")
+plot(1:100,FWER,xlab="number of hypotheses", ylab="FWER")
 ```
 
 To control FWER at a $\alpha$ level, we need to modify our rejection rule:
 
-* we reject $H_i$ when $p_i \leq \tilde{\alpha}$.
+- we reject $H_i$ when $p_i \leq \tilde{\alpha}$.
 
 Solving $\mathrm{FWER}= 1 - (1-\tilde{\alpha})^m = \alpha$ we get 
 \[
@@ -134,6 +145,7 @@ alpha.adj
 ```
 
 Equivalently, we can consider the rejection rule:
+
 * we reject the hypothesis $H_i$ when $\tilde{p}_{i} \leq \alpha$
 
 where
@@ -160,8 +172,8 @@ And then check the FWER at $\alpha$:
 \]
 
 
-The case of 2 independent tests.
-Empirical distribution of p-value pairs for 1000 hypothetical experiments  
+Let consider the case of 2 independent tests. The empirical distribution of p-value pairs for 1000 hypothetical experiments is described as 
+
 ```{r}
 p.values.manyExp=cbind(runif(5000),runif(5000))
 plot(p.values.manyExp,pch=20,col="grey",asp=1)
@@ -186,7 +198,6 @@ mean(V>0)
 ## Dependence between tests.
 
 Variables in an experiment are often correlated with each other.
-In the example of the drug that should 
 
 ```{r}
 effect.individual=rnorm(6,mean = 0,sd = sqrt(70))
@@ -223,8 +234,9 @@ sum((res[,1]<.05)&(res[,2]<.05))/B
 ```
 
 
-## Carlo Emilio Bonferroni
-Carlo Emilio Bonferroni was an Italian mathematician, best known for the inequalities that bear his name.
+## Bonferroni procedure 
+
+Carlo Emilio Bonferroni was an Italian mathematician, best known for the inequalities that takes his name.
 
 ![alt text](http://upload.wikimedia.org/wikipedia/commons/d/de/Carlo_Emilio_Bonferroni.jpg)
 
@@ -234,10 +246,10 @@ Bonferroni's inequality, also known as Boole's inequality, states that for any f
 \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} E_i \right) \leq \sum_{i: H_i \in \mathcal{T}} \Pr\left( E_i \right) 
 \]
 
-so considering $E_i = \P_i \leq \frac{alpha}{m} \}$ we get
+so considering $E_i = p_i \leq \frac{\alpha}{m} \}$ we get
 
 \[
-\mathrm{FWER} = \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} \P_i \leq \frac{ \alpha}{m} \right) \leq \sum_{i: H_i \in \mathcal{T}}  \Pr\left( P_i \leq \frac{ \alpha}{m} \right) \leq m_0 \frac{ \alpha}{m} = \pi_0\alpha \leq \alpha
+\mathrm{FWER} = \Pr\left(\bigcup_{i: H_i \in \mathcal{T}} p_i \leq \frac{ \alpha}{m} \right) \leq \sum_{i: H_i \in \mathcal{T}}  \Pr\left( p_i \leq \frac{ \alpha}{m} \right) \leq m_0 \frac{ \alpha}{m} = \pi_0\alpha \leq \alpha
 \]
 
 that is, Bonferroni's method controls the FWER at $\alpha$. 
@@ -252,15 +264,17 @@ or equivalently.
 
 ## Example: Multiple Endpoints Data
 
-Let consider the `mtept` dataset:
+Let consider the `mtept` dataset: Measurements on four endpoints in patients in treatment (`Drug` in red) and not (`Placebo` in grey).
 
-```{r message=F}  
+
+
+```{r message=F, warning = FALSE}  
 require("multcomp")
 data(mtept)
-gruppo<-mtept[,"treatment"]
-risposte<-mtept[,-1]
-boxplot(risposte[gruppo=="Placebo",], at=c(1,3,5,7), xlim=c(1,8))
-boxplot(risposte[gruppo=="Drug",], at=c(2,4,6,8), col="red", add=T)
+group<-mtept[,"treatment"]
+resp<-mtept[,-1]
+boxplot(resp[group=="Placebo",], at=c(1,3,5,7), xlim=c(1,8))
+boxplot(resp[group=="Drug",], at=c(2,4,6,8), col="red", add=T)
 ```
 
 We conduct 4 Wilcoxon tests, one for each endpoint:
@@ -269,9 +283,9 @@ We conduct 4 Wilcoxon tests, one for each endpoint:
 require("multcomp")
 m<-4
 p.values<-vector("numeric", length=m)
-names(p.values)<-names(risposte)
+names(p.values)<-names(resp)
 for (i in 1:m){
-p.values[i]<-wilcox.test(risposte[gruppo=="Placebo",i], risposte[gruppo=="Drug",i])$p.value
+p.values[i]<-wilcox.test(resp[group=="Placebo",i], resp[group=="Drug",i])$p.value
 }
 p.values
 ```
@@ -283,16 +297,16 @@ p.values.adj<-pmin(p.values*m,1)
 p.values.adj
 p.adjust(p.values,method="bonferroni")
 alpha = 0.1
-names(p.values.adj)[p.values.adj<=alpha] # nomi degli endpoint significativi ad alpha=10%
+names(p.values.adj)[p.values.adj<=alpha] #names of the significant endpoints at alpha=10%
 ```
 
-so the comparison between Placebo and Drug groups is significant at the $\alpha=10\%$ level for endpoint E1.
+so the comparison between `Placebo` and `Drug` groups is significant at the $\alpha=10\%$ level for endpoint `E1`.
 
 ## Example: Golub data
 
-Let us now consider *microarray* type data used in the study described by Golub et al. (1999). In this study, gene expression on 3051 genes was measured for each patient. The 38 patients considered are leukemia patients, and can be divided into two groups: 27 patients with *acute lymphoblastic leukemia* (ALL) and with 11 *acute myeloid leukemia* (AML). The aim of the study is to determine which genes are differentially expressed between the two groups of patients.
+Let us now consider *microarray* type data used in the study described by Golub et al. (1999). In this study, gene expression on $3051$ genes was measured for each patient. The $38$ patients considered are leukemia patients, and can be divided into two groups: $27$ patients with *acute lymphoblastic leukemia* (ALL, code `0`) and with $11$ *acute myeloid leukemia* (AML, code `1`). The aim of the study is to determine which genes are differentially expressed between the two groups of patients.
 
-```{r message=F} 
+```{r message=F, warning = FALSE} 
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 #BiocManager::install("multtest")
@@ -301,21 +315,22 @@ library(multtest)
 set.seed(123)
 data(golub)
 rownames(golub)<-golub.gnames[,3]
-m<-3051
-geni<-1:m # sottoinsieme di geni
-risposte<-golub[geni,]
-gruppo<-golub.cl
+m<-500
+genes<-1:m # subset of genes
+response<-golub[genes,]
+group<-golub.cl
 p.values<-vector("numeric", length=m)
-names(p.values)<-rownames(risposte)
+names(p.values)<-rownames(response)
 for (i in 1:m){
-p.values[i]<-t.test(risposte[i,gruppo==0], risposte[i,gruppo==1])$p.value
+p.values[i]<-t.test(response[i,group==0], 
+                    response[i,group==1])$p.value
 }
-sum(p.values<=alpha) # numero di rifiuti senza correzione per molteplicità
-sum(p.adjust(p.values,"bonferroni") <=alpha) # numero di rifiuti con Bonferroni
+sum(p.values<=alpha) # number of rejections without multiplicity corrections
+sum(p.adjust(p.values,"bonferroni") <=alpha) # number of rejections wih Bonferroni correction
 p.values.adj <- p.adjust(p.values,"bonferroni")
-geni.sig<-names(p.values.adj)[(p.values.adj <=alpha)] # nomi dei geni significativi
-geni.sig
-boxplot(risposte[geni.sig[3],]~gruppo, main=geni.sig[3]) # boxplot del terzo gene significativo
+genes.sig<-names(p.values.adj)[(p.values.adj <=alpha)] # names of significant genes
+genes.sig
+boxplot(response[genes.sig[3],]~group, main=genes.sig[3]) # boxplot of the third significant genes
 ```
 
 Graphically we have:
@@ -328,66 +343,54 @@ segments(x0=1,y0=alpha/m, x1=m,y1=alpha)
 
 # Holm procedure
 
-It leads to the same waste as Bonferroni, sometimes a few more (uniformly more powerful).
+It leads to the same rejections as Bonferroni, sometimes a few more (uniformly more powerful).
 
 It is iterative:
 
 1. Correct the p-values with Bonferroni,
-2. Reject all hypotheses with significant p-value
+2. Reject all hypotheses with significant p-values
 3. Reiterate 1. and 2. until there are no more rejections
 
 ```{r}
-p.values
-p.adjust(p.values,method = "bonferroni")
+sum(p.adjust(p.values,method = "bonferroni") < 0.05)/length(p.values)
 
-p.adjust(p.values,method = "holm")
+sum(p.adjust(p.values,method = "holm") < 0.05)/length(p.values)
 ```
 
-# Post Hoc
+# Post-Hoc
 
-One test per pairwise comparison
+We analyze the `litter` dataset where four dosages ($0$, $5$, $50$, $500$) are administrated to pregenant mice and their litters were evaluated for birth weights as average post-birth weights in the entire litter.
+
+We perform one test for each comparison (i.e., $5$ versus $0$, $50$ versus $0$, $500$ versus $0$, $50$ versus $5$ and so on).
 
 ```{r}
 library(multcomp)
 data(litter)
 head(litter)
-
-#Dose response of litter weights in rats.
-# Details
-# Pregnant mice were divided into four groups and the compound in four different doses was administered during pregnancy. Their litters were evaluated for birth weights.
-# dose: dosages at four levels: 0, 5, 50, 500.
-# weight: response variable: average post-birth weights in the entire litter.
-
+#### Let see the distribution of weights across different dosages
 boxplot(weight~dose,data=litter,col="red")
-# weight.resid=residuals(lm(weight ~ gesttime + number, data = litter))
-# boxplot(weight.resid~dose,data=litter,col="red")
 
+#### Here we perform an analysis of variance, but we are interested on post-hoc comparison
 amod <- aov(weight ~ dose + gesttime + number, data = litter)
 
-### define matrix of linear hypotheses for 'dose'
-doselev <- as.integer(levels(litter$dose))
+### Define matrix of linear hypotheses for 'dose'
 K <- contrMat(table(litter$dose), "Tukey")
 
-### set up multiple comparison object
+### Set up multiple comparison object
 Kht <- glht(amod, linfct = mcp(dose = K), alternative = "less")
 
-### cf. Westfall (1997, Table 2)
 summary(Kht, test = univariate())
 summary(Kht, test = adjusted("bonferroni"))
 summary(Kht, test = adjusted("holm"))
-summary(Kht, test = adjusted("Shaffer"))
 ```
-
-# Gatekeepers
-
-TO ADD AN EXAMPLE ?
 
 # Exercise
 
-Using the same setting (and code) as the simulation under $H_0$ partial with `r m` endpoint (last simulation of the previous laboratory) evaluate:
+Consider the last simulations of the first laboratory, i.e., multiple endpoints ($18$) where the first $5$ endpoints are significant across $1000$ clinical trials:
 
-> The empirical distribution of the number of rejections using the correction of Bonferroni, and Holm
-> the fraction of experiments in which at least one error was committed
+1. The empirical distribution of the number of rejections using the correction of Bonferroni, and Holm
+
+2. the fraction of experiments in which at least one error was committed
   
 **Possible solution**  
   
@@ -396,35 +399,39 @@ m=18
 B=1000
 alpha = 0.05
 
-simulazione.1.esperimento <- function(){
-   # genero la risposta di 6 pazienti su m enpoint
+simulate.1.experiment <- function(){
+####  Generate the response of 6 patients across m endpoints from a normal distribution with mean 0 and sd 1.
    endpoints=matrix(rnorm(6*m),6,m)
-   # aggiunto un valore di 3 ai valori riferiti 
-   # ai primi 5 endpoint per i tre pazienti con il farmaco new 
+####  Generate the response of 6 patients across m endpoints from a normal distribution with mean 0 and sd 1.
    endpoints[4:6,1:5]= endpoints[4:6,1:5]+5
    endpoints
   
-   p.values.1.experiment=apply(endpoints , 2, function(y) t.test(y[1:3],y[4:6])$p.value)
    
+   p.values.1.experiment=apply(endpoints , 2, function(y)
+#### Compute two samples t-test and extract p-value      
+     t.test(y[1:3],y[4:6])$p.value)
+
+#### Compute p-values adjusted by Bonferroni, Holm and BH
    p.bonf <- p.adjust(p.values.1.experiment,method = "bonferroni")
    p.holm <- p.adjust(p.values.1.experiment,method = "holm")
 
-   c(bonf=calcola.err.pow(p.bonf),
-     holm=calcola.err.pow(p.holm))
+#### Compute FWER and power from function compute.err.pow
+   c(bonf=compute.err.pow(p.bonf),
+     holm=compute.err.pow(p.holm))
   }
 
-#### calcola errori e pontenza per una procedura
-calcola.err.pow <- function(p.values){
-  c(Almeno1errore=any(p.values[-(1:5)]<alpha),
-     fdp=sum(p.values[-(1:5)]<alpha)/max(1,sum(p.values<alpha)),
+#### Compute FWER and power
+compute.err.pow <- function(p.values){
+  
+  c(Atleastoneerror=any(p.values[-(1:5)]<alpha),
      power=sum(p.values[(1:5)]<alpha)/5)
 }
 
-res <- replicate(B,simulazione.1.esperimento())
+res <- replicate(B,simulate.1.experiment())
 
-out=matrix(rowMeans(res),3,2)
+out=matrix(rowMeans(res),2,2)
 colnames(out)=c("bonf","holm")
-rownames(out)=c("FWER","FDR","POWER")
+rownames(out)=c("FWER","POWER")
 out
 ```
 

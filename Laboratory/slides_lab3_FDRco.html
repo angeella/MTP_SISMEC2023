@@ -1301,6 +1301,97 @@ window.onload = function() {
 </script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+
+a.sourceLine {
+pointer-events: auto;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
 
 
 
@@ -1333,7 +1424,7 @@ code span.ot { color: #007020; }
 <div class="cover-card table-cell table-middle">
 <span class="author_name">The Labyrinth of Multiple Testing: how to
 avoid the pitfall of false positives</span>
-<span class="author_job">Homework 1: Hypothesis testing</span>
+<span class="author_job">FDR control</span>
 <span class="author_bio mbm">Livio Finos</span>
 </div>
 </div>
@@ -1342,40 +1433,285 @@ avoid the pitfall of false positives</span>
 
 <div class="col s12 m9">
 <div class="post-listing">
+<div id="TOC" class="toc">
+<ul>
+<li><a href="#false-discovery-rate" id="toc-false-discovery-rate"><span class="toc-section-number">1</span> False Discovery Rate</a></li>
+<li><a href="#benjamini-hochberg-procedure." id="toc-benjamini-hochberg-procedure."><span class="toc-section-number">2</span> Benjamini-Hochberg
+procedure.</a></li>
+<li><a href="#benjamini-yekutieli-procedure." id="toc-benjamini-yekutieli-procedure."><span class="toc-section-number">3</span> Benjamini-Yekutieli
+procedure.</a></li>
+<li><a href="#exercise" id="toc-exercise"><span class="toc-section-number">4</span> Exercise</a></li>
+</ul>
+</div>
 
 <div id="post">
 <article class="post-content">
-<p>Perform a simulation with the following setting:</p>
+<div id="false-discovery-rate" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> False Discovery
+Rate</h1>
+<p>Consider a set of null hypotheses <span class="math inline">\(\mathcal{H}=(H_1,\ldots,H_m)\)</span>, of which an
+unknown number <span class="math inline">\(m_0\)</span> are true, while
+the remaining <span class="math inline">\(m_1=m-m_0\)</span> are false.
+We can summarize the number of errors made by a <em>multiple
+testing</em> procedure in the following table:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Assumptions</th>
+<th>True</th>
+<th>False</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>rejected</td>
+<td><span class="math inline">\(V\)</span></td>
+<td><span class="math inline">\(S\)</span></td>
+<td><span class="math inline">\(R\)</span></td>
+</tr>
+<tr class="even">
+<td>not rejected</td>
+<td><span class="math inline">\(m_0 - V\)</span></td>
+<td><span class="math inline">\(m_1-S\)</span></td>
+<td><span class="math inline">\(m-R\)</span></td>
+</tr>
+<tr class="odd">
+<td>total</td>
+<td><span class="math inline">\(m_0\)</span></td>
+<td><span class="math inline">\(m_1\)</span></td>
+<td><span class="math inline">\(m\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>We now define the <em>false discovery proportion</em> <span class="math inline">\(\mathrm{FDP}\)</span> as. <span class="math display">\[\mathrm{FDP} = \left\{\begin{array}{ll} V/R &amp;
+\mathrm{if}\quad R&gt;0\\ 0 &amp; \mathrm{if}\quad  R=0
+\end{array}\right.\]</span> which represents the ratio of the number of
+type I errors to the total number of rejected hypotheses (defined as 0
+if no hypotheses are rejected), i.e., the proportion of type I
+errors.</p>
+<p>Previously, we had defined the <em>familywise error rate</em> as the
+probability of committing at least one error of the first kind,
+i.e. <span class="math inline">\(\Pr(V&gt;0)\)</span>. Controlling the
+<em>familywise error rate</em> at <span class="math inline">\(\alpha\)</span> requires: <span class="math display">\[
+\Pr(V&gt;0) = \Pr(Q&gt;0) \leq \alpha
+\]</span> We now introduce a new error rate, the <em>false discovery
+rate</em> (FDR), defined as <span class="math inline">\(\mathbb{E}(\mathrm{FDP})\)</span>. Controlling the
+<em>false discovery rate</em> at <span class="math inline">\(\alpha\)</span> requires: <span class="math display">\[
+\mathbb{E}(\mathrm{FDP}) \leq \alpha.
+\]</span></p>
+<p>FDR control procedures exert less stringent control than FWER control
+procedures (such as Bonferroni correction), which seek to control the
+probability of at least one I-type error (<span class="math inline">\(\Pr(V&gt;0)\)</span>) as opposed to controlling
+the expected value of the proportion of type I errors <span class="math inline">\(\mathbb{E}(\mathrm{FDP})\)</span>.</p>
+<p>In fact, since <span class="math inline">\(0\leq \mathrm{FDP} \leq
+1\)</span>, we have: <span class="math display">\[
+\mathbb{E}(\mathrm{FDP}) \leq \Pr(\mathrm{FDP}&gt;0)
+\]</span> which implies that the control of FWER also guarantees the
+control of FDR.</p>
+<p>Consequently, we can expect the procedures for checking FDR to be
+more powerful than the procedures for checking FWER, i.e., to reject
+more hypotheses.</p>
+<p>In practice, methods for checking FDR are particularly more powerful
+than methods for checking FWER in the presence of many false null
+hypotheses. In contrast, if all null hypotheses are true, FDR and FWER
+are identical. In fact, in this case we have <span class="math inline">\(R = V\)</span>, so <span class="math inline">\(\mathrm{FDP}\)</span> is a Bernoulli random
+variable. It follows that <span class="math display">\[
+\mathbb{E}(\mathrm{FDP}) = \Pr(\mathrm{FDP} &gt; 0)
+\]</span></p>
+<p>In addition, if there is only one hypothesis (<span class="math inline">\(m = 1\)</span>), the two error rates are
+identical.</p>
+</div>
+<div id="benjamini-hochberg-procedure." class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Benjamini-Hochberg
+procedure.</h1>
+<p>Let <span class="math inline">\(p_{(1)},\ldots,p_{(m)}\)</span> be
+the non-decreasingly ordered p-values, i.e., <span class="math inline">\(p_{(1)} \leq \ldots \leq p_{(m)}\)</span>. For a
+given <span class="math inline">\(\alpha\)</span>,the Benjamini-Hochberg
+(BH) procedure controls <span class="math inline">\(\mathrm{FDR}\)</span> as follows:</p>
 <ul>
-<li><span class="math inline">\(n = 8\)</span> observations (two
-balanced samples)</li>
-<li><span class="math inline">\(m = 20\)</span> endpoints</li>
-<li><span class="math inline">\(m_1=5\)</span> of them are different
-between the two groups (<span class="math inline">\(H_1\)</span>
-hypotheses).</li>
-<li>Control group is distributed as <span class="math inline">\(N(0,1)\)</span> and drug group is <span class="math inline">\(N(0,1)\)</span> for <span class="math inline">\(H_0\)</span> endpoints, while <span class="math inline">\(N(3,1)\)</span> for <span class="math inline">\(H_1\)</span> ones.</li>
-<li>All endpoints are tested with a t-test</li>
-<li><span class="math inline">\(1000\)</span> replications</li>
+<li><p>If <span class="math inline">\(p_{(i)} &gt; \frac
+{i\alpha}{m}\)</span> for any <span class="math inline">\(i=1,\ldots,m\)</span>, no hypothesis is
+rejected.</p></li>
+<li><p>Otherwise, let <span class="math display">\[k = \max\Big\{i:
+p_{(i)} \leq \frac{i\alpha}{m} \Big\}\]</span></p></li>
+<li><p>one rejects <span class="math inline">\(H_i\)</span> when <span class="math inline">\(p_i \leq \tilde{\alpha}= \Large\frac {k
+\alpha}{m}\)</span></p></li>
 </ul>
-<p>For each generation of data compute</p>
+<p>Under the assumption that the p-values are either independent or
+positively dependent the BH procedure checks the FDR at the <span class="math inline">\(\pi_0\alpha\)</span> level:</p>
+<p><span class="math display">\[
+E(Q)\leq \pi_0 \alpha \leq \alpha.
+\]</span></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>pvals <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.03000</span>,<span class="fl">0.0002</span>, <span class="fl">0.05912</span>, <span class="fl">0.08226</span>, <span class="fl">0.00388</span>, <span class="fl">0.0184</span>, <span class="fl">0.03490</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>m<span class="ot">&lt;-</span><span class="fu">length</span>(pvals)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pvals)<span class="ot">&lt;-</span>LETTERS[<span class="dv">1</span><span class="sc">:</span>m]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pvals</span></code></pre></div>
+<pre><code>##       A       B       C       D       E       F       G 
+## 0.03000 0.00020 0.05912 0.08226 0.00388 0.01840 0.03490</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pvals.ord<span class="ot">&lt;-</span><span class="fu">sort</span>(pvals) <span class="co"># p-values sorted</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>pvals.ord</span></code></pre></div>
+<pre><code>##       B       E       F       A       G       C       D 
+## 0.00020 0.00388 0.01840 0.03000 0.03490 0.05912 0.08226</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>(<span class="dv">1</span><span class="sc">:</span>m)[(pvals.ord <span class="sc">&lt;=</span> alpha<span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span>m)<span class="sc">/</span>m)] <span class="co"># indexes i</span></span></code></pre></div>
+<pre><code>## [1] 1 2 3 5</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>k<span class="ot">&lt;-</span><span class="fu">max</span>( (<span class="dv">1</span><span class="sc">:</span>m)<span class="sc">*</span>(pvals.ord <span class="sc">&lt;=</span> alpha<span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span>m)<span class="sc">/</span>m) ) <span class="co"># k = max(indexes i)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>k</span></code></pre></div>
+<pre><code>## [1] 5</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>alpha.adj<span class="ot">&lt;-</span>(alpha<span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span>m)<span class="sc">/</span>m)[k] <span class="co"># adjusted alpha level</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>alpha.adj</span></code></pre></div>
+<pre><code>## [1] 0.03571429</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>hyps.reject<span class="ot">&lt;-</span><span class="fu">names</span>(pvals)[pvals<span class="sc">&lt;=</span>alpha.adj] <span class="co"># names hypothesis rejected</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>hyps.reject</span></code></pre></div>
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;E&quot; &quot;F&quot; &quot;G&quot;</code></pre>
+<p>Equivalently, we can consider the rejection rule:</p>
 <ul>
-<li>the realized FWER (at least one rejection among the <span class="math inline">\(H_0\)</span>s)</li>
-<li>the power (proportion of rejected <span class="math inline">\(H_1\)</span> hypotheses)</li>
-<li>testing individual hypotheses at level <code>alpha_a=.05</code> and
-<code>alpha_b=1-(1-.05)^(1/m)</code></li>
+<li>we reject the hypothesis <span class="math inline">\(H_{(i)}\)</span> when <span class="math inline">\(\tilde{p}_{(i)} \leq \alpha\)</span></li>
 </ul>
-<p>After the simulation, answer the following questions:</p>
+<p>where <span class="math display">\[
+\tilde{p}_{(i)} = \min_{j=i,\ldots,m}\Big(p_{(j)}\cdot\frac{m}{j}
+,1\Big)
+\]</span></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pvals.ord.adj<span class="ot">&lt;-</span>pvals.ord <span class="sc">*</span> m<span class="sc">/</span>(<span class="dv">1</span><span class="sc">:</span>m)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>pvals.ord.adj[i]<span class="ot">&lt;-</span><span class="fu">min</span>(pvals.ord.adj[i<span class="sc">:</span>m],<span class="dv">1</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>pvals.ord.adj <span class="co"># adjusted p-values</span></span></code></pre></div>
+<pre><code>##          B          E          F          A          G          C          D 
+## 0.00140000 0.01358000 0.04293333 0.04886000 0.04886000 0.06897333 0.08226000</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pvals.ord.adj[<span class="fu">names</span>(pvals)] <span class="co"># initial sorting</span></span></code></pre></div>
+<pre><code>##          A          B          C          D          E          F          G 
+## 0.04886000 0.00140000 0.06897333 0.08226000 0.01358000 0.04293333 0.04886000</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pvals.adj<span class="ot">&lt;-</span><span class="fu">p.adjust</span>(pvals,<span class="at">method=</span><span class="st">&quot;BH&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>pvals.adj</span></code></pre></div>
+<pre><code>##          A          B          C          D          E          F          G 
+## 0.04886000 0.00140000 0.06897333 0.08226000 0.01358000 0.04293333 0.04886000</code></pre>
+<p>Graphically we have</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>i<span class="ot">&lt;-</span>(pvals.ord <span class="sc">&lt;=</span> alpha<span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span>m)<span class="sc">/</span>m)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>m, pvals.ord, <span class="at">xlab=</span><span class="st">&quot;i&quot;</span>, <span class="at">ylab=</span><span class="fu">expression</span>(p[(i)]), <span class="at">col=</span>i<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0=</span><span class="dv">1</span>,<span class="at">y0=</span>alpha<span class="sc">/</span>m, <span class="at">x1=</span>m,<span class="at">y1=</span>alpha)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span>alpha.adj, <span class="at">lty=</span><span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>For comparison, if we use Bonferroni’s method we reject</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>hyps.reject.Bonf<span class="ot">&lt;-</span><span class="fu">names</span>(pvals)[pvals<span class="sc">&lt;=</span>alpha<span class="sc">/</span>m]</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>hyps.reject.Bonf</span></code></pre></div>
+<pre><code>## [1] &quot;B&quot; &quot;E&quot;</code></pre>
+</div>
+<div id="benjamini-yekutieli-procedure." class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Benjamini-Yekutieli
+procedure.</h1>
+<p>In short, the Benjamini-Yekutieli (BY) procedure is a conservative
+version of BH since it deals with any p-values correlation structure. We
+consider the following rejection rule:</p>
 <ul>
-<li>Does <code>alpha_a=.05</code> controls the the FWER at level
-<code>0.05</code>?</li>
-<li>Does <code>alpha_b=1-(1-.05)^(1/m)</code> controls the the FWER at
-level <code>0.05</code>?</li>
-<li>What is the power of test controlled at level
-<code>alpha_b=1-(1-.05)^(1/m)</code>?</li>
-<li>What is the power of test controlled at level
-<code>alpha_a=.05</code>? Would you prefer this method to the one above
-(i.e. <code>alpha_b=1-(1-.05)^(1/m)</code>)?</li>
+<li>we reject the hypothesis <span class="math inline">\(H_{(i)}\)</span> when <span class="math inline">\(\tilde{p}_{(i)} \leq \alpha\)</span> where <span class="math display">\[
+\tilde{p}_{(i)} = \min_{j=i,\ldots,m}\Big(p_{(j)}\cdot\frac{m L}{j}
+,1\Big)
+\]</span></li>
 </ul>
+<p>with <span class="math inline">\(L=\sum_{j=1}^{m} 1/j\)</span></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pvals.adj<span class="ot">&lt;-</span><span class="fu">p.adjust</span>(pvals,<span class="at">method=</span><span class="st">&quot;BY&quot;</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>pvals.adj</span></code></pre></div>
+<pre><code>##         A         B         C         D         E         F         G 
+## 0.1266870 0.0036300 0.1788380 0.2132884 0.0352110 0.1113200 0.1266870</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(pvals.adj <span class="sc">&lt;=</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<pre><code>## [1] 2</code></pre>
+<p>Graphically we have</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="dv">1</span><span class="sc">/</span>(<span class="dv">1</span><span class="sc">:</span>m))</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>pvals.ord<span class="ot">&lt;-</span><span class="fu">sort</span>(pvals) <span class="co"># p-values sorted</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>i<span class="ot">&lt;-</span>(pvals.ord <span class="sc">&lt;=</span> alpha<span class="sc">*</span>(<span class="dv">1</span><span class="sc">:</span>m)<span class="sc">/</span>(m<span class="sc">*</span>L))</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>m, pvals.ord, <span class="at">xlab=</span><span class="st">&quot;i&quot;</span>, <span class="at">ylab=</span><span class="fu">expression</span>(p[(i)]), <span class="at">col=</span>i<span class="sc">+</span><span class="dv">1</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">segments</span>(<span class="at">x0=</span><span class="dv">1</span>,<span class="at">y0=</span>alpha<span class="sc">/</span>m, <span class="at">x1=</span>m,<span class="at">y1=</span>alpha)</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span>alpha.adj, <span class="at">lty=</span><span class="st">&quot;dotted&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="exercise" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Exercise</h1>
+<p>Consider the last simulations of the first laboratory, i.e., multiple
+endpoints (<span class="math inline">\(18\)</span>) where the first
+<span class="math inline">\(5\)</span> endpoints are significant across
+<span class="math inline">\(1000\)</span> clinical trials. Compute:</p>
+<ol style="list-style-type: decimal">
+<li><p>The empirical distribution of the number of rejections using the
+correction of Bonferroni, Holm (as in the previous laboratory), BH and
+BY;</p></li>
+<li><p>The fraction of experiments in which at least one error was
+committed.</p></li>
+</ol>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>m<span class="ot">=</span><span class="dv">18</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>B<span class="ot">=</span><span class="dv">1000</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>simulate.<span class="fl">1.</span>experiment <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="do">####  Generate the response of 6 patients across m endpoints from a normal</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a><span class="do">####  distribution with mean 0 and sd 1.</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>   endpoints<span class="ot">=</span><span class="fu">matrix</span>(<span class="fu">rnorm</span>(<span class="dv">6</span><span class="sc">*</span>m),<span class="dv">6</span>,m)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="do">####  Add a value equals 3 for the first 5 endpoints for the patients</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="do">#### taking the new drug</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>   endpoints[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]<span class="ot">=</span> endpoints[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]<span class="sc">+</span><span class="dv">5</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>   endpoints</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>   p.values.<span class="fl">1.</span>experiment<span class="ot">=</span><span class="fu">apply</span>(endpoints , <span class="dv">2</span>, <span class="cf">function</span>(y)   </span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a><span class="do">#### Compute two samples t-test and extract p-value    </span></span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>   <span class="fu">t.test</span>(y[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>],y[<span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>])<span class="sc">$</span>p.value)</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a><span class="do">#### Compute p-values adjusted by Bonferroni, Holm and BH</span></span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>   p.bonf <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(p.values.<span class="fl">1.</span>experiment,<span class="at">method =</span> <span class="st">&quot;bonferroni&quot;</span>)</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>   p.holm <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(p.values.<span class="fl">1.</span>experiment,<span class="at">method =</span> <span class="st">&quot;holm&quot;</span>)</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>   p.bh <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(p.values.<span class="fl">1.</span>experiment,<span class="at">method =</span> <span class="st">&quot;BH&quot;</span>)</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>   p.by <span class="ot">&lt;-</span> <span class="fu">p.adjust</span>(p.values.<span class="fl">1.</span>experiment,<span class="at">method =</span> <span class="st">&quot;BY&quot;</span>)</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a>   </span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a><span class="do">#### Compute errors and power from function compute.err.pow</span></span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a>   <span class="fu">c</span>(<span class="at">bonf=</span><span class="fu">compute.err.pow</span>(p.bonf),</span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>     <span class="at">holm=</span><span class="fu">compute.err.pow</span>(p.holm),</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>     <span class="at">bh=</span><span class="fu">compute.err.pow</span>(p.bh),</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a>     <span class="at">by=</span><span class="fu">compute.err.pow</span>(p.by))</span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a><span class="do">#### Compute errors and power</span></span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a>compute.err.pow <span class="ot">&lt;-</span> <span class="cf">function</span>(p.values){</span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(<span class="at">Atleastoneerror=</span><span class="fu">any</span>(p.values[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)]<span class="sc">&lt;</span>alpha),</span>
+<span id="cb27-36"><a href="#cb27-36" aria-hidden="true" tabindex="-1"></a>     <span class="at">fdp=</span><span class="fu">sum</span>(p.values[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)]<span class="sc">&lt;</span>alpha)<span class="sc">/</span><span class="fu">max</span>(<span class="dv">1</span>,<span class="fu">sum</span>(p.values<span class="sc">&lt;</span>alpha)),</span>
+<span id="cb27-37"><a href="#cb27-37" aria-hidden="true" tabindex="-1"></a>     <span class="at">power=</span><span class="fu">sum</span>(p.values[(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>)]<span class="sc">&lt;</span>alpha)<span class="sc">/</span><span class="dv">5</span>)</span>
+<span id="cb27-38"><a href="#cb27-38" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-39"><a href="#cb27-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-40"><a href="#cb27-40" aria-hidden="true" tabindex="-1"></a><span class="do">#### We replicate the analysis 1000 times</span></span>
+<span id="cb27-41"><a href="#cb27-41" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">replicate</span>(B,<span class="fu">simulate.1.experiment</span>())</span>
+<span id="cb27-42"><a href="#cb27-42" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(res)</span></code></pre></div>
+<pre><code>## [1]   12 1000</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>res[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span></code></pre></div>
+<pre><code>##                      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]     [,10]
+## bonf.Atleastoneerror    0    0    0    0    0    0    0    0    0 1.0000000
+## bonf.fdp                0    0    0    0    0    0    0    0    0 0.3333333
+##                      [,11] [,12] [,13] [,14] [,15] [,16] [,17] [,18] [,19]
+## bonf.Atleastoneerror     0     0     0     0     0     0     0     0     0
+## bonf.fdp                 0     0     0     0     0     0     0     0     0
+##                      [,20]
+## bonf.Atleastoneerror     0
+## bonf.fdp                 0</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rowMeans</span>(res)</span></code></pre></div>
+<pre><code>## bonf.Atleastoneerror             bonf.fdp           bonf.power 
+##           0.02100000           0.01025000           0.28280000 
+## holm.Atleastoneerror             holm.fdp           holm.power 
+##           0.02500000           0.01150000           0.29640000 
+##   bh.Atleastoneerror               bh.fdp             bh.power 
+##           0.09500000           0.02228333           0.59660000 
+##   by.Atleastoneerror               by.fdp             by.power 
+##           0.01100000           0.00525000           0.18240000</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">boxplot</span>(res[<span class="dv">8</span>,])</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAqAAAAHgCAMAAABNUi8GAAAAQlBMVEUAAAAAADoAAGYAOjoAOpAAZrY6AAA6ADo6kNtmAABmtv+QOgCQ2/+2ZgC2///bkDrb////tmb/25D//7b//9v///+6tbUqAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAIr0lEQVR4nO3dcU8TTwKA4dUTT0QtteX7f9VDCvy8ODXltgPv0ef5gzQx2ZjyZnZmdnWWOwhb3vovAH8jUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaWcOdIGTzAl0f3O4+scfZ7kcF2tOoJvly+HD9unDqstxuaYEur95znLz6Xb15bhgUwLdXX99+rg9cpMXKCcxgpI2aw76OISag7LOpFX87vqwij8yfgqUE00K9LUv9y68YNPvcgg0Y7nztfxpdqAbq/gTLb/95Nkrj6Avf4J1MQQ65BZfIdAhgWaYg44ItMPEZ0CgpE16Fv/PYsgqnjXmjKD7m6Mvgv4vl+NyTXth+eqcl+NizZqDbpevf/1zgXISiyTSBEqaQEkTKGkCJU2gpAmUNIGSJlDSBEqaQEkTKGkCJU2gpAmUNIGSJlDSBEqaQEkTKGkCJU2gpAmUNIGSJlDSBEqaQEkTKGkCJU2gpAmUNIGSJlDSBEqaQEkTKGkCJU2gpE0K9PuyXO1vluXoYTQC5SRzAt18ur1v9OrXoYhfznA5LteUQPc391luP3y7O6S69nJcsCmB7q7v7+zbh+M6tw6TZQ0jKGmT56APqa6+HJfLKp40+6CkCZS02YFurOJZ45VH0OXZWS7Hu+cWT5pASZsU6MMW070jM1CBcqJJG/XL4/78drFRzxrzHnUeeNTJKvNeFjnwsgirGEFJmzUHfRxCzUFZZ9Iqfnd9WMUfGT8Fyonsg5ImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gXb4f6cHBJqx3Pla/iTQiuW3nzwTaIVAhwRaIdAhgWaYg44ItMMqfkCgpAmUNIGSJlDSBErapEC/f/xx9/Pzsnz4dpbLcbHmBPrQ57+//deRXisux+WaEuju+st9pFe/PjrIi1UmBfr16bQ5RyGyyqRb/P3ouTGCst6cQHfXH388DKHbY6skgXKSWdtM28NRiFdnuhyXyj4oaQIlbXagG6t41njlEXR5dpbL8e65xZMmUNImBbq/OdzIj8xABcqJ5gS6Wb4cPmyfPqy6HJdrSqCPz+F/8aiTVaa9LPLIyyKsYgQlbdYc9HEINQdlnUmr+N31YRV/ZPwUKCeyD0qaQEkTKGkCJU2gpAmUNIGSJlDSBEqaQEkTKGkCJU2gpAmUNIGSJtAO/53FgEAzljtfy58EWrH89pNnAq0Q6JBAKwQ6JNAMc9ARgXZYxQ8IlDSBkiZQ0gRKmkBJEyhpAiVNoKQJlDSBkiZQ0gRKmkBJEyhpUwP9+fnrsT8SKCeZEujTGR9/Oa1ToJxkzgj6eDySEZS1Jt3id9e/TkgSKGtNm4N+//BNoKw2b5G0Wb4IlLUmruJ/fv6XQFlp5jbT/mYR6Av4V50DNuoz/Lv4kdmBbuyDnsj/LDL0yiPoPxv4Z7nceyLQIbf4CoEOCTTDHHRkUqD3C/i/PYn3mxgx8RmYE+jm8Cz++aH8ystxuaYEur95znLz65n8ystxwSa9bve8Qb+1zcQaRlDSZs1BH4dQc1DWmfY+6GEVf2T8FCgnsg9KmkBJEyhpAiVNoKQJlDSBdnhZZECgGV63GxFohReWhwRaIdAhgVYIdEigGeagIwLtsIofEChpAiVNoKQJlDSBkiZQ0gTaYZtpQKAZNupHBFrhUeeQQCsEOiTQCoEOCTTDHHREoB1W8QMCJU2gpAmUNIF2mIMOCDTDKn5EoBX2QYcEWiHQIYFWCHRIoBnmoCMC7bCKH5gU6Ob+y3446MNx3KwyJ9DNh293u+urO4Gy0pRADwd57W8+3QqUdaYE+nQU4vdPtwJllYkj6L3vVwJllUlz0Mcsd9fHTowXKCeZtoo/3OT3NwJlDfugHfZBBwSa4UnSyOxALZJO5Vn80CuPoMuzs1zuPRHokFt8hUCHBJphDjoyKdD9zeFGfmQG6jcxYuIzMGmjfnl8lLR9+rDqclyuuY8671P9dLv6clywqS+L3NvaZmINI2iHOejArDno4xBqDno6q/iRSav43fVhFX9k/PSb+JN90CH7oBUCHRJohUCHBJphDjoi0A6r+AGBkiZQ0gRKmkBJEyhpAiVNoKQJlDSBkiZQ0gRKmkBJEyhpAiVNoKQJlDSBkiZQ0gRKmkBJEyhpAiVNoKQJlDSBkiZQ0gRKmkBJEyhpAiVNoKQJlLRJgToKkfOYdQyNoxA5iymBOsiLc5kSqKMQORcjKGmz5qCOQuQsJq3iHYXIedgHJU2gpM0OdPMuVvHLe/LWX+bLvPII+n/6Nb1dTTO89bf5Im7xp3jrpM7qrb/MlxEoaV4WIc3LIqR51Emal0VIM4KS5mUR0rwsQpp9UNIEStqbBQoneaNA4bwESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNIESppASRMoaQIlTaCkCZQ0gZImUNL+AyqRdGpnzy0kAAAAAElFTkSuQmCC" /><!-- --></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>out<span class="ot">=</span><span class="fu">matrix</span>(<span class="fu">rowMeans</span>(res),<span class="dv">3</span>,<span class="dv">4</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(out)<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;bonf&quot;</span>,<span class="st">&quot;holm&quot;</span>,<span class="st">&quot;bh&quot;</span>, <span class="st">&quot;by&quot;</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rownames</span>(out)<span class="ot">=</span><span class="fu">c</span>(<span class="st">&quot;FWER&quot;</span>,<span class="st">&quot;FDR&quot;</span>,<span class="st">&quot;POWER&quot;</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>out</span></code></pre></div>
+<pre><code>##          bonf   holm         bh      by
+## FWER  0.02100 0.0250 0.09500000 0.01100
+## FDR   0.01025 0.0115 0.02228333 0.00525
+## POWER 0.28280 0.2964 0.59660000 0.18240</code></pre>
+</div>
 </article>
 </div>
 </div>

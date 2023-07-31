@@ -29,7 +29,7 @@ ps=round(rbeta(10,1,10),4)
 cat(ps,sep=", ")
 ```
 
-- compute the adjusted p-values using Benjamini-Hochberg (FDR controlling) procedure ans show the steps needed.
+- compute the adjusted p-values using Benjamini-Hochberg (FDR controlling) procedure and show the steps needed.
 - run the analysis using `p.adjust` and verify that you get the same results.
 
 
