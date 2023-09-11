@@ -1,7 +1,7 @@
 ---
 title: "The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives"
 subtitle: "FDR control"
-author: "Livio Finos"
+author: "Livio Finos and Angela Andreella"
 highlighter: highlight.js
 job: Università degli Studi di Padova
 output:
@@ -24,11 +24,12 @@ widgets: []
 
 Consider a set of null hypotheses $\mathcal{H}=(H_1,\ldots,H_m)$, of which an unknown number $m_0$ are true, while the remaining $m_1=m-m_0$ are false. We can summarize the number of errors made by a *multiple testing* procedure in the following table:
 
-Assumptions | True | False | Total
+Assumptions | False | True | Total
 ------------- | ------------- | ------------- | -------------
-rejected | $V$ | $S$ | $R$ 
-not rejected | $m_0 - V$ | $m_1-S$ | $m-R$
-total | $m_0$ | $m_1$ | $m$
+rejected | $S$ | $V$ | $R$ 
+not rejected | $T$ | $U$ | $m-R$
+total | $m_1$ | $m_0$ | $m$
+
 
 We now define the *false discovery proportion* $\mathrm{FDP}$ as. 
 $$\mathrm{FDP} = \left\{\begin{array}{ll} V/R & \mathrm{if}\quad R>0\\ 0 & \mathrm{if}\quad  R=0 \end{array}\right.$$
@@ -36,7 +37,7 @@ which represents the ratio of the number of type I errors to the total number of
 
 Previously, we had defined the *familywise error rate* as the probability of committing at least one error of the first kind, i.e. $\Pr(V>0)$. Controlling the *familywise error rate* at $\alpha$ requires:
 \[
-\Pr(V>0) = \Pr(Q>0) \leq \alpha
+\Pr(V>0) \leq \alpha
 \]
 We now introduce a new error rate, the *false discovery rate* (FDR), defined as $\mathbb{E}(\mathrm{FDP})$.
 Controlling the *false discovery rate* at $\alpha$ requires:
@@ -160,7 +161,7 @@ segments(x0=1,y0=alpha/m, x1=m,y1=alpha)
 abline(h=alpha.adj, lty="dotted")
 ```
 
-# Exercise
+# Exercise 1 {-}
 
 Consider the last simulations of the first laboratory, i.e., multiple endpoints ($18$) where the first $5$ endpoints are significant across $1000$ clinical trials. Compute:
 
@@ -224,21 +225,40 @@ rownames(out)=c("FWER","FDR","POWER")
 out
 ```
 
-# Exercise
+# Exercise 2 {-}
 
 Given the following p-values
 
 ```{r,echo=FALSE}
 set.seed(1)
-ps=round(rbeta(10,1,10),4)
+ps=c(.002, .005, .015, .113, .222, .3, .454, .552, .663, .751)
 
-# p.adjust(ps,method = "BH")
+
 cat(ps,sep=", ")
 ```
 
 - compute the adjusted p-values using Benjamini-Hochberg (FDR controlling) procedure and show the steps needed.
 - run the analysis using `p.adjust` and verify that you get the same results.
 
+
+**Possible solution**
+
+```{r}
+ps_sort <- sort(ps)
+
+pmin(c((ps_sort * length(ps)) /c(1:length(ps))),1)[order(order(ps))]
+
+
+L = sum(1/seq(length(ps)))
+pmin(c((ps_sort * length(ps_sort) * L) /c(1:length(ps_sort))),1)[order(order(ps))]
+
+```
+
+
+```{r}
+p.adjust(ps, method = "BH")
+p.adjust(ps, method = "BY")
+```
 
 
 

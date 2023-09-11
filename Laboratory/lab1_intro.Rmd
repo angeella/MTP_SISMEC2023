@@ -19,12 +19,7 @@ widgets: []
 ---
 
 
-```{r setting,echo=FALSE}
-m=18
-```
-
-
-In this laboratory, we will understand the concept of $H_0$, $H_1$, $\alpha$, p-value and FWER using simple simulations.
+In this laboratory, we will understand the concept of $H_0$, $H_1$, $\alpha$, and p-value using simple simulations.
 
 # One single hypothesis
 
@@ -58,7 +53,7 @@ datas
 t.test(pressure~drug,data=datas)
 ```
 
-Here, we suppose that the mean pressure of our patients is $\mu=150$ with dev.std $\sigma=10$.
+Here, we suppose that the mean pressure of our three patients is $\mu=150$ with dev.std $\sigma=10$.
 
 
 **Exercise**
@@ -107,7 +102,7 @@ sum(p.values.many.experiments<=.10)/B
 
 Now suppose we have the same previous setting, but in this case the drug works! 
 
-The answer of primary interest is still `Y`: (maximum) pressure and we have three subjects in each sample.
+The main interest is still `Y`: (maximum) pressure and we have three subjects in each sample.
 
 The hypothesis test of interest is the equality of the averages of the two samples.
 
@@ -172,7 +167,7 @@ For each endpoint we evaluate a hypothesis and obtain a p-value.
 
 **Exercise**
 
-1. Simulate `r B` clinical trials with `r m` endpoints under $H_0$,
+1. Simulate `r B` clinical trials with `r m=18` endpoints under $H_0$,
 
 2. Evaluate the empirical distribution of the **number of rejections** in each trial, 
 
@@ -225,7 +220,7 @@ sum(res["n.rifiuti_b",]>0)
 ```
 
 
-Let us now assume that the drug affects the first 5 endpoints and not the others.
+Let us now assume that the drug affects the first $5$ endpoints and not the others.
 
 **Exercise**
 
@@ -235,14 +230,25 @@ Let us now assume that the drug affects the first 5 endpoints and not the others
 
 3. Evaluate the fraction of experiments in which **at least one error** was made.
 
-considering two different thresholds:
+4. Evaluate the fraction of experiments in which **at least one true discovery** was made.
+
+considering again two different thresholds:
 
 - `alpha_a=.05` 
 - `alpha_b=1-(1-.05)^(1/m)=` `r 1-(1-.05)^(1/m)` (Sidak's correction)
 
+After the simulation, answer the following questions:
+
+- Does `alpha_a=.05` controls the the FWER at level `0.05`?
+- Does `alpha_b=1-(1-.05)^(1/m)` controls the the FWER at level `0.05`?
+- Which method do you prefer?
+
+
 **Possible solution**
 
 ```{r}
+#number of endpoints
+m <- 18
 # Generate the response of 6 patients on m enpoint.
 endpoints=matrix(rnorm(6*m),6,m)
  
@@ -252,53 +258,82 @@ endpoints=matrix(rnorm(6*m),6,m)
 endpoints[4:6,1:5]= endpoints[4:6,1:5]+3
  
 endpoints
+```
+
+Let's compute the p-values:
+
+```{r}
+#One p-value for each endpoint extracted from t.test:
 
 p.values.1.experiment=apply(endpoints , 2, 
                             function(y) t.test(y[1:3],y[4:6])$p.value)
 
- c(n.rifiuti_a=sum(p.values.1.experiment<alpha_a),
-   n.rifiuti_b=sum(p.values.1.experiment<alpha_b),
-   n.rifiuti_a_H0=sum(p.values.1.experiment[-(1:5)]<alpha_a),
-   n.rifiuti_b_H0=sum(p.values.1.experiment[-(1:5)]<alpha_b),
-   n.rifiuti_a_H1=sum(p.values.1.experiment[1:5]<alpha_a),
-   n.rifiuti_b_H1=sum(p.values.1.experiment[1:5]<alpha_b))
-   
 
 p.values.1.experiment
 ```
 
+
 The first 5 p-values tend to have lower values than the others (I reject those hypotheses several times).
 
-
-In applications to real data we obviously do NOT know which hypotheses are under $H_0$ (the two drugs are equal) and which are under $H_1$ (the new drug is better).
-
-
-# Exercise
-
-Perform a simulation with the following setting:
-
-- $n = 8$ observations (two balanced samples)
-- $m = 20$ endpoints
-- $m_1=5$ of them are different between the two groups ($H_1$ hypotheses).
-- Control group is distributed as $N(0,1)$ and drug group is $N(0,1)$ for $H_0$ endpoints, while $N(3,1)$ for $H_1$ ones.
-- All endpoints are tested with a t-test
-- $1000$ replications
-
-For each generation of data compute 
-
-- the realized FWER (at least one rejection among the $H_0$s)
-- the power (proportion of rejected $H_1$ hypotheses)
-- testing individual hypotheses at level `alpha_a=.05` and `alpha_b=1-(1-.05)^(1/m)`
+```{r}
+#Compute:
+ c(n.rifiuti_a=sum(p.values.1.experiment<alpha_a), #number of rejections using alpha_a=0.05
+   n.rifiuti_b=sum(p.values.1.experiment<alpha_b),#number of rejections using alpha_b (i.e., Sidak correction)
+   n.rifiuti_a_H0=sum(p.values.1.experiment[-(1:5)]<alpha_a), #number of false rejections using alpha_a=0.05
+   n.rifiuti_b_H0=sum(p.values.1.experiment[-(1:5)]<alpha_b), #number of false rejections using alpha_b (i.e., Sidak correction)
+   n.rifiuti_a_H1=sum(p.values.1.experiment[1:5]<alpha_a), #number of true rejections using alpha_a=0.05
+   n.rifiuti_b_H1=sum(p.values.1.experiment[1:5]<alpha_b) #number of true rejections using alpha_b (i.e., Sidak correction)
+   )
+```
 
 
-After the simulation, answer the following questions:
+*In applications to real data we obviously do NOT know which hypotheses are under $H_0$ (the two drugs are equal) and which are under $H_1$ (the new drug is better).*
 
-- Does `alpha_a=.05` controls the the FWER at level `0.05`?
-- Does `alpha_b=1-(1-.05)^(1/m)` controls the the FWER at level `0.05`?
-- What is the power of test controlled at level `alpha_b=1-(1-.05)^(1/m)`?
-- What is the power of test controlled at level `alpha_a=.05`? Would you prefer this method to the one above (i.e. `alpha_b=1-(1-.05)^(1/m)`)?
+Let's replicate $B$ times using the `replicate` function:
 
-**SOLUTION**
+```{r}
+res = replicate(B, {
+  endpoints=matrix(rnorm(6*m),6,m)
+  endpoints[4:6,1:5]= endpoints[4:6,1:5]+3
+  
+  p.values.1.experiment=apply(endpoints , 2, 
+                            function(y) t.test(y[1:3],y[4:6])$p.value)
+  
+ c(n.rifiuti_a=sum(p.values.1.experiment<alpha_a), 
+   n.rifiuti_b=sum(p.values.1.experiment<alpha_b),
+   n.rifiuti_a_H0=sum(p.values.1.experiment[-(1:5)]<alpha_a), 
+   n.rifiuti_b_H0=sum(p.values.1.experiment[-(1:5)]<alpha_b),
+   n.rifiuti_a_H1=sum(p.values.1.experiment[1:5]<alpha_a), 
+   n.rifiuti_b_H1=sum(p.values.1.experiment[1:5]<alpha_b) 
+   )
+})
+```
+
+Let's see for example the distribution of rejections considering $\alpha = 0.05$ is:
+
+```{r}
+table(res[1,])
+```
+and the distribution of false rejections:
 
 
+```{r}
+table(res[3,])
+```
+
+and compute the fraction of experiments in which at least one error was made:
+
+
+```{r}
+rowSums(res[c(3,4), ]>0)/B
+```
+The distribution of true rejections:
+
+```{r}
+table(res[5,])
+```
+
+```{r}
+rowSums(res[c(5,6), ]/5)/B
+```
 
