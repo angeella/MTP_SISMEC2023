@@ -224,6 +224,21 @@ rownames(out)=c("FWER","FDR","POWER")
 out
 ```
 
+# Exercise
+
+Given the following p-values
+
+```{r,echo=FALSE}
+set.seed(1)
+ps=round(rbeta(10,1,10),4)
+
+# p.adjust(ps,method = "BH")
+cat(ps,sep=", ")
+```
+
+- compute the adjusted p-values using Benjamini-Hochberg (FDR controlling) procedure and show the steps needed.
+- run the analysis using `p.adjust` and verify that you get the same results.
+
 
 
 

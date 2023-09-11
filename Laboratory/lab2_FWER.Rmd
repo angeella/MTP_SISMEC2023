@@ -357,6 +357,116 @@ sum(p.adjust(p.values,method = "bonferroni") < 0.05)/length(p.values)
 sum(p.adjust(p.values,method = "holm") < 0.05)/length(p.values)
 ```
 
+# Exercises
+
+## Exercise 1 {-}
+
+Let be 
+```{r,echo=FALSE}
+ps=c(.523,.0011,.0246,.0073)
+cat(ps)
+```
+
+the p-values resulting in the comparison of two groups in a clinical trial with four endpoints.  
+
+Perfom:
+
+- a Bonferroni correction
+- a Holm correction
+- a Closed testing correction using Bonferroni combination for the combined tests 
+- at least for the Bonferroni and Holm, program a function to perform it for a general vector of p-values
+
+
+Compare the results of Closed Testing with the ones of Bonferroni and Holm.
+
+
+## Exercise 2 {-}
+
+Consider the `PlantGrowth` in `library(datasets)`:
+
+Results from an experiment to compare yields (as measured by dried weight of plants) obtained under a control and two different treatment conditions.
+
+```{r}
+data(PlantGrowth)
+#?PlantGrowth
+str(PlantGrowth)
+```
+
+We are interested in all possible pair-wise comparisons of the three groups.
+Perform a parametric analysis and correct for post-hoc (i.e. multiple testing) using
+
+- Bonferroni
+- Holm
+
+Do this without the help of `library(multcomp)` (or any other specialized libraries/softwares), also showing step-by-step the calculation performed.
+
+Compare your results with the ones of `library(multcomp)` (or any other specialized libraries/softwares).
+
+
+## Exercise 3 {-}
+
+Consider the `InsectSprays` in `library(datasets)`:
+
+The counts of insects in agricultural experimental units treated with different insecticides.
+
+```{r}
+data(InsectSprays)
+#?InsectSprays
+str(InsectSprays)
+```
+
+Same task as Exercise Two.
+
+## Exercise 4 {-}
+
+Consider a clinical trial with two families of null hypotheses:
+
+Family 1: Primary null hypotheses (one-sided p-values)
+$H_1$ (Endpoint 1), $p_1=0.0082$
+$H_2$ (Endpoint 2), $p_2=0.0174$
+
+Family 2: Secondary null hypotheses (one-sided p-values)
+$H_3$ (Endpoint 3), $p_3=0.0042$
+$H_4$ (Endpoint 4), $p_4=0.0180$
+
+where $p_i$ are the raw p-values.
+
+- Apply the serial gatekeeping procedure
+- Apply the parallel gatekeeping procedure
+
+## Exercise 5 {-}
+
+Description:  
+<http://webserv.jcu.edu/math//faculty/TShort/Bradstreet/part1/part1-table3.html>
+
+Twelve Gastroesophageal Reflux Disease (GERD) patients were allocated randomly to one of four treatment sequences of 0 (placebo), 10, 20, and 40 mg a.m. of a drug in a four period crossover design. On the fifth (last) day of each treatment period and the study baseline period, percent reflux time (% RT), the number of reflux episodes per hour (# EPS/HR), and the number of reflux episodes greater than five minutes in a 12 hour period (#EPS > 5'/12 HR) were recorded for each patient using ambulatory 24-hour esophageal pH monitoring. Measurements were taken while the patient was in the upright (U) or supine (S) positions. The time (hours) in the upright and supine positions was recorded. A seven day washout period separated the treatment periods. The data recorded in the upright and supine positions are shown in <http://webserv.jcu.edu/math//faculty/TShort/Bradstreet/part1/Bradp1t3.txt>
+
+### 5.1 Define a procedure (one endpoint) {-}
+
+Let consider for the moment, only the % RT endpoint, only upright (U) position and the comparisons:  
+
+- $H_{10}: \mu_0 = \mu_{10}$
+- $H_{20}: \mu_0 = \mu_{20}$
+- $H_{40}: \mu_0 = \mu_{40}$
+
+In order to know if there is a dose response and which doses are effective, define an appropriate multiple testing procedure.
+Define the procedure in such a way that:  
+
+- $\alpha/2$ is splitted among the three comparisons 
+- the remaining $\alpha/2$ is allocated to the comparison 0 (placebo) vs 40
+- when one hypothesis is rejected, its $\alpha$ is inherited in a backward fashion: ($H_{40}$ to $H_{20}$ and $H_{20}$ to $H_{10}$)
+
+Is there any room for a further improvement of the procedure? if yes, make your proposal.
+
+### 5.2 Define a procedure (three endpoints) {-}
+
+Define now a procedure that considers also the endpoints: \#EPS/HR and \#EPS > 	5'/12HR (i.e. 3 doses comparisons, 3 endpoints)
+
+### 5.3 Analyse the data {-}
+Analyses the data using the procedures defined at points 5.1 and 5.2.
+
+
+
 # Post-Hoc
 
 We analyze the `litter` dataset where four dosages ($0$, $5$, $50$, $500$) are administrated to pregenant mice and their litters were evaluated for birth weights as average post-birth weights in the entire litter.

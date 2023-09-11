@@ -271,3 +271,34 @@ The first 5 p-values tend to have lower values than the others (I reject those h
 
 
 In applications to real data we obviously do NOT know which hypotheses are under $H_0$ (the two drugs are equal) and which are under $H_1$ (the new drug is better).
+
+
+# Exercise
+
+Perform a simulation with the following setting:
+
+- $n = 8$ observations (two balanced samples)
+- $m = 20$ endpoints
+- $m_1=5$ of them are different between the two groups ($H_1$ hypotheses).
+- Control group is distributed as $N(0,1)$ and drug group is $N(0,1)$ for $H_0$ endpoints, while $N(3,1)$ for $H_1$ ones.
+- All endpoints are tested with a t-test
+- $1000$ replications
+
+For each generation of data compute 
+
+- the realized FWER (at least one rejection among the $H_0$s)
+- the power (proportion of rejected $H_1$ hypotheses)
+- testing individual hypotheses at level `alpha_a=.05` and `alpha_b=1-(1-.05)^(1/m)`
+
+
+After the simulation, answer the following questions:
+
+- Does `alpha_a=.05` controls the the FWER at level `0.05`?
+- Does `alpha_b=1-(1-.05)^(1/m)` controls the the FWER at level `0.05`?
+- What is the power of test controlled at level `alpha_b=1-(1-.05)^(1/m)`?
+- What is the power of test controlled at level `alpha_a=.05`? Would you prefer this method to the one above (i.e. `alpha_b=1-(1-.05)^(1/m)`)?
+
+**SOLUTION**
+
+
+
