@@ -462,7 +462,7 @@ were recorded for each patient using ambulatory 24-hour esophageal pH monitoring
 
 Measurements were taken while the patient was in the upright (U) or supine (S) positions. The time (hours) in the upright and supine positions was recorded. A seven day washout period separated the treatment periods. The data recorded in the upright and supine positions are shown in <http://webserv.jcu.edu/math//faculty/TShort/Bradstreet/part1/Bradp1t3.txt>
 
-### 3.1 Define a procedure (one endpoint) {-}
+### 3.1 A procedure with one endpoint {-}
 
 Let consider for the moment, only the % RT endpoint, only upright (U) position and the comparisons:  
 
@@ -478,9 +478,36 @@ In order to know if there is a dose response and which doses are effective, defi
 
 Is there any room for a further improvement of the procedure? if yes, make your proposal.
 
-### 3.2 Define a procedure (three endpoints) {-}
+**Possible solution**
+
+- $\alpha/2$ is splitted among the three comparisons, that is $\alpha/6$.  
+- Since to $H_40$ is allocated an extra $\alpha/2$:  
+    * $H_{40}$ are tested at level $\alpha/6+\alpha/2=4\alpha/6$  
+    * $H_{20}$ and $H_10$ are tested at level $\alpha/6$  
+- when $H_{40}$ is rejected,  $H_{20}$ is tested at level $\alpha/6+4\alpha/6=5\alpha/6$
+- when $H_{20}$ is rejected,  $H_{10}$ is tested at level $\alpha/6+5\alpha/6=\alpha$
+
+we don't see room for further improvements, the $\alpha$ is fulled exploited.
+
+
+### 3.2 A procedure with three endpoints {-}
+
+
 
 Define now a procedure that considers also the endpoints: \#EPS/HR and \#EPS > 	5'/12HR (i.e., 3 doses comparisons, 3 endpoints)
+
+**Possible solution**
+
+Two possible options are:  
+
+**Test the three endpoints sequentially:** that is,
+- test % RT with procedure at point 3.1,  
+- if $H_{10}$ is rejected (for endpoint % RT), perform the same procedure for \#EPS/HR,  
+- only if  $H_{10}$ is rejected for endpoint  \#EPS/HR,  perform the same procedure for \#EPS > 	5'/12HR 
+
+**Test the three endpoints in parallel:** that is,
+use procedure at point 3.1 at $\alpha$s levels reduced by 1/3. As an example,  $H_{40}$ in each endpoints is tested at level $4\alpha/6/3=4\alpha/18=2\alpha/9$ etc.
+
 
 ### 3.3 Analyse the data {-}
 
