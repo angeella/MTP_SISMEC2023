@@ -625,16 +625,16 @@ Hypotheses are pre-ordered, and individual tests are also used for intersection 
 \begin{tikzpicture}
 \draw[] 
 (0,4) node[draw, line width=1pt] {ABC}
-(0,3.5) node {$p_A$}
+(0,3.5) node {$p_{ABC}=p_A$}
 
 (-2,2.5) node[draw, line width=1pt] {AB}
-(-2,2) node {$p_A$}
+(-2,2) node {$p_{AB}=p_A$}
 
 (0,2.5) node[draw, line width=1pt] {AC}
-(0,2) node {$p_A$}
+(0,2) node {$p_{AC}=p_A$}
 
 (2  ,2.5) node[draw, line width=1pt] {BC}
-(2,2) node {$p_B$}
+(2,2) node {$p_{BC}=p_B$}
 
 (-2,1) node[draw, line width=1pt] {A}
 (-2,0.5) node {$p_A$}
@@ -647,10 +647,9 @@ Hypotheses are pre-ordered, and individual tests are also used for intersection 
 \end{tikzpicture}
 \end{center}
 \begin{itemize}
-    \item $p_A\leq \alpha$ implies rejection of (local) $H_{A}$ but also $H_{AB}$, $H_{AC}$ and $H_{ABC}$
-    \item $p_B\leq \alpha$ implies rejection of (local) $H_{B}$ but also $H_{BC}$ ($H_{AC}$ and $H_{ABC}$ already rejected).
+    \item $p_A\leq \alpha$ implies $p_{AB}=p_{AC}=p_{ABC}=p_A\leq \alpha$
+    \item $p_B\leq \alpha$ implies $p_{BC}=p_B\leq \alpha$ (and $p_{AB}=p_{ABC}\leq \alpha$ already).
 \end{itemize}
-
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
