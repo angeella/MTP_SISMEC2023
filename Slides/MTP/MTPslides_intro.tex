@@ -68,7 +68,7 @@
 }
 
 
-\title[]{The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives \\
+\title[]{The Labyrinth of Multiple Testing: How to avoid the pitfall of false positives \\
 \vspace*{1cm} \large Introduction to Hypothesis testing}
 \subtitle{\vspace*{2cm} \small 12th SISMEC National Congress 2023}
 \date{}
@@ -87,15 +87,15 @@
     \begin{minipage}[t]{0.45\textwidth}
 \includegraphics[width= \textwidth]{Slides/MTP/plaatjes/Finos.jpg}
 \begin{itemize}
-    \item Full professor in statistics at  University of Padova
-    \item \textbf{E-mail}: \href{mailto:livio.finos@unipd.it}{livio.finos@unipd.it} 
+    \item Full professor in statistics at the University of Padova
+    \item \textbf{E-mail}: \\ \href{mailto:livio.finos@unipd.it}{livio.finos@unipd.it} 
 \end{itemize}
 
 \end{minipage}\hfill
 \begin{minipage}[t]{0.45\textwidth}
   \includegraphics[width= .95\textwidth]{Slides/MTP/plaatjes/Andreella.jpg}
 \begin{itemize}
-    \item Researcher in social statistics at  University Ca' Foscari Venezia
+    \item Researcher in social statistics at the University Ca' Foscari Venezia
     \item \textbf{E-mail}: \href{mailto:angela.andreella@unive.it}{angela.andreella@unive.it} 
 \end{itemize}
 
@@ -111,21 +111,21 @@ Ethical Guidelines for Statistical Practice}
 % \begin{tabular}{l|l}
 Recognize that any frequentist %& $\mathcal{H}=\{A\}$ \\ 
 statistical test has a random %&decision rule: reject $A$ if $p_{A}\leq \alpha$\\ 
-chance of indicating significance %&$\Pr(p_A\leq \alpha) \leq \alpha$ when $A$ true \\  
-when it is not really present. %& (probability of type I error)\\ 
+chance of indicating \textbf{significance} %&$\Pr(p_A\leq \alpha) \leq \alpha$ when $A$ true \\  
+when it is \textbf{not really present}. %& (probability of type I error)\\ 
 % &\\
 \bigskip
 
 Selecting the one ``significant'' % & $\mathcal{H}=\{A, B, C,D\}$ \\
 result from a multiplicity of parallel  %& $p_{\min}=\min(p_A,p_B,p_C,p_D)$ \\
 tests poses a grave risk of an  %& $\Pr(p_{\min}\leq \alpha)\leq 4\alpha$ when all true \\
-incorrect conclusion.   %& (probability of at least one type I error) \\
+\textbf{incorrect conclusion}.   %& (probability of at least one type I error) \\
 % &\\
 \bigskip
 
 Failure to disclose the full extent % & \\% \\
 of tests and their results in such  %&  \\
-a case would be highly misleading %& \\
+a case would be highly misleading. %& \\
 % \end{tabular}
 \pause
 
@@ -138,7 +138,7 @@ e.g. VaxGen's AIDSVAX trial \ldots
 \frametitle{VaxGen's AIDSVAX trial}
 
 
-VaxGen announced the results of the first-ever efficacy trial of an AIDS vaccine on 24 February 2003:
+VaxGen announced the results of the \textbf{first-ever efficacy trial} of an AIDS vaccine on 24 February 2003:
 
 \bigskip
 
@@ -183,7 +183,7 @@ but the next day...
 \begin{frame}
 \frametitle{VaxGen's AIDSVAX trial}
 
-...by broking the data down into racial groups -- which they say was part of the original design -- the vaccine appeared to have worked in blacks:
+...by \textbf{broking the data down into racial groups} -- which they say was part of the original design -- the vaccine appeared to have worked in blacks:
 
 %they broke the data down into racial groups, the vaccine appeared to have worked in blacks:
 
@@ -283,7 +283,7 @@ but the next day...
 
 \bigskip
 
-If you torture your data long enough, they will confess you whatever you want to hear!
+\textbf{If you torture your data long enough, they will confess to you whatever you want to hear!}
 \end{enumerate}
 
 \end{frame}
@@ -335,16 +335,18 @@ trials (EMEA)
 \begin{frame}
 \frametitle{Hypothesis Testing: One Single Test}
 
-\rbf{Two Hypotheses under Comparison}
+\rbf{Two Hypotheses under comparison}
 
 \begin{itemize}
-\item $H_0$: two groups are \textbf{Equal}, no relationship between $X$ and $Y$, 
-\item $H_1$: two groups are \textbf{Different}, there is a relationship between $X$ and $Y$,
+\item $H_0$: two groups are \textbf{Equal}, no relationship between $X$ and $Y$. 
+\item $H_1$: two groups are \textbf{Different}, there is a relationship between $X$ and $Y$.
 \end{itemize}
 
 \bigskip
 
-Each test produces a p-value $p$, \\  if $p\leq .05$ ($\alpha=.05$), we reject $H_0$ (and lean towards $H_1$)
+Each test produces a p-value $p$: \\  
+\vspace{.5cm}
+if $\boxed{p\leq .05}$ ($\alpha=.05$), we \textbf{reject} $H_0$ (and lean towards $H_1$).
 \end{frame}
 
 \begin{frame}
@@ -355,17 +357,19 @@ Each test produces a p-value $p$, \\  if $p\leq .05$ ($\alpha=.05$), we reject $
 \begin{tabular}{@{}ll|ll@{}}
 &              & \multicolumn{2}{c}{\textbf{Null hypothesis}}     \\ & \textbf{}    & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}False\\ (two groups are different)\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}True\\ (two group are equal)\end{tabular}} \\ \midrule
 \multicolumn{1}{c}{}                       & Rejected     & \multicolumn{1}{l|}{{\color[HTML]{3166FF} True discovery}}                                     & {\color[HTML]{9A0000} Type I error}                                                      \\
-\multicolumn{1}{c}{\multirow{-2}{*}{Test}} & Not rejected & \multicolumn{1}{l|}{{\color[HTML]{9A0000} Type II error}}                                      & {\color[HTML]{3531FF} True negative}                                                    
+\multicolumn{1}{c}{\multirow{-2}{*}{\textbf{Test}}} & Not rejected & \multicolumn{1}{l|}{{\color[HTML]{9A0000} Type II error}}                                      & {\color[HTML]{3531FF} True negative}                                                    
 \end{tabular}
 \end{table}
 
 \bigskip
 
 \begin{itemize}
-\item \textbf{Type I} (false positive): Reject $H_0$ when it is True \\
+\item \textbf{Type I} (false positive): \textbf{Reject} $H_0$ when it is \textbf{True} \\
 $\mathbb{P}(\text{\rbf{Type I Error}})=\mathbb{P}(p\leq .05 | H_0)=.05$
-\item \textbf{Type II} (false negative): Fail to reject $H_0$ when it is False \\
+\vspace{.2cm}
+\item \textbf{Type II} (false negative): \textbf{Fail} to reject $H_0$ when it is \textbf{False} \\
 $\mathbb{P}(\text{\rbf{Type II Error}})=\mathbb{P}(p> .05 | H_1)$\\
+\vspace{.2cm}
 \bbf{Power}:  $\mathbb{P}(p\leq .05 | H_1) =  1-\mathbb{P}(p>.05 | H_1) = 1-\mathbb{P}(\text{\rbf{Type II Error}})$
 \end{itemize}
 \end{frame}
@@ -378,7 +382,7 @@ Control $\mathbb{P}(\text{\rbf{Type I Error}})$ (e.g., $\leq 0.05$) \\
 
     and \\
 
-find the test with the maximum Power (minimum $\text{\rbf{Type II Error}}$)
+find the test with the maximum \textbf{Power} (minimum $\text{\rbf{Type II Error}}$)
 \end{center}
 
 \bigskip
@@ -418,8 +422,8 @@ consequently, $P\sim U(0,1)$
 \frametitle{Type I Error}
 
 \begin{overprint}
-\only<1> {Under $H_0$, the p-value is a uniform random variable $U(0,1)$}
-\only<2> {Type I Error: $\mathbb{P}(p\leq .05 |H_0)=.05$} % (or at least $\leq .05$)}
+\only<1> {Under $H_0$, the p-value is a \rbf{uniform random variable} $U(0,1)$}
+\only<2> {\rbf{Type I Error}: $\mathbb{P}(p\leq .05 |H_0)=.05$} % (or at least $\leq .05$)}
 \end{overprint} 
 \begin{overprint} 
 \onslide<1> \centerline{\includegraphics[width=7.5cm]{plaatjes/uniform1}}
@@ -433,7 +437,7 @@ consequently, $P\sim U(0,1)$
 %$\mathbb{P}(p\leq .05 | H_1: \textrm{two groups are \textbf{Different}})$
 
 \begin{overprint}
-\only<1> {Under $H_1$, the p-value is stochastically smaller than a uniform random variable $U(0,1)$ (No test distortion)}
+\only<1> {Under $H_1$, the p-value is \rbf{stochastically smaller} than a uniform random variable $U(0,1)$ (No test distortion)}
 \only<2> {Under $H_1$: $\mathbb{P}(p\leq .05 |H_1)>.05$, in our case $= .74$\\ }
 \end{overprint}
 \begin{overprint} 
@@ -458,7 +462,7 @@ Each test carries the risk of making a \rbf{Type I error} $\rightarrow$ the risk
 \begin{frame}
 \frametitle{Two Tests (Independent) Case}
 
-ESEMPIO
+\textbf{\rbf{ESEMPIO}}
 
 \bigskip
 
@@ -507,7 +511,7 @@ Probability of \textbf{ AT LEAST one} (false) rejection?\
 & \textbf{}    & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}False\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}True\end{tabular}} &  \multicolumn{1}{|l}{Tot}\\ 
 \midrule
 \multicolumn{1}{c}{}                       & Rejected     & \multicolumn{1}{l}{{\color[HTML]{3166FF} $S$}}                                     & {\color[HTML]{9A0000} $V$ (false discoveries)}  &  {\color[HTML]{16c155} $R$}  \\
-\multicolumn{1}{c}{\multirow{-2}{*}{Test}} & Not rejected & \multicolumn{1}{l}{{\color[HTML]{9A0000} $T$}}                                      & {\color[HTML]{3531FF} $U$}     &   $m - {\color[HTML]{16c155} R} $  \\    \midrule
+\multicolumn{1}{c}{\multirow{-2}{*}{\tetxbf{Test}}} & Not rejected & \multicolumn{1}{l}{{\color[HTML]{9A0000} $T$}}                                      & {\color[HTML]{3531FF} $U$}     &   $m - {\color[HTML]{16c155} R} $  \\    \midrule
 \multicolumn{1}{c}{}                       & Tot     & \multicolumn{1}{l}{$m_1$}                                     & $m_0$  &  $m$ \\
 \end{tabular}
 \end{table}
@@ -552,9 +556,9 @@ This quickly becomes a problem if $m$ becomes large ...
 \begin{frame}
 \frametitle{Type I error}
 \begin{itemize}
-    \item How to define the Type I error when there are many hypotheses?
+    \item How to \textbf{define} the \rbf{Type I error} when there are many hypotheses?
     \bigskip
-    \item Which procedures control this error?
+    \item Which procedures \textbf{control} this error?
 \end{itemize}
 \end{frame}
 
