@@ -69,7 +69,7 @@
 }
 
 
-\title[]{The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives \\
+\title[]{The Labyrinth of Multiple Testing: How to avoid the pitfall of false positives \\
 \vspace*{1cm} \large FDR control}
 \subtitle{\vspace*{2cm} \small 12th SISMEC National Congress 2023}
 \date{}
@@ -85,7 +85,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-I thank Aldo Solari, Jelle Goeman and Florian Klinglmueller for the ideas and the materials we shared along these years. The material is the result of all this resoning together.
+I thank Aldo Solari, Jelle Goeman and Florian Klinglmueller for the ideas and the materials we shared over these years. The material is the result of all this reasoning together.
 
 \end{frame}
 
@@ -109,8 +109,8 @@ I thank Aldo Solari, Jelle Goeman and Florian Klinglmueller for the ideas and th
 % \bigskip
 % solitamente $q=.05$ (analogo $\alpha$)
 % \end{frame}
-
-\bfr{A contingency table}
+\begin{frame} 
+\frametitle{A contingency table}
 
 \begin{table}[]
 \centering
@@ -124,12 +124,12 @@ I thank Aldo Solari, Jelle Goeman and Florian Klinglmueller for the ideas and th
 \end{tabular}
 \end{table}
 
-\vspace{1cm}
+\vspace{.5cm}
 
 \rbf{\textbf{False Discovery Proportion}}: \[
-\mathrm{FDP} = \left\{ \begin{array}{ll} {\color[HTML]{9A0000} V} /{\color[HTML]{16c155} R} & \textrm{if ${\color[HTML]{16c155} R} > 0$} \\ 0 & \textrm{otherwise}, \end{array} \right.
+\boxed{\mathrm{FDP} = \left\{ \begin{array}{ll} {\color[HTML]{9A0000} V} /{\color[HTML]{16c155} R} & \textrm{if ${\color[HTML]{16c155} R} > 0$} \\ 0 & \textrm{otherwise}, \end{array} \right.}
 \]
-Defined for every rejected set ${\color[HTML]{16c155} \mathcal{R}} = \# {\color[HTML]{16c155} R}$.
+Defined for every rejected set ${\color[HTML]{16c155} \mathcal{R}}$ where $\# {\color[HTML]{16c155} \mathcal{R}} =  {\color[HTML]{16c155} R}$.
 
 \end{frame}
 
@@ -137,16 +137,16 @@ Defined for every rejected set ${\color[HTML]{16c155} \mathcal{R}} = \# {\color[
 \bfr{FWER and FDR}
 
   \bb{Familywise error rate}
-   \[ \mathrm{FWER} = \mathbb{P}({\color[HTML]{9A0000} V} > 0) \]
+   \[ \boxed{\mathrm{FWER} = \mathbb{P}({\color[HTML]{9A0000} V} > 0)} \]
    A procedure controls it if $\text{FWER} \le \alpha$.
    
-   FWER focuses on the probability that the rejected set contains any error.
+   FWER focuses on the probability that the rejected set contains \textbf{any error}.
   \eb
   \bb{False discovery rate}
-    \[ \mathrm{FDR} = \mathbb{E}(\mathrm{FDP}) \]
+    \[ \boxed{\mathrm{FDR} = \mathbb{E}(\mathrm{FDP})} \]
     A procedure controls it if $\text{FDR} \le \alpha$
     
-    FDR looks at the expected proportion of errors among the rejections.
+    FDR looks at the \textbf{expected proportion} of errors among the rejections.
   \eb
 \end{frame}
 
@@ -155,13 +155,13 @@ Defined for every rejected set ${\color[HTML]{16c155} \mathcal{R}} = \# {\color[
 \subsection{Methods}
 
 \bfr{Benjamini and Hochberg (BH) procedure
-\footnote{Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. Journal of the Royal statistical society: series B (Methodological), 57(1), 289-300.}}
+\footnote{Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. Journal of the Royal Statistical Society: Series B (Methodological), 57(1), 289-300.}}
 
     \be
       \item Sort the $p$-values: $p_{(1)}, \ldots, p_{(m)}$
       \item Find $j'$, the largest $j$ such that
       \begin{equation*}
-          p_{(j)} \leq j\alpha/m = c_j^{BH}
+\boxed{p_{(j)} \leq j\alpha/m = c_j^{BH}}
       \end{equation*}
       \item Reject all hypotheses with $p$-values at most $p_{j'}$
     \ee
@@ -185,23 +185,23 @@ In this procedure
     \item controls FDR is valid under \textbf{independence} and \textbf{positive dependence through stochastic ordering} (i.e.,  non-negatively associated $p$-values):
   \begin{itemize}
       \item \rbf{One-sided tests}: as long as test statistics not negatively correlated
-      \item \rbf{Two-sided tests}: If test statistics are (asymptotically) normal
+      \item \rbf{Two-sided tests}: If test statistics are (asymptotically) Normal
   \end{itemize}
   \vspace{.2cm}
   \item we gain in power with respect to FWER-based methods when $m_0$ is large
   \vspace{.2cm}
-  \item $p_{i}^{\text{adjust}} = \dfrac{p_{i}^{\text{raw}} m}{i}$
+  \item $p_{(i)}^{\text{adjust}} = \min\Big(\dfrac{p_{(i)}^{\text{raw}} m}{i},1\Big)$
 \end{itemize}
     
 \end{frame}
 
 
-\bfr{Benjamini \&\ Yekutieli (BY)\footnote{Benjamini, Y., \& Yekutieli, D. (2001). The control of the false discovery rate in multiple testing under dependency. Annals of statistics, 1165-1188.}}
+\bfr{Benjamini \&\ Yekutieli (BY)\footnote{Benjamini, Y., \& Yekutieli, D. (2001). The control of the false discovery rate in multiple testing under dependency. Annals of Statistics, 1165-1188.}}
 Variant of BH valid for any distribution of $p$-values
   \bb{How does it work?}
-Same as BH but 
+Same as BH, but 
 \begin{equation*}
-    p_{(j)} \le \dfrac{j \alpha}{m L} = c_j^{BY}
+    \boxed{p_{(j)} \le \dfrac{j \alpha}{m L} = c_j^{BY}}
 \end{equation*}
 where $L=\sum_{j=1}^{m} 1/j$  (es $m=3$: $L= 1/1+1/2+1/3$ )
   \eb
@@ -210,7 +210,7 @@ where $L=\sum_{j=1}^{m} 1/j$  (es $m=3$: $L= 1/1+1/2+1/3$ )
       \item Quite conservative (especially if $m_0$ is large): 
       \begin{itemize}
           \item $c_j^{BY} < c_j^{BH}$
-          \item $p_{i}^{\text{adjust}} = \dfrac{p_{i}^{\text{raw}}L m}{i}$
+          \item $p_{(i)}^{\text{adjust}} = \min \Big(\dfrac{p_{(i)}^{\text{raw}}L m}{i}, 1\Big)$
       \end{itemize}
       \item Not often needed, not often used
     \ei
@@ -308,13 +308,13 @@ $\rightarrow$ $FDR(t) = \mathbb{E}({\color[HTML]{9A0000} V}(t) / \#{\color[HTML]
 
 \bfr{Storey's FDP estimate}
 
-Storey's estimate is sometimes used as a way to control FDR, rather than as a way to estimate FDP: selecting the highest value of $t$ such that the estimate $\hat{\text{FDP}} \le \alpha$.
+Storey's estimate is sometimes used as a way to control FDR, rather than as a way to estimate FDP: selecting the highest value of $t$ such that the estimate $\widehat{\text{FDP}} \le \alpha$.
 
   \bb{Close relationship with BH}
-    Alternative way of constructing BH rejected set
+    An alternative way of constructing BH rejected set
     \be
       \item Estimate $\hat m_0 = m$ instead of Storey's estimate $\rightarrow$ $\hat{FDP} = m t/ (\# \{ p_i \le t \})$
-      \item Take $t$ the largest value such that $\hat{\mathrm{FDP}} \leq \alpha$
+      \item Take $t$ the largest value such that $\widehat{\mathrm{FDP}} \leq \alpha$
     \ee
   \eb
   \bb{Alternative look at Storey}
@@ -332,7 +332,7 @@ Storey's estimate is sometimes used as a way to control FDR, rather than as a wa
   \begin{itemize}
       \item Only dependent on means $\to$ unaffected by correlation structure 
       \vspace{.2cm}
-      \item Standard errors Available for independent $p$-values only
+      \item Standard errors available for independent $p$-values only
       \vspace{.2cm}
       \item Variability of estimate can be large if $p$-values correlated $\rightarrow$ FDP can be (widely) underestimated.
   \end{itemize}
@@ -346,7 +346,7 @@ Storey's estimate is sometimes used as a way to control FDR, rather than as a wa
 
 \bfr{Bonferroni-bashing}
   \bb{Often heard}
-    ``Never use Bonferroni: it is too conservative''
+    \emph{``Never use Bonferroni: it is too conservative''}
   \eb
   \bb{Is this true?}
     \bi
@@ -371,8 +371,8 @@ Therefore, FDR control is affected by FDP \rbf{\textbf{variability}} $\rightarro
 \begin{itemize}
     \item Variability can be high if $p$-values correlated
     \vspace{.2cm}
-    \item Users of FDR must be aware that control of FDR at $\alpha$ only controls FDP in expectation, and that the actual FDP can often be $\gg$ than $\alpha$.
-    \vspace{.2cm}
+    \item Users of FDR must be aware that control of FDR at $\alpha$ only controls FDP in \textbf{expectation} and that the actual FDP can often be $\gg$ than $\alpha$.
+    \vspace{.15cm}
     \item FDR control is a property of the procedure leading to a rejected set, not of the rejected set itself.
 \end{itemize}
 
@@ -413,19 +413,19 @@ Therefore, FDR control is affected by FDP \rbf{\textbf{variability}} $\rightarro
 
 \bfr{}
 \bb{Cheating}
-Adding un-interesting hypoteses to be rejected, so that more false rejections are allowed.
+Adding uninteresting hypotheses to be rejected so that more false rejections are allowed.
 \eb
 \pause
 \bb{Subsets}
-FDR is about the set R, not about individual hypotheses:
+FDR is about the set ${\color[HTML]{16c155} R}$ , not about individual hypotheses:
 Control of FDR in R does NOT imply control of the FDR in all subsets\\
 \eb
-\bb{Finner and Roters\footnote{Finner, H., \& Roters, M. (2001). On the false discovery rate and expected type I errors. Biometrical Journal, 43(8), 985-1005.}}
+Finner and Roters\footnote{Finner, H., \& Roters, M. (2001). On the false discovery rate and expected type I errors. Biometrical Journal, 43(8), 985-1005.}
     \bi
       \item FDR control on all subsets = FWER control
       \item FWER control on all subsets = FWER control
     \ei
-\eb
+
 \end{frame}
 
 \bfr{Subsets of Rejected hypotheses}
@@ -450,16 +450,16 @@ Control of FDR in R does NOT imply control of the FDR in all subsets\\
 
 \bfr{Relationships between FWER and FDR}
   \bb{Dominance}
-    \[ \mathrm{P}(V > 0) = \mathrm{E}(\boldsymbol{1}\{V > 0\}) \geq \mathrm{E}(\mathrm{FDP}) \]
+    \[ \mathbb{P}({\color[HTML]{9A0000} V} > 0) = \mathbb{E}(\boldsymbol{1}\{{\color[HTML]{9A0000} V}> 0\}) \geq \mathbb{E}(\mathrm{FDP}) \]
     Consequence: Control of FWER implies control of FDR
   \eb
   \bb{Complete null hypothesis}
-    If all hypotheses true, $\mathrm{FDP} = \boldsymbol{1}\{V > 0\}$
+    If all hypotheses true, $\mathrm{FDP} = \boldsymbol{1}\{{\color[HTML]{9A0000} V}  > 0\}$
     \\ Consequence: If all hypotheses true, FDR $=$ FWER
   \eb
   \bb{Single hypothesis}
-    If only one hypothesis, $\mathrm{FDP} = \boldsymbol{1}\{V > 0\}$
-    \\ Consequence: If only one hypothesis, FDR $=$ FWER $=$ Type I error
+    If only one hypothesis, $\mathrm{FDP} = \boldsymbol{1}\{{\color[HTML]{9A0000} V}  > 0\}$
+    \\ Consequence: If only one hypothesis, FDR $=$ FWER $=$ \rbf{Type I error}
   \eb
 \end{frame}
 
@@ -498,13 +498,13 @@ Control of FDR in R does NOT imply control of the FDR in all subsets\\
 \subsection{}
 \bfr{Take-home message}
 \bi 
-\item Molteplicity control is mandatory in Clinical Trials 
-\item FWER: controlling the probability of at least one error
-\item FDR:  controlling the  proportion of false rejection (on average)
+\item \textbf{Molteplicity control} is mandatory in Clinical Trials 
+\item \textbf{FWER}: controlling the probability of at least one error
+\item \textbf{FDR}:  controlling the  proportion of false rejection (on average)
 \item FWER is 
 \bi
 \item a stronger control
-\item usually preferible in Clinical Trials
+\item usually preferable in Clinical Trials
 \item more flexible
 \ei
 \item FWER and FDR  easy in {\tt R}

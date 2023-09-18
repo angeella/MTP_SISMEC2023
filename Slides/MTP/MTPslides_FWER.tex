@@ -73,7 +73,7 @@
 }
 
 
-\title[]{The Labyrinth of Multiple Testing: how to avoid the pitfall of false positives \\
+\title[]{The Labyrinth of Multiple Testing: How to avoid the pitfall of false positives \\
 \vspace*{1cm} \large FWER control}
 \subtitle{\vspace*{2cm} \small 12th SISMEC National Congress 2023}
 \date{}
@@ -88,8 +88,9 @@
 \end{frame}
 
 \begin{frame}
-I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and the materials we shared during these years. The material is the result of all this reasoning together.
+I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and the materials we shared over these years. The material is the result of all this reasoning together.
 \end{frame}
+
 
 \section{FamilyWise Error Rate (FWER)}
 %\section{Defintion}
@@ -103,7 +104,7 @@ I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and t
 & \textbf{}    & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}False\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}True\end{tabular}} &  \multicolumn{1}{|l}{Tot}\\ 
 \midrule
 \multicolumn{1}{c}{}                       & Rejected     & \multicolumn{1}{l}{{\color[HTML]{3166FF} $S$}}                                     & {\color[HTML]{9A0000} $V$}  &  {\color[HTML]{16c155} $R$}\\
-\multicolumn{1}{c}{\multirow{-2}{*}{Test}} & Not rejected & \multicolumn{1}{l}{{\color[HTML]{9A0000} $T$}}                                      & {\color[HTML]{3531FF} $U$}     &   $m -$ {\color[HTML]{16c155} $R$}  \\    \midrule
+\multicolumn{1}{c}{\multirow{-2}{*}{\textbf{Test}}} & Not rejected & \multicolumn{1}{l}{{\color[HTML]{9A0000} $T$}}                                      & {\color[HTML]{3531FF} $U$}     &   $m -$ {\color[HTML]{16c155} $R$}  \\    \midrule
 \multicolumn{1}{c}{}                       & Tot     & \multicolumn{1}{l}{$m_1$}                                     & $m_0$  &  $m$ \\
 \end{tabular}
 \end{table}
@@ -111,7 +112,7 @@ I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and t
 \vspace{.5cm}
 
 \begin{equation*}
-    \text{FWER} = \mathbb{P}(\text{at least one type I error}) = \mathbb{P}(\textcolor{redUnipd}{V} > 0)
+    \boxed{\text{FWER} = \mathbb{P}(\text{at least one type I error}) = \mathbb{P}(\textcolor{redUnipd}{V} > 0)}
 \end{equation*}
 
 \vspace{.5cm}
@@ -151,19 +152,21 @@ If I want to check the \rbf{\textbf{FWER}} at the $\alpha$ level, at which indiv
 \end{frame}
 
 \bfr{\v{S}id\`ak correction}
-From which we get:
-
+From this, we get:
 \begin{eqnarray*}
     1- \alpha &=& (1- \widetilde{\alpha})^{m} \\
     (1- \alpha)^{1/m} &=& (1- \widetilde{\alpha}) \\
   \widetilde{\alpha} &=& 1- (1- \alpha)^{1/m} 
 \end{eqnarray*}
-
-Then it is enough to reject every single hypothesis at the level $\widetilde{\alpha} = 1- (1- \alpha)^{1/m}$ (i.e., I reject the p-values for which $p \leq \widetilde{\alpha}$)\
+Then, it is enough to reject every single hypothesis at the level
+\begin{center}
+    $\boxed{\widetilde{\alpha} = 1- (1- \alpha)^{1/m}}$ 
+\end{center}
+(i.e., I reject the p-values for which $p \leq \widetilde{\alpha}$)
 \bigskip
 
 \pause
-\rbf{\textbf{Problem}}: this solution is valid only when the p-values are \textbf{INDEPENDENT}.
+\rbf{\textbf{PROBLEM}}: it is valid only when the p-values are \textbf{INDEPENDENT}.
 
 In most cases, the tests have dependence-induced dependence between the original variables.
 
@@ -186,12 +189,10 @@ In most cases, the tests have dependence-induced dependence between the original
 \bfr{Dependent P-values}
 It may happen that $\mathbb{P}(\text{at least one false rejection of } H_0) > (!) 1- (1-\alpha)^2$
 \begin{center}
-\includegraphics[width=0.5\textwidth]{plaatjes/bivaH0dep}
+\includegraphics[width=0.4\textwidth]{plaatjes/bivaH0dep}
 \end{center}
 
-TODO: change plot
-
-Remark: remember, however, that the marginal distributions are uniform because the two tests are under $H_0$.
+\textbf{Remark}: Remember, however, that the marginal distributions are uniform because the two tests are under $H_0$.
 
 \end{frame}
 
@@ -227,11 +228,11 @@ Remark: remember, however, that the marginal distributions are uniform because t
 
 \bb{Bonferroni inequality}
      {Reduce $\alpha$} \\
-    Reject $H_i$ if $p_i \leq \widetilde{\alpha} =\alpha/m$ ($m=$ number of hypotheses)
+    Reject $H_i$ if $\boxed{p_i \leq \widetilde{\alpha} =\alpha/m}$ ($m=$ \textbf{number of hypotheses})
 \eb
   \bb{FWER control}
     \begin{eqnarray*}
-    \mathrm{FWER} &=& \mathbb{P} \big(p_i \leq \alpha/m\ \text{ for at least one $i$ true null hypothesis} \big) \\
+    \mathrm{FWER} &=& \mathbb{P} \big(p_i \leq \alpha/m\ \text{ for \textbf{at least one} $i$ true null hypothesis} \big) \\
     &=& \mathbb{P} \Big( \bigcup_{i\in \{\text{true null hypothesis}\}} \{p_i \leq \alpha/m\} \Big) \\
     &\leq& \sum_{i \in \{\text{true null hypothesis}\}} \mathbb{P} (p_i \leq \alpha/m) \\
     &\leq& m_0\frac{\alpha}{m} \leq m \frac{\alpha}{m}  = \alpha
@@ -289,19 +290,19 @@ Remark: remember, however, that the marginal distributions are uniform because t
 \bfr{Bonferroni Procedure}
 
 \bb{Multiplicity adjusted p-value}
-$\tilde p_i = mp_i$ for $i=1,\ldots,m$ and reject if $\tilde p_i \leq \alpha$
+$\boxed{\tilde p_i = mp_i}$ for $i=1,\ldots,m$ and reject if $\tilde p_i \leq \alpha$
 \eb
 
 \bb{Advantages}
 \bi
-\item Very simple
-\item Controls the Family-Wise Error Rate (FWER) under any dependency
+\item Very \textbf{simple}
+\item Controls the FWER under \textbf{any} dependency
 \ei
 \eb
 
 \bb{Disadvantages}
 \bi
-\item Conservative (Adjusted p-values are often high, leading to few rejections)
+\item \textbf{Conservative} (adjusted p-values are often high, leading to few rejections)
 \ei
 \eb
 \end{frame}
@@ -399,24 +400,23 @@ $\tilde p_i = mp_i$ for $i=1,\ldots,m$ and reject if $\tilde p_i \leq \alpha$
 \section{Closed Testing}
 \begin{frame}{Union-intersection hypothesis}
 
-Multiple testing problems in pharmaceutical applications are commonly formulated as \textbf{\rbf{union-intersection problems}}.
-
-One rejects the global hypothesis of no effect if there is evidence of a positive effect with respect to \textbf{at least one} individual objective:
+Reject the global hypothesis of no effect if there is evidence of an effect with respect to \textbf{\rbf{AT LEAST ONE}} individual objective:
 
 \begin{itemize}
     \item the trial's outcome is declared positive if at least one analysis produces a significant result,
     \item Each analysis is independently clinically relevant
     \item Each endpoint, dose, or population analysis independently provides proof of efficacy
 \end{itemize}
+\vspace{.5cm}
 
-Let denote the hypotheses $H_1, \dots, H_m$ corresponding to the multiple objectives. The hypotheses are tested against the alternative hypotheses $K_1, \dots, K_m$:
+Let denote the hypotheses $H_1, \dots, H_m$ corresponding to the multiple objectives tested against the alternative hypotheses $K_1, \dots, K_m$:
 \begin{equation*}
-    H_I: \cap_{i = 1}^m H_i \quad \text{versus} \quad H_U: \cup_{i=1}^m K_i
+    \boxed{H_I: \cap_{i = 1}^m H_i \quad \text{versus} \quad H_U: \cup_{i=1}^m K_i}
 \end{equation*}
 
-\bigskip
+\vspace{.5cm}
 
-$\rightarrow$ adjust for multiplicity!
+$\rightarrow$ \textbf{\rbf{adjust for multiplicity!}}
 
 \end{frame}
 
@@ -427,17 +427,10 @@ $\rightarrow$ adjust for multiplicity!
 \begin{overprint}
 \only<1>{Closed Set of Hypotheses (all possible intersections)}
 \only<2>{Top Node Test (e.g., MANOVA)}
-\only<9>{\bbf{Disadvantage: The tested hypotheses often become too many: $=2^{# \text{hypotheses}}-1$}}
 \end{overprint}
 \begin{center}
 \only<1>{\bbf{Initial Hypotheses}}
 \only<2>{\bbf{Closed Set}}
-\only<3>{\bbf{Test the top node at level $\alpha$}}
-\only<4>{\bbf{Suppose it is significant}}
-\only<5>{\bbf{Move forward}}
-\only<6>{\bbf{Check the next ones at level $\alpha$}}
-\only<7>{\bbf{Move forward}}
-\only<8-9>{\bbf{Identify the significant ones}}
 \medskip
 
 \begin{tikzpicture}
@@ -458,104 +451,56 @@ $\rightarrow$ adjust for multiplicity!
 (0,0) node[draw, line width=1pt] {B}
 (2,0) node[draw, line width=1pt] {C};
 }
-\only<3>{
-\draw[] 
-(.8,4) node {$\alpha$}
-(0,4) node[draw, line width=1pt,fill=lightgrey] {ABC}
-(-1.5,2) node[draw, line width=1pt] {AB}
-(0,2) node[draw, line width=1pt] {AC}
-(1.5,2) node[draw, line width=1pt] {BC}
-(-2,0) node[draw, line width=1pt] {A}
-(0,0) node[draw, line width=1pt] {B}
-(2,0) node[draw, line width=1pt] {C};
-}
-\only<4>{
-\draw[] 
-(.8,4) node {-}
-(0,4) node[draw, line width=1pt,fill=lightred] {ABC}
-(-1.5,2) node[draw, line width=1pt] {AB}
-(0,2) node[draw, line width=1pt] {AC}
-(1.5,2) node[draw, line width=1pt] {BC}
-(-2,0) node[draw, line width=1pt] {A}
-(0,0) node[draw, line width=1pt] {B}
-(2,0) node[draw, line width=1pt] {C};
-}
-\only<5>{
-\draw[] 
-(.8,4) node {-}
-(2.1,2) node {$\alpha$}
-(-.9,2) node {$\alpha$}
-(.6,2) node {$\alpha$}
-(0,4) node[draw, line width=1pt,fill=lightred] {ABC}
-(-1.5,2) node[draw, line width=1pt,fill=lightgrey] {AB}
-(0,2) node[draw, line width=1pt,fill=lightgrey] {AC}
-(1.5,2) node[draw, line width=1pt,fill=lightgrey] {BC}
-(-2,0) node[draw, line width=1pt] {A}
-(0,0) node[draw, line width=1pt] {B}
-(2,0) node[draw, line width=1pt] {C};
-%\draw[->, line width=1pt] (0,3.7) -- (-1.5,2.3);
-%\draw[->, line width=1pt] (0,3.7) -- (0,2.3);
-%\draw[->, line width=1pt] (0,3.7) -- (1.5,2.3);
-}
-\only<6>{
-\draw[] 
-(.8,4) node {-}
-(2.1,2) node {$\alpha$}
-(-.9,2) node {-}
-(.6,2) node {-}
-(0,4) node[draw, line width=1pt,fill=lightred] {ABC}
-(-1.5,2) node[draw, line width=1pt,fill=lightred] {AB}
-(0,2) node[draw, line width=1pt,fill=lightred] {AC}
-(1.5,2) node[draw, line width=1pt,fill=lightgrey] {BC}
-(-2,0) node[draw, line width=1pt] {A}
-(0,0) node[draw, line width=1pt] {B}
-(2,0) node[draw, line width=1pt] {C};
-%\draw[->, line width=1pt] (0,3.7) -- (-1.5,2.3);
-%\draw[->, line width=1pt] (0,3.7) -- (0,2.3);
-%\draw[->, line width=1pt] (0,3.7) -- (1.5,2.3);
-}
-\only<7>{
-\draw[] 
-(.8,4) node {-}
-(2.1,2) node {$\alpha$}
-(-.9,2) node {-}
-(.6,2) node {-}
-(-1.5,0) node {$\alpha$}
-(0,4) node[draw, line width=1pt,fill=lightred] {ABC}
-(-1.5,2) node[draw, line width=1pt,fill=lightred] {AB}
-(0,2) node[draw, line width=1pt,fill=lightred] {AC}
-(1.5,2) node[draw, line width=1pt,fill=lightgrey] {BC}
-(-2,0) node[draw, line width=1pt,fill=lightgrey] {A}
-(0,0) node[draw, line width=1pt] {B}
-(2,0) node[draw, line width=1pt] {C};
-%\draw[->, line width=1pt] (0,3.7) -- (-1.5,2.3);
-%\draw[->, line width=1pt] (0,3.7) -- (0,2.3);
-%\draw[->, line width=1pt] (0,3.7) -- (1.5,2.3);
-%\draw[->, line width=1pt] (-1.5,1.7) -- (-2,0.3);
-%\draw[->, line width=1pt] (0,1.7) -- (-1.7,0.3);
-}
-\only<8-9>{
-\draw[] 
-(.8,4) node {-}
-(2.1,2) node {$\alpha$}
-(-.9,2) node {-}
-(.6,2) node {-}
-(-1.5,0) node {-}
-(0,4) node[draw, line width=1pt,fill=lightred] {ABC}
-(-1.5,2) node[draw, line width=1pt,fill=lightred] {AB}
-(0,2) node[draw, line width=1pt,fill=lightred] {AC}
-(1.5,2) node[draw, line width=1pt,fill=lightgrey] {BC}
-(-2,0) node[draw, line width=1pt,fill=lightred] {A}
-(0,0) node[draw, line width=1pt] {B}
-(2,0) node[draw, line width=1pt] {C};
-%\draw[->, line width=1pt] (0,3.7) -- (-1.5,2.3);
-%\draw[->, line width=1pt] (0,3.7) -- (0,2.3);
-%\draw[->, line width=1pt] (0,3.7) -- (1.5,2.3);
-%\draw[->, line width=1pt] (-1.5,1.7) -- (-2,0.3);
-%\draw[->, line width=1pt] (0,1.7) -- (-1.7,0.3);
-}
 \end{tikzpicture}
 \end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Closed Testing\footnote{R Marcus, E Peritz, KR Gabriel (1976). On closed testing procedures with special reference to ordered analysis of variance. Biometrika 63: 655-660.}}
+
+\begin{itemize}
+    \item Test each hypothesis at level $\alpha$
+    \item Reject an individual hypothesis A if you reject all hypotheses where A is component. \\ \textbf{Example}: Reject $H_A$ if $p_A\leq\alpha$,  $p_{AB}\leq\alpha$, $p_{AC}\leq\alpha$ and $p_{ABC}\leq\alpha$
+\end{itemize}
+\medskip
+
+{\bf \rbf{Relevance}}: \textbf{ANY} multiple testing procedure can be written as Closed Testing procedure. \footnote{Goeman, Hemerik, and Solari (2021) Only closed testing procedures are admissible for controlling false discovery proportions. Ann. Statist. 49(2): 1218-1238} This makes easy to prove the control of the \rbf{Type I error} for new procedures. 
+\medskip
+
+{\bf \rbf{Disadvantage}}: The tested hypotheses often become too many: $=2^{# \text{hypotheses}}-1$ (i.e., research focuses on shortcuts. see next...)
+\end{frame}
+
+\begin{frame}{Holm as a Closed Testing procedure}
+\begin{center}
+\begin{tikzpicture}
+\draw[] 
+(0,4) node[draw, line width=1pt] {ABC}
+(0,3.5) node {$3\min(p_A,p_B,p_C)$}
+
+(-2,2.5) node[draw, line width=1pt] {AB}
+(-2.5,2) node {$2\min(p_A,p_B)$}
+
+(0,2.5) node[draw, line width=1pt] {AC}
+(0,2) node {$2\min(p_A,p_C)$}
+
+(2,2.5) node[draw, line width=1pt] {BC}
+(2.5,2) node {$2\min(p_B,p_C)$}
+
+(-2,1) node[draw, line width=1pt] {A}
+(-2,0.5) node {$p_A$}
+
+(0,1) node[draw, line width=1pt] {B}
+(0,0.5) node {$p_B$}
+
+(2,1) node[draw, line width=1pt] {C}
+(2,0.5) node {$p_C$};
+\end{tikzpicture}
+\end{center}
+ Assume w.l.o.g. $p_A\leq p_B\leq p_C$:
+\begin{itemize}
+    \item$3\min(p_A,p_B,p_C)\leq \alpha$ implies $2\min(p_A,p_B)\leq \alpha$, $2\min(p_A,p_C)\leq \alpha$ and $p_A\leq \alpha$, that is Reject $H_A$
+    \item $2\min(p_B,p_C)\leq \alpha$ implies $p_B\leq \alpha$ (already $3\min(p_A,p_B,p_C)\leq \alpha$ and $2\min(p_A,p_B)\leq \alpha$), that is Reject $H_B$.
+\end{itemize}
 \end{frame}
 
 \section{Gatekeeping strategies}
@@ -569,35 +514,45 @@ Multiple objectives pursued in clinical trials typically exhibit a \textbf{hiera
 To construct a \textbf{gatekeeping procedure}, one first needs to define two or
 more families of analyses, for example:
 \begin{itemize}
-    \item \rbf{Primary and secondary endpoints}: Primary endpoints determine the trial's outcome and key secondary endpoints provide useful supportive information about efficacy and safety
-    \item \rbf{Primary and secondary populations}: General population versus subgroups of patients who are more likely to benefit from treatment
-    \item \rbf{Primary and secondary tests}: Noninferiority assessment as the primary analysis followed by a superiority assessment
+    \item \rbf{\textbf{Primary and secondary endpoints}}: Primary endpoints determine the \textbf{trial's outcome}, and key secondary endpoints provide useful \textbf{supportive} information about efficacy and safety
+    \item \rbf{\textbf{Primary and secondary populations}}: \tetxbf{General} population versus \textbf{subgroups} of patients who are more likely to benefit from treatment
+    \item \rbf{\textbf{Primary and secondary tests}}: \textbf{Noninferiority} assessment as the primary analysis followed by a  \textbf{superiority} assessment
 \end{itemize}
 
 
 \end{frame}
 
+
 \begin{frame}
 \frametitle{Gatekeeping strategies}
-\rbf{Family 1}:
+\rbf{\textbf{Family 1}}:
 $F_1 = \{H_1, \dots, H_{k_1}\}$, null hypotheses
 
 $\dots$
 
-\rbf{Family $m$}:
+\rbf{\textbf{Family $m$}}:
 $F_m = \{H_{k_{m-1} +1}, \dots, H_{k_m}\}$, null hypotheses
 
 \bigskip
 
-Each family (except for the last one) serves as a \textbf{gatekeeper} for the next one, in the sense that one must pass it to perform analyses in the next family $\rightarrow$ increase power by accounting for \rbf{hierarchical} structure of multiple families.
+Each family (except for the last one) serves as a \textbf{gatekeeper} for the next one, in the sense that one must pass it to perform analyses in the next family 
+\bigskip
+
+$\rightarrow$ \textbf{increase power} by accounting for \rbf{\textbf{hierarchical}} structure of multiple families.
 \end{frame}
 
 \begin{frame}
 \frametitle{Gatekeeping Procedures}
+%TODO: da mettere qui? spostare?
 
-\rbf{$\alpha$ recycling}
 
-TODO: da mettere qui? spostare?
+\rbf{\textbf{$\alpha$ allocation}}: Initial distribution of the error rate $\alpha$ across the hypotheses.
+\medskip
+
+\rbf{\textbf{$\alpha$ propagation}}: \emph{``Use it or lose it''} principle: After a hypothesis is rejected, the significance level used can be applied to remaining non-rejected hypotheses. $\rightarrow$ follows from the closure principle and does not result in FWER inflation.
+
+%\rbf{$\alpha$ recycling}
+\medskip
 
 \begin{itemize}
     \item \textbf{Sequential Testing}: Families of hypotheses are tested sequentially starting with Family 1 $\rightarrow$ Error rate is transferred along the sequence
@@ -613,7 +568,7 @@ TODO: da mettere qui? spostare?
 \centering
 
 \rbf{\textbf{Sequential Testing}}\\
-\rbf{\textbf{(three ordered endpoints)}}
+\rbf{\textbf{(three ordered endpoints: high, medium, low doses versus placebo)}}
 
 %\bigskip
 \only<1>{\textcolor{cambridgedarkblue}{$\,$}}
@@ -664,10 +619,45 @@ TODO: da mettere qui? spostare?
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}{Sequential procedure as a Closed Testing procedure}
+Hypotheses are pre-ordered, and individual tests are also used for intersection hypotheses:
+\begin{center}
+\begin{tikzpicture}
+\draw[] 
+(0,4) node[draw, line width=1pt] {ABC}
+(0,3.5) node {$p_A$}
+
+(-2,2.5) node[draw, line width=1pt] {AB}
+(-2,2) node {$p_A$}
+
+(0,2.5) node[draw, line width=1pt] {AC}
+(0,2) node {$p_A$}
+
+(2  ,2.5) node[draw, line width=1pt] {BC}
+(2,2) node {$p_B$}
+
+(-2,1) node[draw, line width=1pt] {A}
+(-2,0.5) node {$p_A$}
+
+(0,1) node[draw, line width=1pt] {B}
+(0,0.5) node {$p_B$}
+
+(2,1) node[draw, line width=1pt] {C}
+(2,0.5) node {$p_C$};
+\end{tikzpicture}
+\end{center}
+\begin{itemize}
+    \item $p_A\leq \alpha$ implies rejection of (local) $H_{A}$ but also $H_{AB}$, $H_{AC}$ and $H_{ABC}$
+    \item $p_B\leq \alpha$ implies rejection of (local) $H_{B}$ but also $H_{BC}$ ($H_{AC}$ and $H_{ABC}$ already rejected).
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Parallel Gatekeeping \footnote{Dmitrienko, A., Offen, W. W., and Westfall, P. H. (2003). Gatekeeping strategies for clinical trials that do not require all primary effects to be significant. Statistics in medicine, 22(15), 2387-2400.}}
 
-Family $1$ is a \rbf{parallel gatekeeper} for Family $2$, i.e., at least one hypothesis must be rejected in Family $1$ to proceed to Family $2$.
+Family $1$ is a \rbf{\textbf{parallel gatekeeper}} for Family $2$, i.e., \textbf{at least one} hypothesis must be rejected in Family $1$ to proceed to Family $2$.
 
 \bigskip
 
@@ -801,71 +791,70 @@ significant.
 
 \bigskip
 
-secondary endpoints are tested if at least one
-primary test is significant
+secondary endpoints are tested if at least one primary test is significant
 
 
 % \end{columns}
 
 \end{frame}
 
-\begin{frame}
-\frametitle{Parallel Gatekeeping}
-\begin{overprint}
-  \onslide<1>
-    Test all primary endpoints at $\alpha/3$
-  \onslide<2>
-    If we reject a few\ldots
-  \onslide<3>
-    Go on with the other primary endpoints as in Holm's procedure
-  \onslide<4>
-    Suppose we are able to reject all primary endpoints\ldots
-  \onslide<5>
-    Go on testing the secondary endpoints at $\alpha/3$
-  \onslide<6>
-    And if we reject some of those\ldots
-  \onslide<7>
-    Go on doing Holm for the secondary endpoints
-\end{overprint}
-\begin{figure}
-  \begin{tikzpicture}
-  \path (0,0) rectangle (7,6) ;
-  \path<1-3> (1,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (a1) {$A_1$} ;
-  \path<4-> (1,5) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=lightred] (a1) {$A_1$} ;
-  \path<1-2> (a1.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
-  \path<3> (a1.north east) node[anchor=west, blue] {$\alpha$} ;
+%\begin{frame}
+%\frametitle{Parallel Gatekeeping}
+%\begin{overprint}
+%  \onslide<1>
+%    Test all primary endpoints at $\alpha/3$
+%  \onslide<2>
+%    If we reject a few\ldots
+%  \onslide<3>
+%    Go on with the other primary endpoints as in Holm's procedure
+%  \onslide<4>
+%    Suppose we are able to reject all primary endpoints\ldots
+%  \onslide<5>
+%    Go on testing the secondary endpoints at $\alpha/3$
+%  \onslide<6>
+ %   And if we reject some of those\ldots
+%  \onslide<7>
+%    Go on doing Holm for the secondary endpoints
+%\end{overprint}
+%\begin{figure}
+%  \begin{tikzpicture}
+%  \path (0,0) rectangle (7,6) ;
+%  \path<1-3> (1,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (a1) {$A_1$} ;
+%  \path<4-> (1,5) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=lightred] (a1) {$A_1$} ;
+%  \path<1-2> (a1.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+%  \path<3> (a1.north east) node[anchor=west, blue] {$\alpha$} ;
 
-  \path<1> (1,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (a2) {$A_2$} ;
-  \path<2-> (1,3) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=lightred] (a2) {$A_2$} ;
-  \path<1> (a2.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+%  \path<1> (1,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (a2) {$A_2$} ;
+%  \path<2-> (1,3) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=lightred] (a2) {$A_2$} ;
+%  \path<1> (a2.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
 
-  \path<1> (1,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (a3) {$A_3$} ;
-  \path<2-> (1,1) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=lightred] (a3) {$A_3$} ;
-  \path<1> (a3.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+%  \path<1> (1,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (a3) {$A_3$} ;
+%  \path<2-> (1,1) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=lightred] (a3) {$A_3$} ;
+%  \path<1> (a3.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
 
-  \path<1-4> (5,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b1) {$B_1$} ;
-  \path<5-> (5,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (b1) {$B_1$} ;
-  \path<1-4> (b1.north east) node[anchor=west, blue] {$0$} ;
-  \path<5-6> (b1.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
-  \path<7-> (b1.north east) node[anchor=west, blue] {$\frac12\alpha$} ;
+%  \path<1-4> (5,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b1) {$B_1$} ;
+%  \path<5-> (5,5) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (b1) {$B_1$} ;
+%  \path<1-4> (b1.north east) node[anchor=west, blue] {$0$} ;
+%  \path<5-6> (b1.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+%  \path<7-> (b1.north east) node[anchor=west, blue] {$\frac12\alpha$} ;
 
-  \path<1-4> (5,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b2) {$B_2$} ;
-  \path<5> (5,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (b2) {$B_2$} ;
-  \path<6-> (5,3) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=lightred] (b2) {$B_2$} ;
-  \path<1-4> (b2.north east) node[anchor=west, blue] {$0$} ;
-  \path<5> (b2.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+%  \path<1-4> (5,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b2) {$B_2$} ;
+%  \path<5> (5,3) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (b2) {$B_2$} ;
+%  \path<6-> (5,3) node[draw, scale=1.5, line width=1pt, text width=1.9cm, text centered, fill=lightred] (b2) {$B_2$} ;
+%  \path<1-4> (b2.north east) node[anchor=west, blue] {$0$} ;
+%  \path<5> (b2.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
 
-  \path<1-4> (5,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b3) {$B_3$} ;
-  \path<5-> (5,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (b3) {$B_3$} ;
-  \path<1-4> (b3.north east) node[anchor=west, blue] {$0$} ;
-  \path<5-6> (b3.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
-  \path<7-> (b3.north east) node[anchor=west, blue] {$\frac12\alpha$} ;
+%  \path<1-4> (5,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered] (b3) {$B_3$} ;
+%  \path<5-> (5,1) node[draw, scale=1.5,  line width=1pt, text width=1.9cm, text centered, fill=lightgrey] (b3) {$B_3$} ;
+%  \path<1-4> (b3.north east) node[anchor=west, blue] {$0$} ;
+%  \path<5-6> (b3.north east) node[anchor=west, blue] {$\frac13\alpha$} ;
+%  \path<7-> (b3.north east) node[anchor=west, blue] {$\frac12\alpha$} ;
 
-  \path (1,6.1) node {Primary endpoints} ;
-  \path (5,6.1) node {Secondary endpoints} ;
-  \end{tikzpicture}
-\end{figure}
-\end{frame}
+%  \path (1,6.1) node {Primary endpoints} ;
+%  \path (5,6.1) node {Secondary endpoints} ;
+%  \end{tikzpicture}
+%\end{figure}
+%\end{frame}
 
 
 \begin{frame}
@@ -930,21 +919,21 @@ primary test is significant
 \begin{frame}
 \frametitle{Intersection-Union test}
 
-Intersection-union testing arises naturally in studies when a significant outcome with respect to two or more objectives is required in order to declare the study successful.
+\rbf{\textbf{Intersection-Union testing}} arises naturally in studies when a significant outcome with respect to two or more objectives is required in order to declare the study successful.
+\medskip
 
 \begin{itemize}
-    \item All analyses must show benefit
-    \item The trial's outcome is positive if all analyses
-produce a significant outcome
+    \item \textbf{All} analyses must show benefit
+    \item The trial's outcome is positive if all analyses produce a significant outcome
 \end{itemize}
 
 \begin{equation*}
-    H_I: \cup_{i = 1}^m H_i \quad \text{versus} H_U: \cap_{i=1}^m K_i
+   \boxed{ H_I: \cup_{i = 1}^m H_i \quad \text{versus} \quad H_U: \cap_{i=1}^m K_i}
 \end{equation*}
 
 \bigskip
 
-$\rightarrow$ no multiplicity adjustment. 
+$\rightarrow$ \textbf{no multiplicity adjustment!} 
 
     
 \end{frame}
@@ -952,7 +941,7 @@ $\rightarrow$ no multiplicity adjustment.
 \begin{frame}
 \frametitle{Serial Gatekeeping \footnote{Westfall, P. H., & Krishen, A. (2001). Optimally weighted, fixed sequence and gatekeeper multiple testing procedures. Journal of Statistical Planning and Inference, 99(1), 25-40.}}
 
-Family $1$ is a \rbf{serial gatekeeper} for Family $2$ $\rightarrow$ all hypotheses must be rejected in Family $1$ to proceed to Family $2$.
+Family $1$ is a \textbf{\rbf{serial gatekeeper}} for Family $2$ $\rightarrow$ \tetxbf{All} hypotheses must be rejected in Family $1$ to proceed to Family $2$.
 
 \bigskip
 \rbf{\textbf{Example}}: Alzheimer's diseases trial
@@ -980,7 +969,7 @@ Treatment effect on both endpoints must be significant
 
 \begin{tikzpicture}[node distance=2.2cm]
 %%% NODES %%%
-\node (main)     [comp1]                 {$H_1$ and $H_2$};
+\node (main)     [comp1]                 {$H_1$ , $H_2$};
 \node (text1)        [left of=main]     {\hspace{-5cm} \textbf{Family 1} };
 \coordinate[below of=main] (c);
 \node (s1)         [comp2, left of=c]      {$H_3$};
@@ -1076,13 +1065,13 @@ secondary endpoints are tested if all primary tests are significant
 \bfr{Summary}
 \bb{Family-Wise Error}
 \bi
-\item Generalizes Type I errors to the case of multiple hypotheses
+\item Generalizes Type I errors to the case of \textbf{multiple hypotheses}
 \pause
 \item Controls the probability of \textbf{at least one} false rejection among all rejections
 \pause
-\item Adjusts p-values (adjusted p-values are always equal to or worse than the unadjusted p-values)
+\item \textbf{Adjusts p-values} (adjusted p-values are always equal to or worse than the unadjusted p-values)
 \pause
-\item Understand the hierarchical/sequential structure of hypotheses testing $\rightarrow$ increase power
+\item Understand the \textbf{hierarchical/sequential structure} of hypotheses testing $\rightarrow$ increase power
 \ei
 \eb
 \pause
