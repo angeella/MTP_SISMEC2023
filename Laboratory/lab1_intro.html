@@ -1441,7 +1441,11 @@ One single hypothesis</a>
 <li><a href="#h_0-true" id="toc-h_0-true"><span class="toc-section-number">1.1</span> <span class="math inline">\(H_0\)</span> true</a></li>
 <li><a href="#h_1-true" id="toc-h_1-true"><span class="toc-section-number">1.2</span> <span class="math inline">\(H_1\)</span> true</a></li>
 </ul></li>
-<li><a href="#multiple-hypotheses" id="toc-multiple-hypotheses"><span class="toc-section-number">2</span> Multiple hypotheses</a></li>
+<li><a href="#multiple-hypotheses" id="toc-multiple-hypotheses"><span class="toc-section-number">2</span> Multiple hypotheses</a>
+<ul>
+<li><a href="#h_0-true-1" id="toc-h_0-true-1"><span class="toc-section-number">2.1</span> <span class="math inline">\(H_0\)</span> true</a></li>
+<li><a href="#h_1-true-1" id="toc-h_1-true-1"><span class="toc-section-number">2.2</span> <span class="math inline">\(H_1\)</span> true</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -1617,9 +1621,11 @@ hypotheses</h1>
 <p>Now suppose that in the same experiment (more realistically) we
 evaluate multiple endpoints of interest and not just maximum pressure.
 For each endpoint we evaluate a hypothesis and obtain a p-value.</p>
+<div id="h_0-true-1" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> <span class="math inline">\(H_0\)</span> true</h2>
 <p><strong>Exercise</strong></p>
 <ol style="list-style-type: decimal">
-<li><p>Simulate 1000 clinical trials with endpoints under <span class="math inline">\(H_0\)</span>,</p></li>
+<li><p>Simulate 1000 clinical trials with 18 endpoints under <span class="math inline">\(H_0\)</span>,</p></li>
 <li><p>Evaluate the empirical distribution of the <strong>number of
 rejections</strong> in each trial,</p></li>
 <li><p>Evaluate the fraction of experiments in which <strong>at least
@@ -1677,6 +1683,9 @@ correction)</li>
 ## 952  48</code></pre>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">sum</span>(res[<span class="st">&quot;n.rifiuti_b&quot;</span>,]<span class="sc">&gt;</span><span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## [1] 48</code></pre>
+</div>
+<div id="h_1-true-1" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> <span class="math inline">\(H_1\)</span> true</h2>
 <p>Let us now assume that the drug affects the first <span class="math inline">\(5\)</span> endpoints and not the others.</p>
 <p><strong>Exercise</strong></p>
 <ol style="list-style-type: decimal">
@@ -1805,6 +1814,7 @@ was made:</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="fu">rowSums</span>(res[<span class="fu">c</span>(<span class="dv">5</span>,<span class="dv">6</span>), ]<span class="sc">/</span><span class="dv">5</span>)<span class="sc">/</span>B</span></code></pre></div>
 <pre><code>## n.rifiuti_a_H1 n.rifiuti_b_H1 
 ##         0.6876         0.0808</code></pre>
+</div>
 </div>
 </article>
 </div>

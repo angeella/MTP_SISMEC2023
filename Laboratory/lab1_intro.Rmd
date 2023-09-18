@@ -18,6 +18,10 @@ framework: io2012
 widgets: []
 ---
 
+```{r, echo = FALSE}
+m=18
+```
+
 
 In this laboratory, we will understand the concept of $H_0$, $H_1$, $\alpha$, and p-value using simple simulations.
 
@@ -162,12 +166,13 @@ sum(p.values.many.experiments<=.10)/B
 
 # Multiple hypotheses
 
-Now suppose that in the same experiment (more realistically) we evaluate multiple endpoints of interest and not just maximum pressure.
-For each endpoint we evaluate a hypothesis and obtain a p-value.
+Now suppose that in the same experiment (more realistically) we evaluate multiple endpoints of interest and not just maximum pressure. For each endpoint we evaluate a hypothesis and obtain a p-value.
+
+## $H_0$ true
 
 **Exercise**
 
-1. Simulate `r B` clinical trials with `r m=18` endpoints under $H_0$,
+1. Simulate `r B` clinical trials with `r m` endpoints under $H_0$,
 
 2. Evaluate the empirical distribution of the **number of rejections** in each trial, 
 
@@ -218,7 +223,7 @@ sum(res["n.rifiuti_a",]>0)
 table(res["n.rifiuti_b",])
 sum(res["n.rifiuti_b",]>0)
 ```
-
+## $H_1$ true
 
 Let us now assume that the drug affects the first $5$ endpoints and not the others.
 
