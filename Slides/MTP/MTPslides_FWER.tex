@@ -87,9 +87,9 @@
   \titlepage
 \end{frame}
 
-\begin{frame}
-I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and the materials we shared over these years. The material is the result of all this reasoning together.
-\end{frame}
+%\begin{frame}
+%I thank Aldo Solari, Jelle Goeman, and Florian Klinglmueller for the ideas and the materials we shared over these years. The material is the result of all this reasoning together.
+%\end{frame}
 
 
 \section{FamilyWise Error Rate (FWER)}
@@ -154,6 +154,7 @@ If I want to check the \rbf{\textbf{FWER}} at the $\alpha$ level, at which indiv
 \bfr{\v{S}id\`ak correction}
 From this, we get:
 \begin{eqnarray*}
+    \alpha &=& 1- (1- \widetilde{\alpha})^{m} \\
     1- \alpha &=& (1- \widetilde{\alpha})^{m} \\
     (1- \alpha)^{1/m} &=& (1- \widetilde{\alpha}) \\
   \widetilde{\alpha} &=& 1- (1- \alpha)^{1/m} 

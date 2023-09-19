@@ -85,7 +85,8 @@
 
 \begin{frame}
     \begin{minipage}[t]{0.45\textwidth}
-\includegraphics[width= \textwidth]{Slides/MTP/plaatjes/Finos.jpg}
+    \centering
+\includegraphics[width= .85\textwidth]{Slides/MTP/plaatjes/Finos.jpg}
 \begin{itemize}
     \item Full professor in statistics at the University of Padova
     \item \textbf{E-mail}: \\ \href{mailto:livio.finos@unipd.it}{livio.finos@unipd.it} 
@@ -93,6 +94,7 @@
 
 \end{minipage}\hfill
 \begin{minipage}[t]{0.45\textwidth}
+\centering
   \includegraphics[width= .95\textwidth]{Slides/MTP/plaatjes/Andreella.jpg}
 \begin{itemize}
     \item Researcher in social statistics at the University Ca' Foscari Venezia
@@ -355,7 +357,7 @@ if $\boxed{p\leq .05}$ ($\alpha=.05$), we \textbf{reject} $H_0$ (and lean toward
 \begin{table}[]
 \centering
 \begin{tabular}{@{}ll|ll@{}}
-&              & \multicolumn{2}{c}{\textbf{Null hypothesis}}     \\ & \textbf{}    & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}False\\ (two groups are different)\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}True\\ (two group are equal)\end{tabular}} \\ \midrule
+&              & \multicolumn{2}{c}{\textbf{Null hypothesis}}     \\ & \textbf{}    & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}False\\ (two groups are different)\end{tabular}} & \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}True\\ (two groups are equal)\end{tabular}} \\ \midrule
 \multicolumn{1}{c}{}                       & Rejected     & \multicolumn{1}{l|}{{\color[HTML]{3166FF} True discovery}}                                     & {\color[HTML]{9A0000} Type I error}                                                      \\
 \multicolumn{1}{c}{\multirow{-2}{*}{\textbf{Test}}} & Not rejected & \multicolumn{1}{l|}{{\color[HTML]{9A0000} Type II error}}                                      & {\color[HTML]{3531FF} True negative}                                                    
 \end{tabular}
@@ -462,7 +464,7 @@ Each test carries the risk of making a \rbf{Type I error} $\rightarrow$ the risk
 \begin{frame}
 \frametitle{Two Tests (Independent) Case}
 
-\textbf{\rbf{ESEMPIO}}
+\textbf{\rbf{EXAMPLE: independent tests}}
 
 \bigskip
 
@@ -517,7 +519,7 @@ Probability of \textbf{ AT LEAST one} (false) rejection?\
 \end{table}
 \bigskip
 
-\rbf{Probability of AT LEAST one false rejection:} \\
+\rbf{Probability of AT LEAST one false rejection (independent tests):} \\
 \begin{equation*}
 \mathbb{P}(\textcolor{redUnipd}{V} >0) = 1- (1-\alpha)^m
 \end{equation*}
