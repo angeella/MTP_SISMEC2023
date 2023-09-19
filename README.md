@@ -4,9 +4,9 @@ This repository contains the material for the masterclass "The Labyrinth of Mult
 
 In [Slides](https://github.com/angeella/MTP_SISMEC2023/tree/main/Slides/MTP) you can find the slides about:
 
-- [Introduction to Hypothesis testing](https://github.com/angeella/MTP_SISMEC2023/blob/main/Slides/MTP/MTPslides_intro.pdf)
-- [FWER control](https://github.com/angeella/MTP_SISMEC2023/blob/main/Slides/MTP/MTPslides_FWER.pdf)
-- [FDR control](https://github.com/angeella/MTP_SISMEC2023/blob/main/Slides/MTP/MTPslides_FDRco.pdf)
+- [Introduction to Hypothesis testing](https://github.com/angeella/MTP_SISMEC2023/blob/main/Slides/MTPslides_intro.pdf)
+- [FWER control](https://github.com/angeella/MTP_SISMEC2023/blob/main/Slides/MTPslides_FWER.pdf)
+- [FDR control](https://github.com/angeella/MTP_SISMEC2023/blob/main/Slides/MTPslides_FDRco.pdf)
 
 while in [Laboratory](https://github.com/angeella/MTP_SISMEC2023/tree/main/Laboratory), the `.rmd` script and the corresponding HTML file related to the topics above.
 
