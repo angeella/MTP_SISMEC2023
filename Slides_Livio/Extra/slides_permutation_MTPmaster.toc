@@ -1,7 +1,0 @@
-\babel@toc {english}{}\relax 
-\beamer@sectionintoc {1}{Introduction}{2}{0}{1}
-\beamer@sectionintoc {2}{A toy example}{6}{0}{2}
-\beamer@sectionintoc {3}{A Naive approach to Permutation Testing}{11}{0}{3}
-\beamer@sectionintoc {4}{Theory (very short)}{37}{0}{4}
-\beamer@sectionintoc {5}{Other cases}{56}{0}{5}
-\beamer@sectionintoc {6}{Multivariate Testing}{62}{0}{6}
