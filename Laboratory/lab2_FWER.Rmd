@@ -23,6 +23,7 @@ widgets: []
 Suppose these are the p-values obtained from your last experiment:
 
 ```{r}
+set.seed(13)
 m=15
 (p.values=runif(m))
 ```
@@ -450,6 +451,12 @@ parallel <- function(pvalues, alpha){
 }
 ```
 
+```{r}
+serial(pvalues, alpha = 0.05)
+parallel(pvalues, alpha = 0.05)
+
+```
+
 
 # Exercise 3: GERD data {-}
 
@@ -706,7 +713,7 @@ data(InsectSprays)
 str(InsectSprays)
 ```
 
-Same task as Exercise Two.
+Same task as previous Exercise.
 
 # Exercise 6 {-}
 
