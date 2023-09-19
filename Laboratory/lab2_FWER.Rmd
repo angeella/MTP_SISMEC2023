@@ -415,10 +415,19 @@ where $p_i$ are the raw p-values.
 **Possible solution**
 
 ```{r}
+pvalues <- c(0.0082, 0.0174, 0.0042, 0.0180)
+```
+
+
+```{r}
 serial <- function(pvalues, alpha){
   if(pvalues[1] < alpha & pvalues[2] < alpha){
     
-   p.adjust(pvalues[c(3,4)], method = "holm")
+    
+    data.frame(Family = rep(c(1,2), each = 2),
+               Hyp = c(1:4),
+               Pvalues = c(pvalues[1:2],p.adjust(pvalues[c(3,4)], method = "holm")
+))
     
   }else{
     "Family 1 is not rejected"
@@ -430,7 +439,10 @@ serial <- function(pvalues, alpha){
 parallel <- function(pvalues, alpha){
   if(pvalues[1] < alpha/2 | pvalues[2] < alpha/2){
     
-    pvalues[c(3,4)] * 4 #Bonferroni
+    data.frame(Family = rep(c(1,2), each = 2),
+               Hyp = c(1:4),
+               Pvalues = c(pvalues[1:2]*2,p.adjust(pvalues[c(3,4)], method = "bonferroni")
+))
     
   }else{
     "Family 1 is not rejected"
