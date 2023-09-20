@@ -576,7 +576,7 @@ D=D[D$Dse!="Pre",]
 # p10_EPS = 0.009277  <= .025/6   = 0.00417  -> DON'T Reject H10_eps 
 # 
 # Reinvest the alpha/3 gained from H20_eps: give it to H10_eps
-# p10_EPS = 0.009277 <= .05/6+.05/3=.05/2=0.025 -> Reject H10_eps 
+# p10_EPS = 0.009277 <= .025/6+.025/3=.05/2=0.0125 -> Reject H10_eps 
 
 # Note that with Holm correction we only reject H20_eps.
 
